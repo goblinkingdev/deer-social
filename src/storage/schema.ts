@@ -13,6 +13,7 @@ export type Device = {
 
   // deer
   deerGateCache: string
+  demoMode: boolean
 }
 
 export type Account = {

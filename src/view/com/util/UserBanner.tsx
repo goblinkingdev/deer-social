@@ -1,47 +1,54 @@
 import React from 'react'
+import {useCallback, useState} from 'react'
 import {
   Pressable,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
-import {type Image as RNImage} from 'react-native-image-crop-picker'
 import {
   type MeasuredDimensions,
   runOnJS,
   runOnUI,
 } from 'react-native-reanimated'
+import {measure, useAnimatedRef} from 'react-native-reanimated'
 import {Image} from 'expo-image'
 import {type ModerationUI} from '@atproto/api'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
-import {measureHandle, useHandleRef} from '#/lib/hooks/useHandleRef'
-import {usePalette} from '#/lib/hooks/usePalette'
 import {
   useCameraPermission,
   usePhotoLibraryPermission,
 } from '#/lib/hooks/usePermissions'
-import {colors} from '#/lib/styles'
+import {compressIfNeeded} from '#/lib/media/manip'
+import {openCamera, openCropper, openPicker} from '#/lib/media/picker'
+import {type PickerImage} from '#/lib/media/picker.shared'
 import {useTheme} from '#/lib/ThemeContext'
 import {logger} from '#/logger'
 import {isAndroid, isNative} from '#/platform/detection'
+import {
+  type ComposerImage,
+  compressImage,
+  createComposerImage,
+} from '#/state/gallery'
 import {useLightboxControls} from '#/state/lightbox'
 import {
   maybeModifyHighQualityImage,
   useHighQualityImages,
 } from '#/state/preferences/high-quality-images'
+import {EditImageDialog} from '#/view/com/composer/photos/EditImageDialog'
 import {EventStopper} from '#/view/com/util/EventStopper'
-import {tokens, useTheme as useAlfTheme} from '#/alf'
+import {atoms as a, tokens, useTheme as useAlfTheme} from '#/alf'
+import {useDialogControl} from '#/components/Dialog'
 import {useSheetWrapper} from '#/components/Dialog/sheet-wrapper'
 import {
-  Camera_Filled_Stroke2_Corner0_Rounded as CameraFilled,
-  Camera_Stroke2_Corner0_Rounded as Camera,
+  Camera_Filled_Stroke2_Corner0_Rounded as CameraFilledIcon,
+  Camera_Stroke2_Corner0_Rounded as CameraIcon,
 } from '#/components/icons/Camera'
-import {StreamingLive_Stroke2_Corner0_Rounded as Library} from '#/components/icons/StreamingLive'
-import {Trash_Stroke2_Corner0_Rounded as Trash} from '#/components/icons/Trash'
+import {StreamingLive_Stroke2_Corner0_Rounded as LibraryIcon} from '#/components/icons/StreamingLive'
+import {Trash_Stroke2_Corner0_Rounded as TrashIcon} from '#/components/icons/Trash'
 import * as Menu from '#/components/Menu'
-import {openCamera, openCropper, openPicker} from '../../../lib/media/picker'
 
 export function UserBanner({
   type,
@@ -52,9 +59,8 @@ export function UserBanner({
   type?: 'labeler' | 'default'
   banner?: string | null
   moderation?: ModerationUI
-  onSelectNewBanner?: (img: RNImage | null) => void
+  onSelectNewBanner?: (img: PickerImage | null) => void
 }) {
-  const pal = usePalette('default')
   const theme = useTheme()
   const t = useAlfTheme()
   const {_} = useLingui()
@@ -64,21 +70,24 @@ export function UserBanner({
   const {openLightbox} = useLightboxControls()
   const highQualityImages = useHighQualityImages()
 
-  const bannerRef = useHandleRef()
+  const bannerRef = useAnimatedRef()
+  const [rawImage, setRawImage] = useState<ComposerImage | undefined>()
+  const editImageDialogControl = useDialogControl()
 
-  const onOpenCamera = React.useCallback(async () => {
+  const onOpenCamera = useCallback(async () => {
     if (!(await requestCameraAccessIfNeeded())) {
       return
     }
     onSelectNewBanner?.(
-      await openCamera({
-        width: 3000,
-        height: 1000,
-      }),
+      await compressIfNeeded(
+        await openCamera({
+          aspect: [3, 1],
+        }),
+      ),
     )
   }, [onSelectNewBanner, requestCameraAccessIfNeeded])
 
-  const onOpenLibrary = React.useCallback(async () => {
+  const onOpenLibrary = useCallback(async () => {
     if (!(await requestPhotoAccessIfNeeded())) {
       return
     }
@@ -88,23 +97,32 @@ export function UserBanner({
     }
 
     try {
-      onSelectNewBanner?.(
-        await openCropper({
-          mediaType: 'photo',
-          path: items[0].path,
-          width: 3000,
-          height: 1000,
-          webAspectRatio: 3,
-        }),
-      )
+      if (isNative) {
+        onSelectNewBanner?.(
+          await compressIfNeeded(
+            await openCropper({
+              imageUri: items[0].path,
+              aspectRatio: 3 / 1,
+            }),
+          ),
+        )
+      } else {
+        setRawImage(await createComposerImage(items[0]))
+        editImageDialogControl.open()
+      }
     } catch (e: any) {
       if (!String(e).includes('Canceled')) {
         logger.error('Failed to crop banner', {error: e})
       }
     }
-  }, [onSelectNewBanner, requestPhotoAccessIfNeeded, sheetWrapper])
+  }, [
+    onSelectNewBanner,
+    requestPhotoAccessIfNeeded,
+    sheetWrapper,
+    editImageDialogControl,
+  ])
 
-  const onRemoveBanner = React.useCallback(() => {
+  const onRemoveBanner = useCallback(() => {
     onSelectNewBanner?.(null)
   }, [onSelectNewBanner])
 
@@ -129,91 +147,115 @@ export function UserBanner({
 
   const onPressBanner = React.useCallback(() => {
     if (banner && !(moderation?.blur && moderation?.noOverride)) {
-      const bannerHandle = bannerRef.current
       runOnUI(() => {
         'worklet'
-        const rect = measureHandle(bannerHandle)
+        const rect = measure(bannerRef)
         runOnJS(_openLightbox)(banner, rect)
       })()
     }
   }, [banner, moderation, _openLightbox, bannerRef])
 
+  const onChangeEditImage = useCallback(
+    async (image: ComposerImage) => {
+      const compressed = await compressImage(image)
+      onSelectNewBanner?.(compressed)
+    },
+    [onSelectNewBanner],
+  )
+
   // setUserBanner is only passed as prop on the EditProfile component
   return onSelectNewBanner ? (
-    <EventStopper onKeyDown={true}>
-      <Menu.Root>
-        <Menu.Trigger label={_(msg`Edit avatar`)}>
-          {({props}) => (
-            <Pressable {...props} testID="changeBannerBtn">
-              {banner ? (
-                <Image
-                  testID="userBannerImage"
-                  style={styles.bannerImage}
-                  source={{
-                    uri: maybeModifyHighQualityImage(banner, highQualityImages),
-                  }}
-                  accessible={true}
-                  accessibilityIgnoresInvertColors
-                />
-              ) : (
-                <View
-                  testID="userBannerFallback"
-                  style={[styles.bannerImage, t.atoms.bg_contrast_25]}
-                />
-              )}
-              <View style={[styles.editButtonContainer, pal.btn]}>
-                <CameraFilled height={14} width={14} style={t.atoms.text} />
-              </View>
-            </Pressable>
-          )}
-        </Menu.Trigger>
-        <Menu.Outer showCancel>
-          <Menu.Group>
-            {isNative && (
-              <Menu.Item
-                testID="changeBannerCameraBtn"
-                label={_(msg`Upload from Camera`)}
-                onPress={onOpenCamera}>
-                <Menu.ItemText>
-                  <Trans>Upload from Camera</Trans>
-                </Menu.ItemText>
-                <Menu.ItemIcon icon={Camera} />
-              </Menu.Item>
-            )}
-
-            <Menu.Item
-              testID="changeBannerLibraryBtn"
-              label={_(msg`Upload from Library`)}
-              onPress={onOpenLibrary}>
-              <Menu.ItemText>
-                {isNative ? (
-                  <Trans>Upload from Library</Trans>
+    <>
+      <EventStopper onKeyDown={true}>
+        <Menu.Root>
+          <Menu.Trigger label={_(msg`Edit avatar`)}>
+            {({props}) => (
+              <Pressable {...props} testID="changeBannerBtn">
+                {banner ? (
+                  <Image
+                    testID="userBannerImage"
+                    style={styles.bannerImage}
+                    source={{uri: banner}}
+                    accessible={true}
+                    accessibilityIgnoresInvertColors
+                  />
                 ) : (
-                  <Trans>Upload from Files</Trans>
+                  <View
+                    testID="userBannerFallback"
+                    style={[styles.bannerImage, t.atoms.bg_contrast_25]}
+                  />
                 )}
-              </Menu.ItemText>
-              <Menu.ItemIcon icon={Library} />
-            </Menu.Item>
-          </Menu.Group>
-          {!!banner && (
-            <>
-              <Menu.Divider />
-              <Menu.Group>
+                <View
+                  style={[
+                    styles.editButtonContainer,
+                    t.atoms.bg_contrast_25,
+                    a.border,
+                    t.atoms.border_contrast_low,
+                  ]}>
+                  <CameraFilledIcon
+                    height={14}
+                    width={14}
+                    style={t.atoms.text}
+                  />
+                </View>
+              </Pressable>
+            )}
+          </Menu.Trigger>
+          <Menu.Outer showCancel>
+            <Menu.Group>
+              {isNative && (
                 <Menu.Item
-                  testID="changeBannerRemoveBtn"
-                  label={_(msg`Remove Banner`)}
-                  onPress={onRemoveBanner}>
+                  testID="changeBannerCameraBtn"
+                  label={_(msg`Upload from Camera`)}
+                  onPress={onOpenCamera}>
                   <Menu.ItemText>
-                    <Trans>Remove Banner</Trans>
+                    <Trans>Upload from Camera</Trans>
                   </Menu.ItemText>
-                  <Menu.ItemIcon icon={Trash} />
+                  <Menu.ItemIcon icon={CameraIcon} />
                 </Menu.Item>
-              </Menu.Group>
-            </>
-          )}
-        </Menu.Outer>
-      </Menu.Root>
-    </EventStopper>
+              )}
+
+              <Menu.Item
+                testID="changeBannerLibraryBtn"
+                label={_(msg`Upload from Library`)}
+                onPress={onOpenLibrary}>
+                <Menu.ItemText>
+                  {isNative ? (
+                    <Trans>Upload from Library</Trans>
+                  ) : (
+                    <Trans>Upload from Files</Trans>
+                  )}
+                </Menu.ItemText>
+                <Menu.ItemIcon icon={LibraryIcon} />
+              </Menu.Item>
+            </Menu.Group>
+            {!!banner && (
+              <>
+                <Menu.Divider />
+                <Menu.Group>
+                  <Menu.Item
+                    testID="changeBannerRemoveBtn"
+                    label={_(msg`Remove Banner`)}
+                    onPress={onRemoveBanner}>
+                    <Menu.ItemText>
+                      <Trans>Remove Banner</Trans>
+                    </Menu.ItemText>
+                    <Menu.ItemIcon icon={TrashIcon} />
+                  </Menu.Item>
+                </Menu.Group>
+              </>
+            )}
+          </Menu.Outer>
+        </Menu.Root>
+      </EventStopper>
+
+      <EditImageDialog
+        control={editImageDialogControl}
+        image={rawImage}
+        onChange={onChangeEditImage}
+        aspectRatio={3}
+      />
+    </>
   ) : banner &&
     !((moderation?.blur && isAndroid) /* android crashes with blur */) ? (
     <TouchableWithoutFeedback
@@ -229,7 +271,7 @@ export function UserBanner({
           {backgroundColor: theme.palette.default.backgroundLight},
         ]}
         contentFit="cover"
-        source={{uri: maybeModifyHighQualityImage(banner, highQualityImages)}}
+        source={{uri: banner}}
         blurRadius={moderation?.blur ? 100 : 0}
         accessible={true}
         accessibilityIgnoresInvertColors
@@ -256,7 +298,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.gray5,
   },
   bannerImage: {
     width: '100%',

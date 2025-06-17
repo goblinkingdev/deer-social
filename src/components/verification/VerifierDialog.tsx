@@ -5,7 +5,6 @@ import {useLingui} from '@lingui/react'
 
 import {urls} from '#/lib/constants'
 import {getUserDisplayName} from '#/lib/getUserDisplayName'
-import {NON_BREAKING_SPACE} from '#/lib/strings/constants'
 import {logger} from '#/logger'
 import {useDeerVerificationEnabled} from '#/state/preferences/deer-verification'
 import {useSession} from '#/state/session'
@@ -31,6 +30,7 @@ export function VerifierDialog({
 }) {
   return (
     <Dialog.Outer control={control}>
+      <Dialog.Handle />
       <Inner
         control={control}
         profile={profile}
@@ -68,8 +68,6 @@ function Inner({
       style={[
         gtMobile ? {width: 'auto', maxWidth: 400, minWidth: 200} : a.w_full,
       ]}>
-      <Dialog.Handle />
-
       <View style={[a.gap_lg]}>
         {!deerVerificationEnabled && (
           <View
@@ -101,9 +99,8 @@ function Inner({
           </Text>
           <Text style={[a.text_md, a.leading_snug]}>
             <Trans>
-              Accounts with a scalloped blue check mark
+              Accounts with a scalloped blue check mark{' '}
               <RNText>
-                {NON_BREAKING_SPACE}
                 <VerifierCheck width={14} />
                 {NON_BREAKING_SPACE}
               </RNText>
@@ -129,9 +126,13 @@ function Inner({
             color="primary"
             style={[a.justify_center]}
             onPress={() => {
-              logger.metric('verification:learn-more', {
-                location: 'verifierDialog',
-              })
+              logger.metric(
+                'verification:learn-more',
+                {
+                  location: 'verifierDialog',
+                },
+                {statsig: true},
+              )
             }}>
             <ButtonText>
               <Trans>Learn more</Trans>

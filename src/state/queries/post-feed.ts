@@ -18,6 +18,7 @@ import {
 
 import {AuthorFeedAPI} from '#/lib/api/feed/author'
 import {CustomFeedAPI} from '#/lib/api/feed/custom'
+import {DemoFeedAPI} from '#/lib/api/feed/demo'
 import {FollowingFeedAPI} from '#/lib/api/feed/following'
 import {HomeFeedAPI} from '#/lib/api/feed/home'
 import {LikesFeedAPI} from '#/lib/api/feed/likes'
@@ -60,6 +61,7 @@ export type FeedDescriptor =
   | `feedgen|${FeedUri}`
   | `likes|${ActorDid}`
   | `list|${ListUri}`
+  | 'demo'
 export interface FeedParams {
   mergeFeedEnabled?: boolean
   mergeFeedSources?: string[]
@@ -91,6 +93,7 @@ export interface FeedPostSlice {
   isIncompleteThread: boolean
   isFallbackMarker: boolean
   feedContext: string | undefined
+  reqId: string | undefined
   feedPostUri: string
   reason?:
     | AppBskyFeedDefs.ReasonRepost
@@ -317,6 +320,7 @@ export function usePostFeedQuery(
                     userActionHistory.seen(
                       slice.items.map(item => ({
                         feedContext: slice.feedContext,
+                        reqId: slice.reqId,
                         likeCount: item.post.likeCount ?? 0,
                         repostCount: item.post.repostCount ?? 0,
                         replyCount: item.post.replyCount ?? 0,
@@ -334,6 +338,7 @@ export function usePostFeedQuery(
                     isIncompleteThread: slice.isIncompleteThread,
                     isFallbackMarker: slice.isFallbackMarker,
                     feedContext: slice.feedContext,
+                    reqId: slice.reqId,
                     reason: slice.reason,
                     feedPostUri: slice.feedPostUri,
                     items: slice.items.map((item, i) => {
@@ -486,6 +491,8 @@ function createApi({
   } else if (feedDesc.startsWith('list')) {
     const [_, list] = feedDesc.split('|')
     return new ListFeedAPI({agent, feedParams: {list}})
+  } else if (feedDesc === 'demo') {
+    return new DemoFeedAPI({agent})
   } else {
     // shouldnt happen
     return new FollowingFeedAPI({agent})

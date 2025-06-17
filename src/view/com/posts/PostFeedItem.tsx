@@ -1,4 +1,4 @@
-import React, {memo, useMemo, useState} from 'react'
+import {memo, useCallback, useMemo, useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {
   type AppBskyActorDefs,
@@ -17,23 +17,31 @@ import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useQueryClient} from '@tanstack/react-query'
 
+import {useActorStatus} from '#/lib/actor-status'
 import {isReasonFeedSource, type ReasonFeedSource} from '#/lib/api/feed/types'
 import {MAX_POST_LINES} from '#/lib/constants'
+import {useOpenComposer} from '#/lib/hooks/useOpenComposer'
 import {usePalette} from '#/lib/hooks/usePalette'
 import {makeProfileLink} from '#/lib/routes/links'
 import {sanitizeDisplayName} from '#/lib/strings/display-names'
 import {sanitizeHandle} from '#/lib/strings/handles'
 import {countLines} from '#/lib/strings/helpers'
 import {s} from '#/lib/styles'
-import {POST_TOMBSTONE, type Shadow, usePostShadow} from '#/state/cache/post-shadow'
+import {
+  POST_TOMBSTONE,
+  type Shadow,
+  usePostShadow,
+} from '#/state/cache/post-shadow'
 import {useFeedFeedbackContext} from '#/state/feed-feedback'
-import {precacheProfile} from '#/state/queries/profile'
+import {unstableCacheProfileView} from '#/state/queries/profile'
 import {useSession} from '#/state/session'
-import {useComposerControls} from '#/state/shell/composer'
 import {useMergedThreadgateHiddenReplies} from '#/state/threadgate-hidden-replies'
+import {
+  buildPostSourceKey,
+  setUnstablePostSource,
+} from '#/state/unstable-post-source'
 import {FeedNameText} from '#/view/com/util/FeedInfoText'
-import {PostCtrls} from '#/view/com/util/post-ctrls/PostCtrls'
-import {PostEmbeds, PostEmbedViewContext} from '#/view/com/util/post-embeds'
+import {Link, TextLinkOnWebOnly} from '#/view/com/util/Link'
 import {PostMeta} from '#/view/com/util/PostMeta'
 import {Text} from '#/view/com/util/text/Text'
 import {PreviewableUserAvatar} from '#/view/com/util/UserAvatar'
@@ -44,12 +52,15 @@ import {ContentHider} from '#/components/moderation/ContentHider'
 import {LabelsOnMyPost} from '#/components/moderation/LabelsOnMe'
 import {PostAlerts} from '#/components/moderation/PostAlerts'
 import {type AppModerationCause} from '#/components/Pills'
+import {Embed} from '#/components/Post/Embed'
+import {PostEmbedViewContext} from '#/components/Post/Embed/types'
+import {ShowMoreTextButton} from '#/components/Post/ShowMoreTextButton'
+import {PostControls} from '#/components/PostControls'
+import {DiscoverDebug} from '#/components/PostControls/DiscoverDebug'
 import {ProfileHoverCard} from '#/components/ProfileHoverCard'
 import {RichText} from '#/components/RichText'
 import {SubtleWebHover} from '#/components/SubtleWebHover'
 import * as bsky from '#/types/bsky'
-import {Link, TextLink, TextLinkOnWebOnly} from '../util/Link'
-import {AviFollowButton} from './AviFollowButton'
 
 interface FeedItemProps {
   record: AppBskyFeedPost.Record
@@ -66,6 +77,7 @@ interface FeedItemProps {
   isThreadLastChild?: boolean
   isThreadParent?: boolean
   feedContext: string | undefined
+  reqId: string | undefined
   hideTopBorder?: boolean
   isParentBlocked?: boolean
   isParentNotFound?: boolean
@@ -77,6 +89,7 @@ export function PostFeedItem({
   record,
   reason,
   feedContext,
+  reqId,
   moderation,
   parentAuthor,
   showReplyTo,
@@ -88,9 +101,11 @@ export function PostFeedItem({
   isParentNotFound,
   rootPost,
   isCarouselItem,
+  onShowLess,
 }: FeedItemProps & {
   post: AppBskyFeedDefs.PostView
   rootPost: AppBskyFeedDefs.PostView
+  onShowLess?: (interaction: AppBskyFeedDefs.Interaction) => void
 }): React.ReactNode {
   const postShadowed = usePostShadow(post)
   const richText = useMemo(
@@ -113,6 +128,7 @@ export function PostFeedItem({
         record={record}
         reason={reason}
         feedContext={feedContext}
+        reqId={reqId}
         richText={richText}
         parentAuthor={parentAuthor}
         showReplyTo={showReplyTo}
@@ -125,6 +141,7 @@ export function PostFeedItem({
         isParentNotFound={isParentNotFound}
         isCarouselItem={isCarouselItem}
         rootPost={rootPost}
+        onShowLess={onShowLess}
       />
     )
   }
@@ -136,6 +153,7 @@ let FeedItemInner = ({
   record,
   reason,
   feedContext,
+  reqId,
   richText,
   moderation,
   parentAuthor,
@@ -148,27 +166,32 @@ let FeedItemInner = ({
   isParentNotFound,
   isCarouselItem,
   rootPost,
+  onShowLess,
 }: FeedItemProps & {
   richText: RichTextAPI
   post: Shadow<AppBskyFeedDefs.PostView>
   rootPost: AppBskyFeedDefs.PostView
+  onShowLess?: (interaction: AppBskyFeedDefs.Interaction) => void
 }): React.ReactNode => {
   const queryClient = useQueryClient()
-  const {openComposer} = useComposerControls()
+  const {openComposer} = useOpenComposer()
   const pal = usePalette('default')
   const {_} = useLingui()
+
+  const [hover, setHover] = useState(false)
 
   const href = useMemo(() => {
     const urip = new AtUri(post.uri)
     return makeProfileLink(post.author, 'post', urip.rkey)
   }, [post.uri, post.author])
-  const {sendInteraction} = useFeedFeedbackContext()
+  const {sendInteraction, feedDescriptor} = useFeedFeedbackContext()
 
-  const onPressReply = React.useCallback(() => {
+  const onPressReply = () => {
     sendInteraction({
       item: post.uri,
       event: 'app.bsky.feed.defs#interactionReply',
       feedContext,
+      reqId,
     })
     openComposer({
       replyTo: {
@@ -180,40 +203,53 @@ let FeedItemInner = ({
         moderation,
       },
     })
-  }, [post, record, openComposer, moderation, sendInteraction, feedContext])
+  }
 
-  const onOpenAuthor = React.useCallback(() => {
+  const onOpenAuthor = () => {
     sendInteraction({
       item: post.uri,
       event: 'app.bsky.feed.defs#clickthroughAuthor',
       feedContext,
+      reqId,
     })
-  }, [sendInteraction, post, feedContext])
+  }
 
-  const onOpenReposter = React.useCallback(() => {
+  const onOpenReposter = () => {
     sendInteraction({
       item: post.uri,
       event: 'app.bsky.feed.defs#clickthroughReposter',
       feedContext,
+      reqId,
     })
-  }, [sendInteraction, post, feedContext])
+  }
 
-  const onOpenEmbed = React.useCallback(() => {
+  const onOpenEmbed = () => {
     sendInteraction({
       item: post.uri,
       event: 'app.bsky.feed.defs#clickthroughEmbed',
       feedContext,
+      reqId,
     })
-  }, [sendInteraction, post, feedContext])
+  }
 
-  const onBeforePress = React.useCallback(() => {
+  const onBeforePress = () => {
     sendInteraction({
       item: post.uri,
       event: 'app.bsky.feed.defs#clickthroughItem',
       feedContext,
+      reqId,
     })
-    precacheProfile(queryClient, post.author)
-  }, [queryClient, post, sendInteraction, feedContext])
+    unstableCacheProfileView(queryClient, post.author)
+    setUnstablePostSource(buildPostSourceKey(post.uri, post.author.handle), {
+      feed: feedDescriptor,
+      post: {
+        post,
+        reason: AppBskyFeedDefs.isReasonRepost(reason) ? reason : undefined,
+        feedContext,
+        reqId,
+      },
+    })
+  }
 
   const outerStyles = [
     styles.outer,
@@ -244,7 +280,17 @@ let FeedItemInner = ({
     ? rootPost.threadgate.record
     : undefined
 
-  const [hover, setHover] = useState(false)
+  const {isActive: live} = useActorStatus(post.author)
+
+  const viaRepost = useMemo(() => {
+    if (AppBskyFeedDefs.isReasonRepost(reason) && reason.uri && reason.cid) {
+      return {
+        uri: reason.uri,
+        cid: reason.cid,
+      }
+    }
+  }, [reason])
+
   return (
     <Link
       testID={`feedItem-by-${post.author.handle}`}
@@ -327,7 +373,7 @@ let FeedItemInner = ({
                 ) : (
                   <Trans>
                     Reposted by{' '}
-                    <ProfileHoverCard inline did={reason.by.did}>
+                    <ProfileHoverCard did={reason.by.did}>
                       <TextLinkOnWebOnly
                         type="sm-bold"
                         style={pal.textLight}
@@ -375,15 +421,14 @@ let FeedItemInner = ({
 
       <View style={styles.layout}>
         <View style={styles.layoutAvi}>
-          <AviFollowButton author={post.author} moderation={moderation}>
-            <PreviewableUserAvatar
-              size={42}
-              profile={post.author}
-              moderation={moderation.ui('avatar')}
-              type={post.author.associated?.labeler ? 'labeler' : 'user'}
-              onBeforePress={onOpenAuthor}
-            />
-          </AviFollowButton>
+          <PreviewableUserAvatar
+            size={42}
+            profile={post.author}
+            moderation={moderation.ui('avatar')}
+            type={post.author.associated?.labeler ? 'labeler' : 'user'}
+            onBeforePress={onOpenAuthor}
+            live={live}
+          />
           {isThreadParent && (
             <View
               style={[
@@ -391,7 +436,7 @@ let FeedItemInner = ({
                 {
                   flexGrow: 1,
                   backgroundColor: pal.colors.replyLine,
-                  marginTop: 4,
+                  marginTop: live ? 8 : 4,
                 },
               ]}
             />
@@ -423,16 +468,21 @@ let FeedItemInner = ({
             post={post}
             threadgateRecord={threadgateRecord}
           />
-          <PostCtrls
+          <PostControls
             post={post}
             record={record}
             richText={richText}
             onPressReply={onPressReply}
             logContext="FeedItem"
             feedContext={feedContext}
+            reqId={reqId}
             threadgateRecord={threadgateRecord}
+            onShowLess={onShowLess}
+            viaRepost={viaRepost}
           />
         </View>
+
+        <DiscoverDebug feedContext={feedContext} />
       </View>
     </Link>
   )
@@ -456,8 +506,6 @@ let PostContent = ({
   post: AppBskyFeedDefs.PostView
   threadgateRecord?: AppBskyFeedThreadgate.Record
 }): React.ReactNode => {
-  const pal = usePalette('default')
-  const {_} = useLingui()
   const {currentAccount} = useSession()
   const [limitLines, setLimitLines] = useState(
     () => countLines(richText.text) >= MAX_POST_LINES,
@@ -465,7 +513,7 @@ let PostContent = ({
   const threadgateHiddenReplies = useMergedThreadgateHiddenReplies({
     threadgateRecord,
   })
-  const additionalPostAlerts: AppModerationCause[] = React.useMemo(() => {
+  const additionalPostAlerts: AppModerationCause[] = useMemo(() => {
     const isPostHiddenByThreadgate = threadgateHiddenReplies.has(post.uri)
     const rootPostUri = bsky.dangerousIsType<AppBskyFeedPost.Record>(
       post.record,
@@ -486,7 +534,7 @@ let PostContent = ({
       : []
   }, [post, currentAccount?.did, threadgateHiddenReplies])
 
-  const onPressShowMore = React.useCallback(() => {
+  const onPressShowMore = useCallback(() => {
     setLimitLines(false)
   }, [setLimitLines])
 
@@ -502,7 +550,7 @@ let PostContent = ({
         additionalCauses={additionalPostAlerts}
       />
       {richText.text ? (
-        <View style={styles.postTextContainer}>
+        <>
           <RichText
             enableTags
             testID="postText"
@@ -512,19 +560,14 @@ let PostContent = ({
             authorHandle={postAuthor.handle}
             shouldProxyLinks={true}
           />
-        </View>
-      ) : undefined}
-      {limitLines ? (
-        <TextLink
-          text={_(msg`Show More`)}
-          style={pal.link}
-          onPress={onPressShowMore}
-          href="#"
-        />
+          {limitLines && (
+            <ShowMoreTextButton style={[a.text_md]} onPress={onPressShowMore} />
+          )}
+        </>
       ) : undefined}
       {postEmbed ? (
         <View style={[a.pb_xs]}>
-          <PostEmbeds
+          <Embed
             embed={postEmbed}
             moderation={moderation}
             onOpen={onOpenEmbed}
@@ -562,7 +605,7 @@ function ReplyToLabel({
       label = (
         <Trans context="description">
           Reply to{' '}
-          <ProfileHoverCard inline did={profile.did}>
+          <ProfileHoverCard did={profile.did}>
             <TextLinkOnWebOnly
               type="md"
               style={pal.textLight}
@@ -643,13 +686,6 @@ const styles = StyleSheet.create({
   alert: {
     marginTop: 6,
     marginBottom: 6,
-  },
-  postTextContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    paddingBottom: 2,
-    overflow: 'hidden',
   },
   contentHiderChild: {
     marginTop: 6,

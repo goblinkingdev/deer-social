@@ -24,8 +24,8 @@ import {
   type CommonNavigatorParams,
   type NativeStackScreenProps,
 } from '#/lib/routes/types'
-import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {useHideFollowNotifications} from '#/state/preferences/hide-follow-notifications'
+import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {moderationOptsOverrideContext} from '#/state/preferences/moderation-opts'
 import {type FeedNotification} from '#/state/queries/notifications/types'
 import {
@@ -830,6 +830,7 @@ function MockPostFeedItem({
       showReplyTo={false}
       reason={undefined}
       feedContext={''}
+      reqId={undefined}
       rootPost={post}
     />
   )

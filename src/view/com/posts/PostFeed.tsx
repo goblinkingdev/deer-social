@@ -1,8 +1,9 @@
-import React, {memo} from 'react'
+import {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {
   ActivityIndicator,
   AppState,
   Dimensions,
+  LayoutAnimation,
   type ListRenderItemInfo,
   type StyleProp,
   StyleSheet,
@@ -18,8 +19,10 @@ import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useQueryClient} from '@tanstack/react-query'
 
+import {isStatusStillActive, validateStatus} from '#/lib/actor-status'
 import {DISCOVER_FEED_URI, KNOWN_SHUTDOWN_FEEDS} from '#/lib/constants'
 import {useInitialNumToRender} from '#/lib/hooks/useInitialNumToRender'
+import {useNonReactiveCallback} from '#/lib/hooks/useNonReactiveCallback'
 import {logEvent} from '#/lib/statsig/statsig'
 import {logger} from '#/logger'
 import {isIOS, isNative, isWeb} from '#/platform/detection'
@@ -38,6 +41,7 @@ import {
   RQKEY,
   usePostFeedQuery,
 } from '#/state/queries/post-feed'
+import {useLiveNowConfig} from '#/state/service-config'
 import {useSession} from '#/state/session'
 import {useProgressGuide} from '#/state/shell/progress-guide'
 import {List, type ListRef} from '#/view/com/util/List'
@@ -57,6 +61,7 @@ import {FeedShutdownMsg} from './FeedShutdownMsg'
 import {PostFeedErrorMessage} from './PostFeedErrorMessage'
 import {PostFeedItem} from './PostFeedItem'
 import {PostFeedItemCarousel} from './PostFeedItemCarousel'
+import {ShowLessFollowup} from './ShowLessFollowup'
 import {ViewFullThread} from './ViewFullThread'
 
 type FeedRow =
@@ -106,6 +111,7 @@ type FeedRow =
       items: FeedPostSliceItem[]
       sourceFeedUri: string
       feedContexts: (string | undefined)[]
+      reqIds: (string | undefined)[]
     }
   | {
       type: 'sliceViewFullThread'
@@ -128,6 +134,10 @@ type FeedRow =
       type: 'interstitialTrendingVideos'
       key: string
     }
+  | {
+      type: 'showLessFollowup'
+      key: string
+    }
 
 type FeedPostSliceOrGroup =
   | (FeedPostSlice & {
@@ -142,11 +152,13 @@ export function getItemsForFeedback(feedRow: FeedRow):
   | {
       item: FeedPostSliceItem
       feedContext: string | undefined
+      reqId: string | undefined
     }[] {
   if (feedRow.type === 'sliceItem') {
     return feedRow.slice.items.map(item => ({
       item,
       feedContext: feedRow.slice.feedContext,
+      reqId: feedRow.slice.reqId,
     }))
   } else if (feedRow.type === 'reposts') {
     return feedRow.items.map((item, i) => ({
@@ -157,6 +169,7 @@ export function getItemsForFeedback(feedRow: FeedRow):
     return feedRow.items.map((item, i) => ({
       item,
       feedContext: feedRow.feedContexts[i],
+      reqId: feedRow.reqIds[i],
     }))
   } else {
     return []
@@ -265,16 +278,29 @@ let PostFeed = ({
   const {currentAccount, hasSession} = useSession()
   const initialNumToRender = useInitialNumToRender()
   const feedFeedback = useFeedFeedbackContext()
-  const [isPTRing, setIsPTRing] = React.useState(false)
-  const checkForNewRef = React.useRef<(() => void) | null>(null)
-  const lastFetchRef = React.useRef<number>(Date.now())
+  const [isPTRing, setIsPTRing] = useState(false)
+  const lastFetchRef = useRef<number>(Date.now())
   const [feedType, feedUriOrActorDid, feedTab] = feed.split('|')
   const {gtMobile} = useBreakpoints()
   const {rightNavVisible} = useLayoutBreakpoints()
   const areVideoFeedsEnabled = isNative
 
+  const [hasPressedShowLessUris, setHasPressedShowLessUris] = useState(
+    () => new Set<string>(),
+  )
+  const onPressShowLess = useCallback(
+    (interaction: AppBskyFeedDefs.Interaction) => {
+      if (interaction.item) {
+        const uri = interaction.item
+        setHasPressedShowLessUris(prev => new Set([...prev, uri]))
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+      }
+    },
+    [],
+  )
+
   const feedCacheKey = feedParams?.feedCacheKey
-  const opts = React.useMemo(
+  const opts = useMemo(
     () => ({enabled, ignoreFilterFor}),
     [enabled, ignoreFilterFor],
   )
@@ -293,20 +319,21 @@ let PostFeed = ({
   if (lastFetchedAt) {
     lastFetchRef.current = lastFetchedAt
   }
-  const isEmpty = React.useMemo(
+  const isEmpty = useMemo(
     () => !isFetching && !data?.pages?.some(page => page.slices.length),
     [isFetching, data],
   )
 
-  const checkForNew = React.useCallback(async () => {
-    // Discover always has fresh content
-    if (feedUriOrActorDid === DISCOVER_FEED_URI) {
-      return onHasNew?.(true)
-    }
-
+  const checkForNew = useNonReactiveCallback(async () => {
     if (!data?.pages[0] || isFetching || !onHasNew || !enabled || disablePoll) {
       return
     }
+
+    // Discover always has fresh content
+    if (feedUriOrActorDid === DISCOVER_FEED_URI) {
+      return onHasNew(true)
+    }
+
     try {
       if (await pollLatest(data.pages[0])) {
         if (isEmpty) {
@@ -318,20 +345,10 @@ let PostFeed = ({
     } catch (e) {
       logger.error('Poll latest failed', {feed, message: String(e)})
     }
-  }, [
-    feed,
-    data,
-    isFetching,
-    isEmpty,
-    onHasNew,
-    enabled,
-    disablePoll,
-    refetch,
-    feedUriOrActorDid,
-  ])
+  })
 
   const myDid = currentAccount?.did || ''
-  const onPostCreated = React.useCallback(() => {
+  const onPostCreated = useCallback(() => {
     // NOTE
     // only invalidate if there's 1 page
     // more than 1 page can trigger some UI freakouts on iOS and android
@@ -344,46 +361,41 @@ let PostFeed = ({
       queryClient.invalidateQueries({queryKey: RQKEY(feed)})
     }
   }, [queryClient, feed, data, myDid])
-  React.useEffect(() => {
+  useEffect(() => {
     return listenPostCreated(onPostCreated)
   }, [onPostCreated])
 
-  React.useEffect(() => {
-    // we store the interval handler in a ref to avoid needless
-    // reassignments in other effects
-    checkForNewRef.current = checkForNew
-  }, [checkForNew])
-  React.useEffect(() => {
+  useEffect(() => {
     if (enabled && !disablePoll) {
       const timeSinceFirstLoad = Date.now() - lastFetchRef.current
-      if (
-        (isEmpty || timeSinceFirstLoad > CHECK_LATEST_AFTER) &&
-        checkForNewRef.current
-      ) {
+      if (isEmpty || timeSinceFirstLoad > CHECK_LATEST_AFTER) {
         // check for new on enable (aka on focus)
-        checkForNewRef.current()
+        checkForNew()
       }
     }
-  }, [enabled, disablePoll, feed, queryClient, scrollElRef, isEmpty])
-  React.useEffect(() => {
+  }, [enabled, isEmpty, disablePoll, checkForNew])
+
+  useEffect(() => {
     let cleanup1: () => void | undefined, cleanup2: () => void | undefined
     const subscription = AppState.addEventListener('change', nextAppState => {
       // check for new on app foreground
       if (nextAppState === 'active') {
-        checkForNewRef.current?.()
+        checkForNew()
       }
     })
     cleanup1 = () => subscription.remove()
     if (pollInterval) {
       // check for new on interval
-      const i = setInterval(() => checkForNewRef.current?.(), pollInterval)
+      const i = setInterval(() => {
+        checkForNew()
+      }, pollInterval)
       cleanup2 = () => clearInterval(i)
     }
     return () => {
       cleanup1?.()
       cleanup2?.()
     }
-  }, [pollInterval])
+  }, [pollInterval, checkForNew])
 
   const followProgressGuide = useProgressGuide('follow-10')
   const followAndLikeProgressGuide = useProgressGuide('like-10-and-follow-7')
@@ -399,7 +411,20 @@ let PostFeed = ({
     useRepostCarousel = repostCarouselEnabled
   }
 
-  const feedItems: FeedRow[] = React.useMemo(() => {
+  const feedItems: FeedRow[] = useMemo(() => {
+    // wraps a slice item, and replaces it with a showLessFollowup item
+    // if the user has pressed show less on it
+    const sliceItem = (row: Extract<FeedRow, {type: 'sliceItem'}>) => {
+      if (hasPressedShowLessUris.has(row.slice.items[row.indexInSlice]?.uri)) {
+        return {
+          type: 'showLessFollowup',
+          key: row.key,
+        } as const
+      } else {
+        return row
+      }
+    }
+
     let feedKind: 'following' | 'discover' | 'profile' | 'thevids' | undefined
     if (feedType === 'following') {
       feedKind = 'following'
@@ -438,14 +463,20 @@ let PostFeed = ({
           const videos: {
             item: FeedPostSliceItem
             feedContext: string | undefined
+            reqId: string | undefined
           }[] = []
           for (const page of data.pages) {
             for (const slice of page.slices) {
               const item = slice.items.find(
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 item => item.uri === slice.feedPostUri,
               )
               if (item && AppBskyEmbedVideo.isView(item.post.embed)) {
-                videos.push({item, feedContext: slice.feedContext})
+                videos.push({
+                  item,
+                  feedContext: slice.feedContext,
+                  reqId: slice.reqId,
+                })
               }
             }
           }
@@ -453,12 +484,17 @@ let PostFeed = ({
           const rows: {
             item: FeedPostSliceItem
             feedContext: string | undefined
+            reqId: string | undefined
           }[][] = []
           for (let i = 0; i < videos.length; i++) {
             const video = videos[i]
             const item = video.item
             const cols = gtMobile ? 3 : 2
-            const rowItem = {item, feedContext: video.feedContext}
+            const rowItem = {
+              item,
+              feedContext: video.feedContext,
+              reqId: video.reqId,
+            }
             if (i % cols === 0) {
               rows.push([rowItem])
             } else {
@@ -474,6 +510,7 @@ let PostFeed = ({
               items: row.map(r => r.item),
               sourceFeedUri: feedUriOrActorDid,
               feedContexts: row.map(r => r.feedContext),
+              reqIds: row.map(r => r.reqId),
             })
           }
         } else {
@@ -539,43 +576,51 @@ let PostFeed = ({
               } else if (slice.isIncompleteThread && slice.items.length >= 3) {
                 const beforeLast = slice.items.length - 2
                 const last = slice.items.length - 1
-                arr.push({
-                  type: 'sliceItem',
-                  key: slice.items[0]._reactKey,
-                  slice: slice,
-                  indexInSlice: 0,
-                  showReplyTo: false,
-                })
+                arr.push(
+                  sliceItem({
+                    type: 'sliceItem',
+                    key: slice.items[0]._reactKey,
+                    slice: slice,
+                    indexInSlice: 0,
+                    showReplyTo: false,
+                  }),
+                )
                 arr.push({
                   type: 'sliceViewFullThread',
                   key: slice._reactKey + '-viewFullThread',
                   uri: slice.items[0].uri,
                 })
-                arr.push({
-                  type: 'sliceItem',
-                  key: slice.items[beforeLast]._reactKey,
-                  slice: slice,
-                  indexInSlice: beforeLast,
-                  showReplyTo:
-                    slice.items[beforeLast].parentAuthor?.did !==
-                    slice.items[beforeLast].post.author.did,
-                })
-                arr.push({
-                  type: 'sliceItem',
-                  key: slice.items[last]._reactKey,
-                  slice: slice,
-                  indexInSlice: last,
-                  showReplyTo: false,
-                })
+                arr.push(
+                  sliceItem({
+                    type: 'sliceItem',
+                    key: slice.items[beforeLast]._reactKey,
+                    slice: slice,
+                    indexInSlice: beforeLast,
+                    showReplyTo:
+                      slice.items[beforeLast].parentAuthor?.did !==
+                      slice.items[beforeLast].post.author.did,
+                  }),
+                )
+                arr.push(
+                  sliceItem({
+                    type: 'sliceItem',
+                    key: slice.items[last]._reactKey,
+                    slice: slice,
+                    indexInSlice: last,
+                    showReplyTo: false,
+                  }),
+                )
               } else {
                 for (let i = 0; i < slice.items.length; i++) {
-                  arr.push({
-                    type: 'sliceItem',
-                    key: slice.items[i]._reactKey,
-                    slice: slice,
-                    indexInSlice: i,
-                    showReplyTo: i === 0,
-                  })
+                  arr.push(
+                    sliceItem({
+                      type: 'sliceItem',
+                      key: slice.items[i]._reactKey,
+                      slice: slice,
+                      indexInSlice: i,
+                      showReplyTo: i === 0,
+                    }),
+                  )
                 }
               }
             }
@@ -621,12 +666,13 @@ let PostFeed = ({
     isVideoFeed,
     areVideoFeedsEnabled,
     useRepostCarousel,
+    hasPressedShowLessUris,
   ])
 
   // events
   // =
 
-  const onRefresh = React.useCallback(async () => {
+  const onRefresh = useCallback(async () => {
     logEvent('feed:refresh', {
       feedType: feedType,
       feedUrl: feed,
@@ -642,7 +688,7 @@ let PostFeed = ({
     setIsPTRing(false)
   }, [refetch, setIsPTRing, onHasNew, feed, feedType])
 
-  const onEndReached = React.useCallback(async () => {
+  const onEndReached = useCallback(async () => {
     if (isFetching || !hasNextPage || isError) return
 
     logEvent('feed:endReached', {
@@ -665,19 +711,19 @@ let PostFeed = ({
     feedItems.length,
   ])
 
-  const onPressTryAgain = React.useCallback(() => {
+  const onPressTryAgain = useCallback(() => {
     refetch()
     onHasNew?.(false)
   }, [refetch, onHasNew])
 
-  const onPressRetryLoadMore = React.useCallback(() => {
+  const onPressRetryLoadMore = useCallback(() => {
     fetchNextPage()
   }, [fetchNextPage])
 
   // rendering
   // =
 
-  const renderItem = React.useCallback(
+  const renderItem = useCallback(
     ({item: row, index: rowIndex}: ListRenderItemInfo<FeedRow>) => {
       if (row.type === 'empty') {
         return renderEmptyState()
@@ -727,6 +773,7 @@ let PostFeed = ({
             record={item.record}
             reason={indexInSlice === 0 ? slice.reason : undefined}
             feedContext={slice.feedContext}
+            reqId={slice.reqId}
             moderation={item.moderation}
             parentAuthor={item.parentAuthor}
             showReplyTo={row.showReplyTo}
@@ -740,6 +787,7 @@ let PostFeed = ({
             isParentNotFound={item.isParentNotFound}
             hideTopBorder={rowIndex === 0 && indexInSlice === 0}
             rootPost={slice.items[0].post}
+            onShowLess={onPressShowLess}
           />
         )
       } else if (row.type === 'reposts') {
@@ -776,6 +824,8 @@ let PostFeed = ({
             sourceContext={sourceContext}
           />
         )
+      } else if (row.type === 'showLessFollowup') {
+        return <ShowLessFollowup />
       } else {
         return null
       }
@@ -792,12 +842,13 @@ let PostFeed = ({
       feedUriOrActorDid,
       feedTab,
       feedCacheKey,
+      onPressShowLess,
     ],
   )
 
   const shouldRenderEndOfFeed =
     !hasNextPage && !isEmpty && !isFetching && !isError && !!renderEndOfFeed
-  const FeedFooter = React.useCallback(() => {
+  const FeedFooter = useCallback(() => {
     /**
      * A bit of padding at the bottom of the feed as you scroll and when you
      * reach the end, so that content isn't cut off by the bottom of the
@@ -816,6 +867,37 @@ let PostFeed = ({
       <View style={{height: offset}} />
     )
   }, [isFetchingNextPage, shouldRenderEndOfFeed, renderEndOfFeed, headerOffset])
+
+  const liveNowConfig = useLiveNowConfig()
+
+  const seenActorWithStatusRef = useRef<Set<string>>(new Set())
+  const onItemSeen = useCallback(
+    (item: FeedRow) => {
+      feedFeedback.onItemSeen(item)
+      if (item.type === 'sliceItem') {
+        const actor = item.slice.items[item.indexInSlice].post.author
+
+        if (
+          actor.status &&
+          validateStatus(actor.did, actor.status, liveNowConfig) &&
+          isStatusStillActive(actor.status.expiresAt)
+        ) {
+          if (!seenActorWithStatusRef.current.has(actor.did)) {
+            seenActorWithStatusRef.current.add(actor.did)
+            logger.metric(
+              'live:view:post',
+              {
+                subject: actor.did,
+                feed,
+              },
+              {statsig: false},
+            )
+          }
+        }
+      }
+    },
+    [feedFeedback, feed, liveNowConfig],
+  )
 
   return (
     <View testID={testID} style={style}>
@@ -839,7 +921,6 @@ let PostFeed = ({
         onEndReachedThreshold={2} // number of posts left to trigger load more
         removeClippedSubviews={true}
         extraData={extraData}
-        // @ts-ignore our .web version only -prf
         desktopFixedHeight={
           desktopFixedHeightOffset ? desktopFixedHeightOffset : true
         }
@@ -847,7 +928,7 @@ let PostFeed = ({
         windowSize={9}
         maxToRenderPerBatch={isIOS ? 5 : 1}
         updateCellsBatchingPeriod={40}
-        onItemSeen={feedFeedback.onItemSeen}
+        onItemSeen={onItemSeen}
       />
     </View>
   )

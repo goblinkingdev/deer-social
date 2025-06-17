@@ -1,6 +1,7 @@
 import React from 'react'
 import EventEmitter from 'eventemitter3'
 
+import {networkRetry} from '#/lib/async/retry'
 import {logger} from '#/logger'
 import {type Device, device} from '#/storage'
 
@@ -26,10 +27,28 @@ export const DEFAULT_GEOLOCATION: Device['geolocation'] = {
   countryCode: 'US',
 }
 
+async function getGeolocation(): Promise<Device['geolocation']> {
+  const res = await fetch(`https://bsky.app/ipcc`)
+
+  if (!res.ok) {
+    throw new Error(`geolocation: lookup failed ${res.status}`)
+  }
+
+  const json = await res.json()
+
+  if (json.countryCode) {
+    return {
+      countryCode: json.countryCode,
+    }
+  } else {
+    return undefined
+  }
+}
+
 /**
  * Local promise used within this file only.
  */
-let geolocationResolution: Promise<void> | undefined
+let geolocationResolution: Promise<{success: boolean}> | undefined
 
 /**
  * Begin the process of resolving geolocation. This should be called once at
@@ -45,16 +64,57 @@ export function beginResolveGeolocation() {
    * In dev, IP server is unavailable, so we just set the default geolocation
    * and fail closed.
    */
-  geolocationResolution = new Promise(y => y())
-  if (device.get(['geolocation']) == undefined) {
+  if (__DEV__) {
+    geolocationResolution = new Promise(y => y({success: true}))
     device.set(['geolocation'], DEFAULT_GEOLOCATION)
   }
 }
 
-export function setGeolocation(geolocation: Device['geolocation']) {
-  device.set(['geolocation'], geolocation)
-  emitGeolocationUpdate(geolocation)
-}
+geolocationResolution = new Promise(async resolve => {
+  let success = true
+
+  try {
+    // Try once, fail fast
+    const geolocation = await getGeolocation()
+    if (geolocation) {
+      device.set(['geolocation'], geolocation)
+      emitGeolocationUpdate(geolocation)
+      logger.debug(`geolocation: success`, {geolocation})
+    } else {
+      // endpoint should throw on all failures, this is insurance
+      throw new Error(`geolocation: nothing returned from initial request`)
+    }
+  } catch (e: any) {
+    success = false
+
+    logger.debug(`geolocation: failed initial request`, {
+      safeMessage: e.message,
+    })
+
+    // set to default
+    device.set(['geolocation'], DEFAULT_GEOLOCATION)
+
+    // retry 3 times, but don't await, proceed with default
+    networkRetry(3, getGeolocation)
+      .then(geolocation => {
+        if (geolocation) {
+          device.set(['geolocation'], geolocation)
+          emitGeolocationUpdate(geolocation)
+          logger.debug(`geolocation: success`, {geolocation})
+          success = true
+        } else {
+          // endpoint should throw on all failures, this is insurance
+          throw new Error(`geolocation: nothing returned from retries`)
+        }
+      })
+      .catch((e: any) => {
+        // complete fail closed
+        logger.debug(`geolocation: failed retries`, {safeMessage: e.message})
+      })
+  } finally {
+    resolve({success})
+  }
+})
 
 /**
  * Ensure that geolocation has been resolved, or at the very least attempted
@@ -71,10 +131,14 @@ export async function ensureGeolocationResolved() {
     logger.debug(`geolocation: using cache`, {cached})
   } else {
     logger.debug(`geolocation: no cache`)
-    await geolocationResolution
-    logger.debug(`geolocation: resolved`, {
-      resolved: device.get(['geolocation']),
-    })
+    const {success} = await geolocationResolution
+    if (success) {
+      logger.debug(`geolocation: resolved`, {
+        resolved: device.get(['geolocation']),
+      })
+    } else {
+      logger.error(`geolocation: failed to resolve`)
+    }
   }
 }
 
