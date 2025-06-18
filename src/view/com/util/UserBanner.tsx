@@ -1,4 +1,3 @@
-import React from 'react'
 import {useCallback, useState} from 'react'
 import {
   Pressable,
@@ -7,11 +6,12 @@ import {
   View,
 } from 'react-native'
 import {
+  measure,
   type MeasuredDimensions,
   runOnJS,
   runOnUI,
+  useAnimatedRef,
 } from 'react-native-reanimated'
-import {measure, useAnimatedRef} from 'react-native-reanimated'
 import {Image} from 'expo-image'
 import {type ModerationUI} from '@atproto/api'
 import {msg, Trans} from '@lingui/macro'
@@ -24,7 +24,6 @@ import {
 import {compressIfNeeded} from '#/lib/media/manip'
 import {openCamera, openCropper, openPicker} from '#/lib/media/picker'
 import {type PickerImage} from '#/lib/media/picker.shared'
-import {useTheme} from '#/lib/ThemeContext'
 import {logger} from '#/logger'
 import {isAndroid, isNative} from '#/platform/detection'
 import {
@@ -39,7 +38,7 @@ import {
 } from '#/state/preferences/high-quality-images'
 import {EditImageDialog} from '#/view/com/composer/photos/EditImageDialog'
 import {EventStopper} from '#/view/com/util/EventStopper'
-import {atoms as a, tokens, useTheme as useAlfTheme} from '#/alf'
+import {atoms as a, tokens, useTheme} from '#/alf'
 import {useDialogControl} from '#/components/Dialog'
 import {useSheetWrapper} from '#/components/Dialog/sheet-wrapper'
 import {
@@ -61,18 +60,17 @@ export function UserBanner({
   moderation?: ModerationUI
   onSelectNewBanner?: (img: PickerImage | null) => void
 }) {
-  const theme = useTheme()
-  const t = useAlfTheme()
+  const t = useTheme()
   const {_} = useLingui()
   const {requestCameraAccessIfNeeded} = useCameraPermission()
   const {requestPhotoAccessIfNeeded} = usePhotoLibraryPermission()
   const sheetWrapper = useSheetWrapper()
+  const [rawImage, setRawImage] = useState<ComposerImage | undefined>()
+  const editImageDialogControl = useDialogControl()
   const {openLightbox} = useLightboxControls()
   const highQualityImages = useHighQualityImages()
 
   const bannerRef = useAnimatedRef()
-  const [rawImage, setRawImage] = useState<ComposerImage | undefined>()
-  const editImageDialogControl = useDialogControl()
 
   const onOpenCamera = useCallback(async () => {
     if (!(await requestCameraAccessIfNeeded())) {
@@ -126,7 +124,7 @@ export function UserBanner({
     onSelectNewBanner?.(null)
   }, [onSelectNewBanner])
 
-  const _openLightbox = React.useCallback(
+  const _openLightbox = useCallback(
     (uri: string, thumbRect: MeasuredDimensions | null) => {
       openLightbox({
         images: [
@@ -145,7 +143,7 @@ export function UserBanner({
     [openLightbox, highQualityImages],
   )
 
-  const onPressBanner = React.useCallback(() => {
+  const onPressBanner = useCallback(() => {
     if (banner && !(moderation?.blur && moderation?.noOverride)) {
       runOnUI(() => {
         'worklet'
@@ -175,7 +173,12 @@ export function UserBanner({
                   <Image
                     testID="userBannerImage"
                     style={styles.bannerImage}
-                    source={{uri: banner}}
+                    source={{
+                      uri: maybeModifyHighQualityImage(
+                        banner,
+                        highQualityImages,
+                      ),
+                    }}
                     accessible={true}
                     accessibilityIgnoresInvertColors
                   />
@@ -266,12 +269,9 @@ export function UserBanner({
       accessibilityHint="">
       <Image
         testID="userBannerImage"
-        style={[
-          styles.bannerImage,
-          {backgroundColor: theme.palette.default.backgroundLight},
-        ]}
+        style={[styles.bannerImage, t.atoms.bg_contrast_25]}
         contentFit="cover"
-        source={{uri: banner}}
+        source={{uri: maybeModifyHighQualityImage(banner, highQualityImages)}}
         blurRadius={moderation?.blur ? 100 : 0}
         accessible={true}
         accessibilityIgnoresInvertColors

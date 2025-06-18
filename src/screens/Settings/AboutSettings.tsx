@@ -30,7 +30,7 @@ export function AboutSettingsScreen({}: Props) {
   const {_, i18n} = useLingui()
   const [devModeEnabled, setDevModeEnabled] = useDevMode()
   const [demoModeEnabled, setDemoModeEnabled] = useDemoMode()
-  const stableID = useMemo(() => Statsig.getStableID(), [])
+  const stableID = `DEER_SOCIAL_OOPS`
 
   const {mutate: onClearImageCache, isPending: isClearingImageCache} =
     useMutation({

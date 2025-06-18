@@ -9,6 +9,10 @@ import {
 import {Image} from 'expo-image'
 
 import {useLightboxControls} from '#/state/lightbox'
+import {
+  maybeModifyHighQualityImage,
+  useHighQualityImages,
+} from '#/state/preferences/high-quality-images'
 import {type Dimensions} from '#/view/com/lightbox/ImageViewing/@types'
 import {AutoSizedImage} from '#/view/com/util/images/AutoSizedImage'
 import {ImageLayoutGrid} from '#/view/com/util/images/ImageLayoutGrid'
@@ -24,12 +28,13 @@ export function ImageEmbed({
   embed: EmbedType<'images'>
 }) {
   const {openLightbox} = useLightboxControls()
+  const highQualityImages = useHighQualityImages()
   const {images} = embed.view
 
   if (images.length > 0) {
     const items = images.map(img => ({
-      uri: img.fullsize,
-      thumbUri: img.thumb,
+      uri: maybeModifyHighQualityImage(img.fullsize, highQualityImages),
+      thumbUri: maybeModifyHighQualityImage(img.thumb, highQualityImages),
       alt: img.alt,
       dimensions: img.aspectRatio ?? null,
     }))

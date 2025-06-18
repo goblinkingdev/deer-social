@@ -94,7 +94,7 @@ let ShareMenuItems = ({
   return (
     <>
       <Menu.Outer>
-        {!hideInPWI && copyLinkItem}
+        {copyLinkItem}
 
         {hasSession && (
           <Menu.Item
@@ -124,7 +124,7 @@ let ShareMenuItems = ({
           </Menu.Item>
         )}
 
-        {hideInPWI && (
+        {false && hideInPWI && (
           <>
             {hasSession && <Menu.Divider />}
             {copyLinkItem}

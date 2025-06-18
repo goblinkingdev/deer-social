@@ -431,6 +431,7 @@ let EditableUserAvatar = ({
     },
     [onSelectNewAvatar],
   )
+
   return (
     <>
       <Menu.Root>
