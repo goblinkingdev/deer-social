@@ -8,6 +8,7 @@ import {
 import * as Clipboard from 'expo-clipboard'
 import {
   type AppBskyEmbedExternal,
+  type AppBskyEmbedRecordWithMedia,
   type AppBskyEmbedVideo,
   type AppBskyFeedDefs,
   AppBskyFeedPost,
@@ -362,11 +363,32 @@ let PostMenuItems = ({
     })
   }
 
+  const videoEmbed: AppBskyEmbedVideo.View | undefined = useMemo(() => {
+    if (post.embed?.$type === 'app.bsky.embed.video#view')
+      return post.embed as AppBskyEmbedVideo.View
+    if (post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
+      const embed = post.embed as AppBskyEmbedRecordWithMedia.View | undefined
+      if (embed?.media.$type === 'app.bsky.embed.video#view')
+        return embed?.media as AppBskyEmbedVideo.View
+    }
+    return undefined
+  }, [post])
+
+  const gifEmbed: AppBskyEmbedExternal.View | undefined = useMemo(() => {
+    if (post.embed?.$type === 'app.bsky.embed.external#view')
+      return post.embed as AppBskyEmbedExternal.View
+    if (post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
+      const embed = post.embed as AppBskyEmbedRecordWithMedia.View | undefined
+      if (embed?.media.$type === 'app.bsky.embed.external#view')
+        return embed?.media as AppBskyEmbedExternal.View
+    }
+    return undefined
+  }, [post])
+
   const onPressDownloadVideo = async () => {
-    if (post.embed?.$type !== 'app.bsky.embed.video#view') return
-    const video = post.embed as AppBskyEmbedVideo.View
+    if (!videoEmbed) return
     const did = post.author.did
-    const cid = video.cid
+    const cid = videoEmbed.cid
     if (!did.startsWith('did:')) return
     const pdsUrl = await resolvePdsServiceUrl(did as `did:${string}`)
     const uri = `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${did}&cid=${cid}`
@@ -382,24 +404,22 @@ let PostMenuItems = ({
   }
 
   const onPressDownloadGif = async () => {
-    if (post.embed?.$type !== 'app.bsky.embed.external#view') return
-    const media = post.embed as AppBskyEmbedExternal.View
+    if (!gifEmbed) return
 
     Toast.show('Downloading GIF...', 'download')
 
     let success
-    if (isWeb) success = await downloadVideoWeb({uri: media.external.uri})
-    else success = await saveVideoToMediaLibrary({uri: media.external.uri})
+    if (isWeb) success = await downloadVideoWeb({uri: gifEmbed.external.uri})
+    else success = await saveVideoToMediaLibrary({uri: gifEmbed.external.uri})
 
     if (success) Toast.show('GIF downloaded', 'check')
     else Toast.show('Failed to download GIF', 'xmark')
   }
 
   const isEmbedGif = () => {
-    if (post.embed?.$type !== 'app.bsky.embed.external#view') return false
-    const embed = post.embed as AppBskyEmbedExternal.View
+    if (!gifEmbed) return false
     // Janky workaround by checking if the domain is tenor.com
-    const url = new URL(embed.external.uri)
+    const url = new URL(gifEmbed.external.uri)
     return url.host === 'media.tenor.com'
   }
 
@@ -484,7 +504,7 @@ let PostMenuItems = ({
           </>
         )}
 
-        {post.embed?.$type === 'app.bsky.embed.video#view' && (
+        {videoEmbed && (
           <>
             <Menu.Group>
               <Menu.Item
