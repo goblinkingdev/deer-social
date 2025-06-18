@@ -164,6 +164,7 @@ export function getItemsForFeedback(feedRow: FeedRow):
     return feedRow.items.map((item, i) => ({
       item: item.items[0],
       feedContext: feedRow.items[i].feedContext,
+      reqId: feedRow.items[i].reqId,
     }))
   } else if (feedRow.type === 'videoGridRow') {
     return feedRow.items.map((item, i) => ({

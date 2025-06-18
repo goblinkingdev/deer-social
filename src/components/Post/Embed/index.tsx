@@ -1,5 +1,5 @@
 import React from 'react'
-import {View} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 import {
   type $Typed,
   type AppBskyFeedDefs,
@@ -8,17 +8,22 @@ import {
   moderatePost,
   RichText as RichTextAPI,
 } from '@atproto/api'
-import {Trans} from '@lingui/macro'
+import {msg, Trans} from '@lingui/macro'
+import {useLingui} from '@lingui/react'
 import {useQueryClient} from '@tanstack/react-query'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {makeProfileLink} from '#/lib/routes/links'
+import {useDirectFetchRecords} from '#/state/preferences/direct-fetch-records'
 import {useModerationOpts} from '#/state/preferences/moderation-opts'
+import {useDirectFetchEmbedRecord} from '#/state/queries/direct-fetch-record'
 import {unstableCacheProfileView} from '#/state/queries/profile'
 import {useSession} from '#/state/session'
 import {Link} from '#/view/com/util/Link'
 import {PostMeta} from '#/view/com/util/PostMeta'
+import {Text} from '#/view/com/util/text/Text'
 import {atoms as a, useTheme} from '#/alf'
+import {EyeSlash_Stroke2_Corner0_Rounded as EyeSlashIcon} from '#/components/icons/EyeSlash'
 import {ContentHider} from '#/components/moderation/ContentHider'
 import {PostAlerts} from '#/components/moderation/PostAlerts'
 import {RichText} from '#/components/RichText'
@@ -122,6 +127,20 @@ function RecordEmbed({
 }: CommonProps & {
   embed: TEmbed
 }) {
+  const {_} = useLingui()
+  const directFetchEnabled = useDirectFetchRecords()
+  const shouldDirectFetch =
+    (embed.type === 'post_blocked' || embed.type === 'post_detached') &&
+    directFetchEnabled
+
+  const directRecord = useDirectFetchEmbedRecord({
+    uri:
+      embed.type === 'post_blocked' || embed.type === 'post_detached'
+        ? embed.view.uri
+        : '',
+    enabled: shouldDirectFetch,
+  })
+
   switch (embed.type) {
     case 'feed': {
       return (
@@ -175,14 +194,42 @@ function RecordEmbed({
       )
     }
     case 'post_blocked': {
+      const record = directRecord.data
+      if (record !== undefined) {
+        return (
+          <DirectFetchEmbed
+            {...rest}
+            embed={record}
+            visibilityLabel={_(msg`Blocked`)}
+          />
+        )
+      }
+
       return (
-        <PostPlaceholderText>
+        <PostPlaceholderText directFetchEnabled={directFetchEnabled}>
           <Trans>Blocked</Trans>
         </PostPlaceholderText>
       )
     }
     case 'post_detached': {
-      return <PostDetachedEmbed embed={embed} />
+      const record = directRecord.data
+      if (record !== undefined) {
+        return (
+          <DirectFetchEmbed
+            {...rest}
+            embed={record}
+            visibilityLabel={_(msg`Removed by author`)}
+            visibilityLabelOwner={_(`Removed by you`)}
+          />
+        )
+      }
+
+      return (
+        <PostDetachedEmbed
+          embed={embed}
+          directFetchEnabled={directFetchEnabled}
+        />
+      )
     }
     default: {
       return null
@@ -190,10 +237,16 @@ function RecordEmbed({
   }
 }
 
-export function PostDetachedEmbed({
+export function DirectFetchEmbed({
   embed,
-}: {
-  embed: EmbedType<'post_detached'>
+  visibilityLabel,
+  visibilityLabelOwner,
+  ...rest
+}: Omit<CommonProps, 'viewContext'> & {
+  embed: EmbedType<'post'>
+  viewContext?: PostEmbedViewContext
+  visibilityLabel: string
+  visibilityLabelOwner?: string
 }) {
   const {currentAccount} = useSession()
   const isViewerOwner = currentAccount?.did
@@ -201,7 +254,41 @@ export function PostDetachedEmbed({
     : false
 
   return (
-    <PostPlaceholderText>
+    <View>
+      <QuoteEmbed
+        {...rest}
+        embed={embed}
+        viewContext={
+          rest.viewContext === PostEmbedViewContext.Feed
+            ? QuoteEmbedViewContext.FeedEmbedRecordWithMedia
+            : undefined
+        }
+        isWithinQuote={rest.isWithinQuote}
+        allowNestedQuotes={rest.allowNestedQuotes}
+        visibilityLabel={
+          isViewerOwner && visibilityLabelOwner
+            ? visibilityLabelOwner
+            : visibilityLabel
+        }
+      />
+    </View>
+  )
+}
+
+export function PostDetachedEmbed({
+  embed,
+  directFetchEnabled,
+}: {
+  embed: EmbedType<'post_detached'>
+  directFetchEnabled?: boolean
+}) {
+  const {currentAccount} = useSession()
+  const isViewerOwner = currentAccount?.did
+    ? embed.view.uri.includes(currentAccount.did)
+    : false
+
+  return (
+    <PostPlaceholderText directFetchEnabled={directFetchEnabled}>
       {isViewerOwner ? (
         <Trans>Removed by you</Trans>
       ) : (
@@ -221,9 +308,11 @@ export function QuoteEmbed({
   style,
   isWithinQuote: parentIsWithinQuote,
   allowNestedQuotes: parentAllowNestedQuotes,
+  visibilityLabel,
 }: Omit<CommonProps, 'viewContext'> & {
   embed: EmbedType<'post'>
   viewContext?: QuoteEmbedViewContext
+  visibilityLabel?: string
 }) {
   const moderationOpts = useModerationOpts()
   const quote = React.useMemo<$Typed<AppBskyFeedDefs.PostView>>(
@@ -292,6 +381,14 @@ export function QuoteEmbed({
           title={itemTitle}
           onBeforePress={onBeforePress}>
           <View pointerEvents="none">
+            {visibilityLabel !== undefined ? (
+              <View style={[styles.blockHeader, t.atoms.border_contrast_low]}>
+                <EyeSlashIcon size="sm" style={pal.text} />
+                <Text type="lg" style={pal.text}>
+                  {visibilityLabel}
+                </Text>
+              </View>
+            ) : undefined}
             <PostMeta
               author={quote.author}
               moderation={moderation}
@@ -330,3 +427,12 @@ export function QuoteEmbed({
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  blockHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 8,
+  },
+})

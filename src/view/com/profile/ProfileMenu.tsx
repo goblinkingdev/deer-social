@@ -330,7 +330,7 @@ let ProfileMenu = ({
                       <Menu.ItemText>
                         <Trans>Remove trust</Trans>
                       </Menu.ItemText>
-                      <Menu.ItemIcon icon={CircleX} />
+                      <Menu.ItemIcon icon={CircleXIcon} />
                     </Menu.Item>
                   ) : (
                     <Menu.Item
@@ -340,7 +340,7 @@ let ProfileMenu = ({
                       <Menu.ItemText>
                         <Trans>Trust verifier</Trans>
                       </Menu.ItemText>
-                      <Menu.ItemIcon icon={CircleCheck} />
+                      <Menu.ItemIcon icon={CircleCheckIcon} />
                     </Menu.Item>
                   ))}
                 {isSelf && canGoLive && (

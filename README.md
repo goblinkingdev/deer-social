@@ -77,7 +77,7 @@ Without an overriding motivation, opinionated features should exist behind a tog
 - Stay away from PRs like...
   - Changing "Post" to "Skeet."
   - Refactoring the codebase, e.g., to replace React Query with Redux Toolkit or something.
-  - Adding entirely new features without prior discussion. 
+- Include a new toggle and preference for your feature.
 
 If we don't merge your PR for whatever reason, you are welcome to fork and/or self host:
 

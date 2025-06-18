@@ -12,6 +12,7 @@ import {retry} from '#/lib/async/retry'
 import {STALE} from '#/state/queries'
 import {useAgent} from '#/state/session'
 import * as bsky from '#/types/bsky'
+import {type EmbedType} from '#/types/bsky/post'
 
 const RQKEY_ROOT = 'direct-fetch-record'
 export const RQKEY = (uri: string) => [RQKEY_ROOT, uri]
@@ -62,20 +63,23 @@ export async function directFetchRecordAndProfile(
 export async function directFetchEmbedRecord(
   agent: BskyAgent,
   uri: string,
-): Promise<AppBskyEmbedRecord.ViewRecord | undefined> {
+): Promise<EmbedType<'post'> | undefined> {
   const res = await directFetchRecordAndProfile(agent, uri)
   if (res === undefined) return undefined
   const {profile, record} = res
 
   if (record && bsky.validate(record, AppBskyFeedPost.validateRecord)) {
     return {
-      $type: 'app.bsky.embed.record#viewRecord',
-      uri,
-      author: profile as ProfileViewBasic,
-      cid: 'directfetch',
-      value: record,
-      indexedAt: new Date().toISOString(),
-    } satisfies AppBskyEmbedRecord.ViewRecord
+      type: 'post',
+      view: {
+        $type: 'app.bsky.embed.record#viewRecord',
+        uri,
+        author: profile as ProfileViewBasic,
+        cid: 'directfetch',
+        value: record,
+        indexedAt: new Date().toISOString(),
+      } satisfies AppBskyEmbedRecord.ViewRecord,
+    }
   } else {
     return undefined
   }
@@ -89,7 +93,7 @@ export function useDirectFetchEmbedRecord({
   enabled?: boolean
 }) {
   const agent = useAgent()
-  return useQuery<AppBskyEmbedRecord.ViewRecord | undefined>({
+  return useQuery<EmbedType<'post'> | undefined>({
     staleTime: STALE.HOURS.ONE,
     queryKey: RQKEY(uri || ''),
     async queryFn() {

@@ -102,8 +102,7 @@ function Inner({
               Accounts with a scalloped blue check mark{' '}
               <RNText>
                 <VerifierCheck width={14} />
-                {NON_BREAKING_SPACE}
-              </RNText>
+              </RNText>{' '}
               can verify others. These trusted verifiers are selected by{' '}
               {deerVerificationEnabled ? 'you' : 'Bluesky'}.
             </Trans>
