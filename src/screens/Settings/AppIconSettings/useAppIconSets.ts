@@ -13,20 +13,28 @@ export function useAppIconSets() {
         id: 'default_light',
         name: _(msg({context: 'Name of app icon variant', message: 'Light'})),
         iosImage: () => {
-          return require(`../../../../assets/app-icons/ios_icon_default_light.png`)
+          return require(
+            `../../../../assets/app-icons/ios_icon_default_light.png`,
+          )
         },
         androidImage: () => {
-          return require(`../../../../assets/app-icons/android_icon_default_light.png`)
+          return require(
+            `../../../../assets/app-icons/android_icon_default_light.png`,
+          )
         },
       },
       {
         id: 'default_dark',
         name: _(msg({context: 'Name of app icon variant', message: 'Dark'})),
         iosImage: () => {
-          return require(`../../../../assets/app-icons/ios_icon_default_dark.png`)
+          return require(
+            `../../../../assets/app-icons/ios_icon_default_dark.png`,
+          )
         },
         androidImage: () => {
-          return require(`../../../../assets/app-icons/android_icon_default_dark.png`)
+          return require(
+            `../../../../assets/app-icons/android_icon_default_dark.png`,
+          )
         },
       },
     ] satisfies AppIconSet[]
