@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, View} from 'react-native'
+import {View} from 'react-native'
 import {
   type $Typed,
   type AppBskyFeedDefs,
@@ -21,9 +21,7 @@ import {unstableCacheProfileView} from '#/state/queries/profile'
 import {useSession} from '#/state/session'
 import {Link} from '#/view/com/util/Link'
 import {PostMeta} from '#/view/com/util/PostMeta'
-import {Text} from '#/view/com/util/text/Text'
 import {atoms as a, useTheme} from '#/alf'
-import {EyeSlash_Stroke2_Corner0_Rounded as EyeSlashIcon} from '#/components/icons/EyeSlash'
 import {ContentHider} from '#/components/moderation/ContentHider'
 import {PostAlerts} from '#/components/moderation/PostAlerts'
 import {RichText} from '#/components/RichText'
@@ -308,7 +306,6 @@ export function QuoteEmbed({
   style,
   isWithinQuote: parentIsWithinQuote,
   allowNestedQuotes: parentAllowNestedQuotes,
-  visibilityLabel,
 }: Omit<CommonProps, 'viewContext'> & {
   embed: EmbedType<'post'>
   viewContext?: QuoteEmbedViewContext
@@ -357,82 +354,61 @@ export function QuoteEmbed({
   const [hover, setHover] = React.useState(false)
   return (
     <View
-      onPointerEnter={() => {
-        setHover(true)
-      }}
-      onPointerLeave={() => {
-        setHover(false)
-      }}>
+      style={[a.mt_sm]}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}>
       <ContentHider
         modui={moderation?.ui('contentList')}
-        style={[
-          a.rounded_md,
-          a.p_md,
-          a.mt_sm,
-          a.border,
-          t.atoms.border_contrast_low,
-          style,
-        ]}
+        style={[a.rounded_md, a.border, t.atoms.border_contrast_low, style]}
+        activeStyle={[a.p_md, a.pt_sm]}
         childContainerStyle={[a.pt_sm]}>
-        <SubtleWebHover hover={hover} />
-        <Link
-          hoverStyle={{borderColor: pal.colors.borderLinkHover}}
-          href={itemHref}
-          title={itemTitle}
-          onBeforePress={onBeforePress}>
-          <View pointerEvents="none">
-            {visibilityLabel !== undefined ? (
-              <View style={[styles.blockHeader, t.atoms.border_contrast_low]}>
-                <EyeSlashIcon size="sm" style={pal.text} />
-                <Text type="lg" style={pal.text}>
-                  {visibilityLabel}
-                </Text>
+        {({active}) => (
+          <>
+            {!active && <SubtleWebHover hover={hover} style={[a.rounded_md]} />}
+            <Link
+              style={[!active && a.p_md]}
+              hoverStyle={{borderColor: pal.colors.borderLinkHover}}
+              href={itemHref}
+              title={itemTitle}
+              onBeforePress={onBeforePress}>
+              <View pointerEvents="none">
+                <PostMeta
+                  author={quote.author}
+                  moderation={moderation}
+                  showAvatar
+                  postHref={itemHref}
+                  timestamp={quote.indexedAt}
+                />
               </View>
-            ) : undefined}
-            <PostMeta
-              author={quote.author}
-              moderation={moderation}
-              showAvatar
-              postHref={itemHref}
-              timestamp={quote.indexedAt}
-            />
-          </View>
-          {moderation ? (
-            <PostAlerts
-              modui={moderation.ui('contentView')}
-              style={[a.py_xs]}
-            />
-          ) : null}
-          {richText ? (
-            <RichText
-              value={richText}
-              style={a.text_md}
-              numberOfLines={20}
-              disableLinks
-            />
-          ) : null}
-          {quote.embed && (
-            <Embed
-              embed={quote.embed}
-              moderation={moderation}
-              isWithinQuote={parentIsWithinQuote ?? true}
-              // already within quote? override nested
-              allowNestedQuotes={
-                parentIsWithinQuote ? false : parentAllowNestedQuotes
-              }
-            />
-          )}
-        </Link>
+              {moderation ? (
+                <PostAlerts
+                  modui={moderation.ui('contentView')}
+                  style={[a.py_xs]}
+                />
+              ) : null}
+              {richText ? (
+                <RichText
+                  value={richText}
+                  style={a.text_md}
+                  numberOfLines={20}
+                  disableLinks
+                />
+              ) : null}
+              {quote.embed && (
+                <Embed
+                  embed={quote.embed}
+                  moderation={moderation}
+                  isWithinQuote={parentIsWithinQuote ?? true}
+                  // already within quote? override nested
+                  allowNestedQuotes={
+                    parentIsWithinQuote ? false : parentAllowNestedQuotes
+                  }
+                />
+              )}
+            </Link>
+          </>
+        )}
       </ContentHider>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  blockHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: 8,
-  },
-})
