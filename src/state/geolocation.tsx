@@ -65,11 +65,12 @@ export function beginResolveGeolocation() {
    * In dev, IP server is unavailable, so we just set the default geolocation
    * and fail closed.
    */
-  if (__DEV__) {
-    geolocationResolution = new Promise(y => y({success: true}))
-    if (!device.get(['geolocation'])) {
-      device.set(['geolocation'], DEFAULT_GEOLOCATION)
-    }
+  // commented out the dev if check, the entire web ui straight up doesnt load when doing build-web because of this check
+  //if (__DEV__) {
+  geolocationResolution = new Promise(y => y({success: true}))
+  if (!device.get(['geolocation'])) {
+    device.set(['geolocation'], DEFAULT_GEOLOCATION)
+    //  }
     return
   }
 }
