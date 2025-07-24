@@ -1,6 +1,6 @@
 {
   "name": "deer.social",
-  "version": "1.105.0",
+  "version": "1.106.0",
   "private": true,
   "engines": {
     "node": ">=18"
@@ -12,7 +12,8 @@
         "buildFromSource": [
           "expo-notifications",
           "expo-haptics",
-          "expo-media-library"
+          "expo-media-library",
+          "expo-image-picker"
         ]
       }
     }
@@ -69,7 +70,7 @@
     "icons:optimize": "svgo -f ./assets/icons"
   },
   "dependencies": {
-    "@atproto/api": "^0.15.21",
+    "@atproto/api": "^0.15.26",
     "@bitdrift/react-native": "^0.6.8",
     "@braintree/sanitize-url": "^6.0.2",
     "@discord/bottom-sheet": "bluesky-social/react-native-bottom-sheet",
@@ -218,7 +219,7 @@
     "zod": "^3.20.2"
   },
   "devDependencies": {
-    "@atproto/dev-env": "^0.3.150",
+    "@atproto/dev-env": "^0.3.155",
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/runtime": "^7.26.0",

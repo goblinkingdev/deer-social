@@ -23,8 +23,28 @@ const onGeolocationUpdate = (
  * additional mod authorities.
  */
 export const DEFAULT_GEOLOCATION: Device['geolocation'] = {
-  countryCode: 'US',
+  countryCode: undefined,
+  isAgeRestrictedGeo: false,
 }
+
+/*async function getGeolocation(): Promise<Device['geolocation']> {
+  const res = await fetch(`https://bsky.app/ipcc`)
+
+  if (!res.ok) {
+    throw new Error(`geolocation: lookup failed ${res.status}`)
+  }
+
+  const json = await res.json()
+
+  if (json.countryCode) {
+    return {
+      countryCode: json.countryCode,
+      isAgeRestrictedGeo: json.isAgeRestrictedGeo ?? false,
+    }
+  } else {
+    return undefined
+  }
+}*/
 
 /**
  * Local promise used within this file only.
@@ -45,9 +65,12 @@ export function beginResolveGeolocation() {
    * In dev, IP server is unavailable, so we just set the default geolocation
    * and fail closed.
    */
-  geolocationResolution = new Promise(y => y({success: true}))
-  if (device.get(['geolocation']) == undefined) {
-    device.set(['geolocation'], DEFAULT_GEOLOCATION)
+  if (__DEV__) {
+    geolocationResolution = new Promise(y => y({success: true}))
+    if (!device.get(['geolocation'])) {
+      device.set(['geolocation'], DEFAULT_GEOLOCATION)
+    }
+    return
   }
 }
 
