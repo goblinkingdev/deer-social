@@ -29,6 +29,7 @@ module.exports = function (_config) {
   //   ? 'production'
   //   : undefined
   // const UPDATES_ENABLED = !!UPDATES_CHANNEL
+  const UPDATES_ENABLED = IS_TESTFLIGHT || IS_PRODUCTION
 
   const USE_SENTRY = Boolean(process.env.SENTRY_AUTH_TOKEN)
 
@@ -194,6 +195,21 @@ module.exports = function (_config) {
       //   checkAutomatically: 'NEVER',
       //   channel: UPDATES_CHANNEL,
       // },
+      updates: {
+        url: 'https://updates.bsky.app/manifest',
+        enabled: UPDATES_ENABLED,
+        fallbackToCacheTimeout: 30000,
+        codeSigningCertificate: UPDATES_ENABLED
+          ? './code-signing/certificate.pem'
+          : undefined,
+        codeSigningMetadata: UPDATES_ENABLED
+          ? {
+              keyid: 'main',
+              alg: 'rsa-v1_5-sha256',
+            }
+          : undefined,
+        checkAutomatically: 'NEVER',
+      },
       plugins: [
         'expo-video',
         'expo-localization',

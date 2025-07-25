@@ -27,7 +27,7 @@ export function ProfileHeaderHandle({
   const showProfileInHandle = useShowLinkInHandle()
   return (
     <View
-      style={[a.flex_row, a.gap_xs, a.align_center, {maxWidth: '100%'}]}
+      style={[a.flex_row, a.gap_sm, a.align_center, {maxWidth: '100%'}]}
       pointerEvents={disableTaps ? 'none' : isIOS ? 'auto' : 'box-none'}>
       <NewskieDialog profile={profile} disabled={disableTaps} />
       {profile.viewer?.followedBy && !blockHide ? (
