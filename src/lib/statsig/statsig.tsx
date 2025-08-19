@@ -3,14 +3,13 @@ import {Platform} from 'react-native'
 import {AppState, type AppStateStatus} from 'react-native'
 import {Statsig} from 'statsig-react-native-expo'
 
-import {BUNDLE_DATE, BUNDLE_IDENTIFIER} from '#/lib/app-info'
 import {logger} from '#/logger'
 import {type MetricEvents} from '#/logger/metrics'
 import {isWeb} from '#/platform/detection'
 import * as persisted from '#/state/persisted'
-import {device} from '#/storage'
-import packageDotJson from '../../../package.json'
 // import {useSession} from '../../state/session'
+import * as env from '#/env'
+import {device} from '#/storage'
 import {timeout} from '../async/timeout'
 // import {useNonReactiveCallback} from '../hooks/useNonReactiveCallback'
 import {type Gate} from './gates'
@@ -150,6 +149,7 @@ function toStringRecord<E extends keyof MetricEvents>(
 // and it's been difficult to get it to behave in a predictable way.
 // Our own cache ensures consistent evaluation within a single session.
 const GateCache = React.createContext<Map<string, boolean> | null>(null)
+GateCache.displayName = 'StatsigGateCacheContext'
 
 type GateOptions = {
   dangerouslyDisableExposureLogging?: boolean
@@ -231,9 +231,9 @@ function toStatsigUser(did: string | undefined): StatsigUser {
       refSrc,
       refUrl,
       platform: Platform.OS as 'ios' | 'android' | 'web',
-      appVersion: packageDotJson.version,
-      bundleIdentifier: BUNDLE_IDENTIFIER,
-      bundleDate: BUNDLE_DATE,
+      appVersion: env.RELEASE_VERSION,
+      bundleIdentifier: env.BUNDLE_IDENTIFIER,
+      bundleDate: env.BUNDLE_DATE,
       appLanguage: languagePrefs.appLanguage,
       contentLanguages: languagePrefs.contentLanguages,
     },
