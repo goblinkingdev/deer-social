@@ -389,8 +389,7 @@ let PostMenuItems = ({
     const pdsUrl = await resolvePdsServiceUrl(did as `did:${string}`)
     const uri = `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${did}&cid=${cid}`
 
-    // FIXME
-    // Toast.show('Downloading video...', 'download')
+    Toast.show(_(msg({message: 'Downloading video...', context: 'toast'})))
 
     let success
     if (isWeb) success = await downloadVideoWeb({uri: uri})
@@ -403,8 +402,7 @@ let PostMenuItems = ({
   const onPressDownloadGif = async () => {
     if (!gifEmbed) return
 
-    // FIXME
-    // Toast.show('Downloading GIF...', 'download')
+    Toast.show(_(msg({message: 'Downloading GIF...', context: 'toast'})))
 
     let success
     if (isWeb) success = await downloadVideoWeb({uri: gifEmbed.external.uri})
