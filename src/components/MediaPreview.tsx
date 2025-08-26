@@ -100,12 +100,11 @@ export function ImageItem({
       <Image
         key={thumbnail}
         source={{uri: thumbnail}}
+        alt={alt}
         style={[a.flex_1, a.rounded_xs, t.atoms.bg_contrast_25]}
         contentFit="cover"
         accessible={true}
         accessibilityIgnoresInvertColors
-        accessibilityHint={alt}
-        accessibilityLabel=""
       />
       <MediaInsetBorder style={[a.rounded_xs]} />
       {children}
