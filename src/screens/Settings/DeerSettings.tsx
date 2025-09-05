@@ -14,7 +14,6 @@ import {
   useGatesCache,
 } from '#/lib/statsig/statsig'
 import {isWeb} from '#/platform/detection'
-import {setGeolocation, useGeolocation} from '#/state/geolocation'
 import * as persisted from '#/state/persisted'
 import {useGoLinksEnabled, useSetGoLinksEnabled} from '#/state/preferences'
 import {
@@ -69,7 +68,6 @@ import * as Toggle from '#/components/forms/Toggle'
 import {Atom_Stroke2_Corner0_Rounded as DeerIcon} from '#/components/icons/Atom'
 import {Bell_Stroke2_Corner0_Rounded as BellIcon} from '#/components/icons/Bell'
 import {Eye_Stroke2_Corner0_Rounded as VisibilityIcon} from '#/components/icons/Eye'
-import {Earth_Stroke2_Corner2_Rounded as GlobeIcon} from '#/components/icons/Globe'
 import {Lab_Stroke2_Corner0_Rounded as BeakerIcon} from '#/components/icons/Lab'
 import {PaintRoller_Stroke2_Corner2_Rounded as PaintRollerIcon} from '#/components/icons/PaintRoller'
 import {RaisingHand4Finger_Stroke2_Corner0_Rounded as RaisingHandIcon} from '#/components/icons/RaisingHand'
@@ -80,71 +78,6 @@ import {Text} from '#/components/Typography'
 import {SearchProfileCard} from '../Search/components/SearchProfileCard'
 
 type Props = NativeStackScreenProps<CommonNavigatorParams>
-
-function GeolocationSettingsDialog({
-  control,
-}: {
-  control: Dialog.DialogControlProps
-}) {
-  const pal = usePalette('default')
-  const {_} = useLingui()
-
-  const [hasChanged, setHasChanged] = useState(false)
-  const [countryCode, setCountryCode] = useState('')
-
-  const submit = () => {
-    setGeolocation({countryCode})
-    control.close()
-  }
-
-  return (
-    <Dialog.Outer control={control} nativeOptions={{preventExpansion: true}}>
-      <Dialog.Handle />
-      <Dialog.ScrollableInner label={_(msg`Geolocation ISO 3166-1 Code`)}>
-        <View style={[a.gap_sm, a.pb_lg]}>
-          <Text style={[a.text_2xl, a.font_bold]}>
-            <Trans>Geolocation ISO 3166-1 Code</Trans>
-          </Text>
-        </View>
-
-        <View style={a.gap_lg}>
-          <Dialog.Input
-            label="Text input field"
-            autoFocus
-            style={[styles.textInput, pal.border, pal.text]}
-            value={countryCode}
-            onChangeText={value => {
-              setCountryCode(value.toUpperCase())
-              setHasChanged(true)
-            }}
-            maxLength={2}
-            placeholder="BR"
-            placeholderTextColor={pal.colors.textLight}
-            onSubmitEditing={submit}
-            accessibilityHint={_(
-              msg`Input 2 letter ISO 3166-1 country code to use as location`,
-            )}
-          />
-
-          <View style={isWeb && [a.flex_row, a.justify_end]}>
-            <Button
-              label={hasChanged ? _(msg`Save location`) : _(msg`Done`)}
-              size="large"
-              onPress={submit}
-              variant="solid"
-              color="primary">
-              <ButtonText>
-                {hasChanged ? <Trans>Save</Trans> : <Trans>Done</Trans>}
-              </ButtonText>
-            </Button>
-          </View>
-        </View>
-
-        <Dialog.Close />
-      </Dialog.ScrollableInner>
-    </Dialog.Outer>
-  )
-}
 
 function ConstellationInstanceDialog({
   control,
@@ -269,9 +202,6 @@ export function DeerSettingsScreen({}: Props) {
 
   const hideFollowNotifications = useHideFollowNotifications()
   const setHideFollowNotifications = useSetHideFollowNotifications()
-
-  const location = useGeolocation()
-  const setLocationControl = Dialog.useDialogControl()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -423,18 +353,6 @@ export function DeerSettingsScreen({}: Props) {
             </Admonition>
           </SettingsList.Item>
 
-          <SettingsList.Item>
-            <SettingsList.ItemIcon icon={GlobeIcon} />
-            <SettingsList.ItemText>
-              <Trans>{`ISO 3166-1 Location (currently ${
-                location.geolocation?.countryCode ?? '?'
-              })`}</Trans>
-            </SettingsList.ItemText>
-            <SettingsList.BadgeButton
-              label={_(msg`Change`)}
-              onPress={() => setLocationControl.open()}
-            />
-          </SettingsList.Item>
           <SettingsList.Item>
             <Admonition type="info" style={[a.flex_1]}>
               <Trans>
@@ -602,7 +520,6 @@ export function DeerSettingsScreen({}: Props) {
           </SettingsList.Item>
         </SettingsList.Container>
       </Layout.Content>
-      <GeolocationSettingsDialog control={setLocationControl} />
       <ConstellationInstanceDialog control={setConstellationInstanceControl} />
     </Layout.Screen>
   )
