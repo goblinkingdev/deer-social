@@ -207,11 +207,22 @@ export const defaults: Schema = {
   deerVerification: {
     enabled: false,
     // https://social.daniela.lol/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
+    // using https://bverified.vercel.app/ as a source
     trusted: [
       'did:plc:z72i7hdynmk6r22z27h6tvur',
-      'did:plc:eclio37ymobqex2ncko63h4r',
-      'did:plc:inz4fkbbp7ms3ixufw6xuvdi',
       'did:plc:b2kutgxqlltwc6lhs724cfwr',
+      'did:plc:inz4fkbbp7ms3ixufw6xuvdi',
+      'did:plc:eclio37ymobqex2ncko63h4r',
+      'did:plc:dzezcmpb3fhcpns4n4xm4ur5',
+      'did:plc:5u54z2qgkq43dh2nzwzdbbhb',
+      'did:plc:wmho6q2uiyktkam3jsvrms3s',
+      'did:plc:sqbswn3lalcc2dlh2k7zdpuw',
+      'did:plc:k5nskatzhyxersjilvtnz4lh',
+      'did:plc:d2jith367s6ybc3ldsusgdae',
+      'did:plc:y3xrmnwvkvsq4tqcsgwch4na',
+      'did:plc:i3fhjvvkbmirhyu4aeihhrnv',
+      'did:plc:fivojrvylkim4nuo3pfqcf3k',
+      'did:plc:ofbkqcjzvm6gtwuufsubnkaf',
     ],
   },
   highQualityImages: false,

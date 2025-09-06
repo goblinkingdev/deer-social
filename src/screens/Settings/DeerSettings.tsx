@@ -153,6 +153,31 @@ function ConstellationInstanceDialog({
   )
 }
 
+function TrustedVerifiersDialog({
+  control,
+}: {
+  control: Dialog.DialogControlProps
+}) {
+  const {_} = useLingui()
+
+  return (
+    <Dialog.Outer control={control} nativeOptions={{preventExpansion: true}}>
+      <Dialog.Handle />
+      <Dialog.ScrollableInner label={_(msg`Trusted Verifiers`)}>
+        <View style={[a.gap_sm, a.pb_lg]}>
+          <Text style={[a.text_2xl, a.font_bold]}>
+            <Trans>Trusted Verifiers</Trans>
+          </Text>
+        </View>
+
+        <TrustedVerifiers />
+
+        <Dialog.Close />
+      </Dialog.ScrollableInner>
+    </Dialog.Outer>
+  )
+}
+
 const TrustedVerifiers = (): React.ReactNode => {
   const trusted = useDeerVerificationTrusted()
   const moderationOpts = useModerationOpts()
@@ -205,6 +230,8 @@ export function DeerSettingsScreen({}: Props) {
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
+
+  const setTrustedVerifiersDialogControl = Dialog.useDialogControl()
 
   const deerVerificationEnabled = useDeerVerificationEnabled()
   const setDeerVerificationEnabled = useSetDeerVerificationEnabled()
@@ -331,7 +358,16 @@ export function DeerSettingsScreen({}: Props) {
             </Admonition>
           </SettingsList.Item>
 
-          <TrustedVerifiers />
+          <SettingsList.Item>
+            <SettingsList.ItemIcon icon={VerifiedIcon} />
+            <SettingsList.ItemText>
+              <Trans>{`Trusted Verifiers`}</Trans>
+            </SettingsList.ItemText>
+            <SettingsList.BadgeButton
+              label={_(msg`View`)}
+              onPress={() => setTrustedVerifiersDialogControl.open()}
+            />
+          </SettingsList.Item>
 
           <SettingsList.Item>
             <SettingsList.ItemIcon icon={StarIcon} />
@@ -349,15 +385,6 @@ export function DeerSettingsScreen({}: Props) {
                 Constellation is used to supplement AppView responses for custom
                 verifications and nuclear block bypass, via backlinks. Current
                 instance: {constellationInstance}
-              </Trans>
-            </Admonition>
-          </SettingsList.Item>
-
-          <SettingsList.Item>
-            <Admonition type="info" style={[a.flex_1]}>
-              <Trans>
-                Geolocation country code informs required regional app labelers
-                and currency behavior.
               </Trans>
             </Admonition>
           </SettingsList.Item>
@@ -521,6 +548,7 @@ export function DeerSettingsScreen({}: Props) {
         </SettingsList.Container>
       </Layout.Content>
       <ConstellationInstanceDialog control={setConstellationInstanceControl} />
+      <TrustedVerifiersDialog control={setTrustedVerifiersDialogControl} />
     </Layout.Screen>
   )
 }
