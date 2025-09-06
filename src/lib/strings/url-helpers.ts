@@ -88,6 +88,16 @@ export function toShareUrl(url: string): string {
   return url
 }
 
+// separate one for bluesky, im fully aware i could just have it in one function but im more worried about code conflicts from this
+export function toShareUrlBsky(url: string): string {
+  if (!url.startsWith('https')) {
+    const urlp = new URL('https://bsky.app')
+    urlp.pathname = url
+    url = urlp.toString()
+  }
+  return url
+}
+
 export function toBskyAppUrl(url: string): string {
   return new URL(url, BSKY_APP_HOST).toString()
 }

@@ -8,7 +8,7 @@ import type React from 'react'
 import {makeProfileLink} from '#/lib/routes/links'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareText, shareUrl} from '#/lib/sharing'
-import {toShareUrl} from '#/lib/strings/url-helpers'
+import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {isWeb} from '#/platform/detection'
 import {useAgeAssurance} from '#/state/ageAssurance/useAgeAssurance'
@@ -63,6 +63,13 @@ let ShareMenuItems = ({
     onShareProp()
   }
 
+  const onCopyLinkBsky = () => {
+    logger.metric('share:press:copyLink', {}, {statsig: true})
+    const url = toShareUrlBsky(href)
+    shareUrl(url)
+    onShareProp()
+  }
+
   const onSelectChatToShareTo = (conversation: string) => {
     logger.metric('share:press:dmSelected', {}, {statsig: true})
     navigation.navigate('MessagesConversation', {
@@ -82,15 +89,26 @@ let ShareMenuItems = ({
   }
 
   const copyLinkItem = (
-    <Menu.Item
-      testID="postDropdownShareBtn"
-      label={_(msg`Copy link to post`)}
-      onPress={onCopyLink}>
-      <Menu.ItemText>
-        <Trans>Copy link to post</Trans>
-      </Menu.ItemText>
-      <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
-    </Menu.Item>
+    <Menu.Group>
+      <Menu.Item
+        testID="postDropdownShareBtn"
+        label={_(msg`Copy link to post`)}
+        onPress={onCopyLink}>
+        <Menu.ItemText>
+          <Trans>Copy link to post</Trans>
+        </Menu.ItemText>
+        <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
+      </Menu.Item>
+      <Menu.Item
+        testID="postDropdownShareBtn"
+        label={_(msg`Copy link to post`)}
+        onPress={onCopyLinkBsky}>
+        <Menu.ItemText>
+          <Trans>Copy via bsky.app</Trans>
+        </Menu.ItemText>
+        <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
+      </Menu.Item>
+    </Menu.Group>
   )
 
   return (

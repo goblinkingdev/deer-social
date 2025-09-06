@@ -29,7 +29,7 @@ import {
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
 import {cleanError} from '#/lib/strings/errors'
-import {toShareUrl} from '#/lib/strings/url-helpers'
+import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {s} from '#/lib/styles'
 import {logger} from '#/logger'
 import {isNative, isWeb} from '#/platform/detection'
@@ -506,12 +506,29 @@ function Header({
     shareUrl(url)
   }, [list, rkey])
 
+  const onPressShareBsky = useCallback(() => {
+    const url = toShareUrlBsky(`/profile/${list.creator.did}/lists/${rkey}`)
+    shareUrl(url)
+  }, [list, rkey])
+
   const dropdownItems: DropdownItem[] = useMemo(() => {
     let items: DropdownItem[] = [
       {
         testID: 'listHeaderDropdownShareBtn',
         label: isWeb ? _(msg`Copy link to list`) : _(msg`Share`),
         onPress: onPressShare,
+        icon: {
+          ios: {
+            name: 'square.and.arrow.up',
+          },
+          android: '',
+          web: 'share',
+        },
+      },
+      {
+        testID: 'listHeaderDropdownShareBtn',
+        label: isWeb ? _(msg`Copy via bsky.app`) : _(msg`Share`),
+        onPress: onPressShareBsky,
         icon: {
           ios: {
             name: 'square.and.arrow.up',
@@ -633,21 +650,22 @@ function Header({
   }, [
     _,
     onPressShare,
+    onPressShareBsky,
+    savedFeedConfig,
     isOwner,
     isModList,
     isPinned,
     isCurateList,
+    isBlocking,
+    isMuting,
+    onRemoveFromSavedFeeds,
     onPressEdit,
     deleteListPromptControl.open,
     onPressReport,
     isPending,
-    isBlocking,
-    isMuting,
+    removeSavedFeed,
     onUnsubscribeMute,
     onUnsubscribeBlock,
-    removeSavedFeed,
-    savedFeedConfig,
-    onRemoveFromSavedFeeds,
   ])
 
   const subscribeDropdownItems: DropdownItem[] = useMemo(() => {

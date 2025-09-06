@@ -10,7 +10,7 @@ import {HITSLOP_20} from '#/lib/constants'
 import {makeProfileLink} from '#/lib/routes/links'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareText, shareUrl} from '#/lib/sharing'
-import {toShareUrl} from '#/lib/strings/url-helpers'
+import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {isWeb} from '#/platform/detection'
 import {type Shadow} from '#/state/cache/types'
@@ -116,6 +116,10 @@ let ProfileMenu = ({
 
   const onPressShare = React.useCallback(() => {
     shareUrl(toShareUrl(makeProfileLink(profile)))
+  }, [profile])
+
+  const onPressShareBsky = React.useCallback(() => {
+    shareUrl(toShareUrlBsky(makeProfileLink(profile)))
   }, [profile])
 
   const onPressAddRemoveLists = React.useCallback(() => {
@@ -264,6 +268,25 @@ let ProfileMenu = ({
               <Menu.ItemText>
                 {isWeb ? (
                   <Trans>Copy link to profile</Trans>
+                ) : (
+                  <Trans>Share via...</Trans>
+                )}
+              </Menu.ItemText>
+              <Menu.ItemIcon icon={isWeb ? ChainLinkIcon : ArrowOutOfBoxIcon} />
+            </Menu.Item>
+            <Menu.Item
+              testID="profileHeaderDropdownShareBtn"
+              label={isWeb ? _(msg`Copy via bsky.app`) : _(msg`Share via...`)}
+              onPress={() => {
+                if (showLoggedOutWarning) {
+                  loggedOutWarningPromptControl.open()
+                } else {
+                  onPressShareBsky()
+                }
+              }}>
+              <Menu.ItemText>
+                {isWeb ? (
+                  <Trans>Copy via bsky.app</Trans>
                 ) : (
                   <Trans>Share via...</Trans>
                 )}
