@@ -185,7 +185,7 @@ export function createThemes({
   } as const
 
   const darkPalette: Palette = {
-    white: color.gray_25,
+    white: color.gray_0, // this used to be gray_25, set it to 0 for contrast reasons
     black: color.trueBlack,
     like: color.like,
 
