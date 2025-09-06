@@ -206,7 +206,7 @@ export const defaults: Schema = {
   showLinkInHandle: false,
   deerVerification: {
     enabled: false,
-    // https://deer.social/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
+    // https://social.daniela.lol/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
     trusted: [
       'did:plc:z72i7hdynmk6r22z27h6tvur',
       'did:plc:eclio37ymobqex2ncko63h4r',

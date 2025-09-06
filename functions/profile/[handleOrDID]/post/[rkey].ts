@@ -130,21 +130,21 @@ class HeadHandler {
     const embedElems = !embed
       ? ''
       : AppBskyEmbedImages.isView(embed)
-      ? html`${embed.images.map(
-            i => html`<meta property="og:image" content="${i.thumb}" />`,
-          )}
-          <meta name="twitter:card" content="summary_large_image" /> `
-      : // TODO: in the future, embed videos
-      'thumbnail' in embed && embed.thumbnail
-      ? html`
-          <meta property="og:image" content="${embed.thumbnail}" />
-          <meta name="twitter:card" content="summary_large_image" />
-        `
-      : html`<meta name="twitter:card" content="summary" />`
+        ? html`${embed.images.map(
+              i => html`<meta property="og:image" content="${i.thumb}" />`,
+            )}
+            <meta name="twitter:card" content="summary_large_image" /> `
+        : // TODO: in the future, embed videos
+          'thumbnail' in embed && embed.thumbnail
+          ? html`
+              <meta property="og:image" content="${embed.thumbnail}" />
+              <meta name="twitter:card" content="summary_large_image" />
+            `
+          : html`<meta name="twitter:card" content="summary" />`
 
     element.append(
       html`
-        <meta property="og:site_name" content="deer.social" />
+        <meta property="og:site_name" content="social.daniela.lol" />
         <meta property="og:type" content="article" />
         <meta property="profile:username" content="${author.handle}" />
         <meta property="og:url" content="${this.url}" />

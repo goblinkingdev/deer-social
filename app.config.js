@@ -18,7 +18,7 @@ module.exports = function (_config) {
   const IS_DEV = !IS_TESTFLIGHT || !IS_PRODUCTION
 
   const ASSOCIATED_DOMAINS = [
-    'applinks:deer.social',
+    'applinks:social.daniela.lol',
     // When testing local services, enter an ngrok (et al) domain here. It must use a standard HTTP/HTTPS port.
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
@@ -63,7 +63,7 @@ module.exports = function (_config) {
             'Used to save images to your library.',
           NSPhotoLibraryUsageDescription:
             'Used for profile pictures, posts, and other kinds of content',
-          CFBundleSpokenName: 'deer.social',
+          CFBundleSpokenName: 'social.daniela.lol',
           CFBundleLocalizations: [
             'en',
             'an',
@@ -159,6 +159,10 @@ module.exports = function (_config) {
             action: 'VIEW',
             autoVerify: true,
             data: [
+              {
+                scheme: 'https',
+                host: 'social.daniela.lol',
+              },
               {
                 scheme: 'https',
                 host: 'deer.social',

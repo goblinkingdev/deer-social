@@ -166,7 +166,7 @@ function Footer() {
       ]}>
       <InlineLinkText
         label={_(msg`Read the patches and contribute`)}
-        to="https://github.com/a-viv-a/deer-social">
+        to="https://github.com/danielah05/deer-social">
         <Trans>Github</Trans>
       </InlineLinkText>
 

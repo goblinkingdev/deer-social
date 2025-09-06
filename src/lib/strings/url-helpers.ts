@@ -7,9 +7,10 @@ import {isInvalidHandle} from '#/lib/strings/handles'
 import {startUriToStarterPackUri} from '#/lib/strings/starter-pack'
 import {logger} from '#/logger'
 
-export const BSKY_APP_HOST = 'https://deer.social'
+export const BSKY_APP_HOST = 'https://social.daniela.lol'
 const BSKY_TRUSTED_HOSTS = [
   'deer\\.social',
+  'social\\.daniela\\.lol',
   'bsky\\.app',
   'bsky\\.social',
   'blueskyweb\\.xyz',
@@ -80,7 +81,7 @@ export function toShortUrl(url: string): string {
 
 export function toShareUrl(url: string): string {
   if (!url.startsWith('https')) {
-    const urlp = new URL('https://deer.social')
+    const urlp = new URL('https://social.daniela.lol')
     urlp.pathname = url
     url = urlp.toString()
   }
@@ -95,7 +96,9 @@ export function isBskyAppUrl(url: string): boolean {
   return (
     url.startsWith('https://bsky.app/') ||
     (url.startsWith('https://deer.social/') &&
-      !url.startsWith('https://deer.social/about'))
+      !url.startsWith('https://deer.social/about')) ||
+    (url.startsWith('https://social.daniela.lol/') &&
+      !url.startsWith('https://social.daniela.lol/about'))
   )
 }
 
