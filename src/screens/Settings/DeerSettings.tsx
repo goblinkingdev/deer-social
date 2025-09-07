@@ -34,6 +34,10 @@ import {
   useSetDirectFetchRecords,
 } from '#/state/preferences/direct-fetch-records'
 import {
+  useHideFeedsPromoTab,
+  useSetHideFeedsPromoTab,
+} from '#/state/preferences/hide-feeds-promo-tab'
+import {
   useHideFollowNotifications,
   useSetHideFollowNotifications,
 } from '#/state/preferences/hide-follow-notifications'
@@ -227,6 +231,9 @@ export function DeerSettingsScreen({}: Props) {
 
   const hideFollowNotifications = useHideFollowNotifications()
   const setHideFollowNotifications = useSetHideFollowNotifications()
+
+  const hideFeedsPromoTab = useHideFeedsPromoTab()
+  const setHideFeedsPromoTab = useSetHideFeedsPromoTab()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -491,6 +498,20 @@ export function DeerSettingsScreen({}: Props) {
                 longer to load and use more bandwidth.
               </Trans>
             </Admonition>
+
+            <Toggle.Item
+              name="hide_feeds_promo_tab"
+              label={_(msg`Hide "Feeds ✨" tab when only one feed is selected`)}
+              value={hideFeedsPromoTab}
+              onChange={value => setHideFeedsPromoTab(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>
+                  Hide "Feeds ✨" tab when only one feed is selected
+                </Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
           </SettingsList.Group>
 
           <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
