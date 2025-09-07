@@ -5,25 +5,17 @@ import {
 } from '#/state/geolocation/const'
 import {emitGeolocationConfigUpdate} from '#/state/geolocation/events'
 import {logger} from '#/state/geolocation/logger'
-import {BAPP_CONFIG_DEV_BYPASS_SECRET, IS_DEV} from '#/env'
 import {type Device, device} from '#/storage'
 
 async function getGeolocationConfig(
-  url: string,
+  _url: string,
 ): Promise<Device['geolocation']> {
-  const res = await fetch(url, {
-    headers: IS_DEV
-      ? {
-          'x-dev-bypass-secret': BAPP_CONFIG_DEV_BYPASS_SECRET,
-        }
-      : undefined,
-  })
-
-  if (!res.ok) {
-    throw new Error(`config: fetch failed ${res.status}`)
+  const json = {
+    countryCode: 'US',
+    regionCode: 'SC',
+    ageRestrictedGeos: [],
+    ageBlockedGeos: [],
   }
-
-  const json = await res.json()
 
   if (json.countryCode) {
     /**
