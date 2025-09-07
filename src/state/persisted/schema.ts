@@ -131,9 +131,9 @@ const schema = z.object({
   noAppLabelers: z.boolean().optional(),
   noDiscoverFallback: z.boolean().optional(),
   repostCarouselEnabled: z.boolean().optional(),
-  hideFollowNotifications: z.boolean().optional(),
   constellationInstance: z.string().optional(),
   showLinkInHandle: z.boolean().optional(),
+  hideFeedsPromoTab: z.boolean().optional(),
   deerVerification: z
     .object({
       enabled: z.boolean(),
@@ -201,9 +201,9 @@ export const defaults: Schema = {
   noAppLabelers: true,
   noDiscoverFallback: false,
   repostCarouselEnabled: false,
-  hideFollowNotifications: false,
   constellationInstance: 'https://constellation.microcosm.blue/',
   showLinkInHandle: true,
+  hideFeedsPromoTab: false,
   deerVerification: {
     enabled: false,
     // https://deer-social-ayla.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k

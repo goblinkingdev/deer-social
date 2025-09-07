@@ -10,7 +10,7 @@ import {Provider as DisableHapticsProvider} from './disable-haptics'
 import {Provider as ExternalEmbedsProvider} from './external-embeds-prefs'
 import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
-import {Provider as FollowNotificationsProvider} from './hide-follow-notifications'
+import {Provider as HideFeedsPromoTabProvider} from './hide-feeds-promo-tab'
 import {Provider as HighQualityImagesProvider} from './high-quality-images'
 import {Provider as InAppBrowserProvider} from './in-app-browser'
 import {Provider as KawaiiProvider} from './kawaii'
@@ -36,6 +36,10 @@ export {
 } from './external-embeds-prefs'
 export {useGoLinksEnabled, useSetGoLinksEnabled} from './go-links-enabled'
 export * from './hidden-posts'
+export {
+  useHideFeedsPromoTab,
+  useSetHideFeedsPromoTab,
+} from './hide-feeds-promo-tab'
 export {useLabelDefinitions} from './label-defs'
 export {useLanguagePrefs, useLanguagePrefsApi} from './languages'
 export {useSetSubtitlesEnabled, useSubtitlesEnabled} from './subtitles'
@@ -46,45 +50,45 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
       <AltTextRequiredProvider>
         <GoLinksProvider>
           <NoAppLabelersProvider>
-            <FollowNotificationsProvider>
-              <DirectFetchRecordsProvider>
-                <ConstellationProvider>
-                  <ConstellationInstanceProvider>
-                    <DeerVerificationProvider>
-                      <NoDiscoverProvider>
-                        <ShowLinkInHandleProvider>
-                          <LargeAltBadgeProvider>
-                            <ExternalEmbedsProvider>
-                              <HiddenPostsProvider>
-                                <HighQualityImagesProvider>
-                                  <InAppBrowserProvider>
-                                    <DisableHapticsProvider>
-                                      <AutoplayProvider>
-                                        <UsedStarterPacksProvider>
-                                          <SubtitlesProvider>
-                                            <TrendingSettingsProvider>
-                                              <RepostCarouselProvider>
-                                                <KawaiiProvider>
+            <DirectFetchRecordsProvider>
+              <ConstellationProvider>
+                <ConstellationInstanceProvider>
+                  <DeerVerificationProvider>
+                    <NoDiscoverProvider>
+                      <ShowLinkInHandleProvider>
+                        <LargeAltBadgeProvider>
+                          <ExternalEmbedsProvider>
+                            <HiddenPostsProvider>
+                              <HighQualityImagesProvider>
+                                <InAppBrowserProvider>
+                                  <DisableHapticsProvider>
+                                    <AutoplayProvider>
+                                      <UsedStarterPacksProvider>
+                                        <SubtitlesProvider>
+                                          <TrendingSettingsProvider>
+                                            <RepostCarouselProvider>
+                                              <KawaiiProvider>
+                                                <HideFeedsPromoTabProvider>
                                                   {children}
-                                                </KawaiiProvider>
-                                              </RepostCarouselProvider>
-                                            </TrendingSettingsProvider>
-                                          </SubtitlesProvider>
-                                        </UsedStarterPacksProvider>
-                                      </AutoplayProvider>
-                                    </DisableHapticsProvider>
-                                  </InAppBrowserProvider>
-                                </HighQualityImagesProvider>
-                              </HiddenPostsProvider>
-                            </ExternalEmbedsProvider>
-                          </LargeAltBadgeProvider>
-                        </ShowLinkInHandleProvider>
-                      </NoDiscoverProvider>
-                    </DeerVerificationProvider>
-                  </ConstellationInstanceProvider>
-                </ConstellationProvider>
-              </DirectFetchRecordsProvider>
-            </FollowNotificationsProvider>
+                                                </HideFeedsPromoTabProvider>
+                                              </KawaiiProvider>
+                                            </RepostCarouselProvider>
+                                          </TrendingSettingsProvider>
+                                        </SubtitlesProvider>
+                                      </UsedStarterPacksProvider>
+                                    </AutoplayProvider>
+                                  </DisableHapticsProvider>
+                                </InAppBrowserProvider>
+                              </HighQualityImagesProvider>
+                            </HiddenPostsProvider>
+                          </ExternalEmbedsProvider>
+                        </LargeAltBadgeProvider>
+                      </ShowLinkInHandleProvider>
+                    </NoDiscoverProvider>
+                  </DeerVerificationProvider>
+                </ConstellationInstanceProvider>
+              </ConstellationProvider>
+            </DirectFetchRecordsProvider>
           </NoAppLabelersProvider>
         </GoLinksProvider>
       </AltTextRequiredProvider>
