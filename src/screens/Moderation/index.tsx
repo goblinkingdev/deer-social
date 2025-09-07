@@ -12,21 +12,15 @@ import {
 } from '#/lib/routes/types'
 import {logger} from '#/logger'
 import {isIOS} from '#/platform/detection'
-import {useAgeAssurance} from '#/state/ageAssurance/useAgeAssurance'
 import {
   useMyLabelersQuery,
   usePreferencesQuery,
   type UsePreferencesQueryResponse,
   usePreferencesSetAdultContentMutation,
 } from '#/state/queries/preferences'
-import {isNonConfigurableModerationAuthority} from '#/state/session/additional-moderation-authorities'
 import {useSetMinimalShellMode} from '#/state/shell'
 import {atoms as a, useBreakpoints, useTheme, type ViewStyleProp} from '#/alf'
-import {Admonition} from '#/components/Admonition'
-import {AgeAssuranceAdmonition} from '#/components/ageAssurance/AgeAssuranceAdmonition'
-import {Button, ButtonText} from '#/components/Button'
-import * as Dialog from '#/components/Dialog'
-import {BirthDateSettingsDialog} from '#/components/dialogs/BirthDateSettings'
+import {Button} from '#/components/Button'
 import {useGlobalDialogsControlContext} from '#/components/dialogs/Context'
 import {Divider} from '#/components/Divider'
 import * as Toggle from '#/components/forms/Toggle'
@@ -86,9 +80,8 @@ export function ModerationScreen(
     error: preferencesError,
     data: preferences,
   } = usePreferencesQuery()
-  const {isReady: isAgeInfoReady} = useAgeAssurance()
 
-  const isLoading = isPreferencesLoading || !isAgeInfoReady
+  const isLoading = isPreferencesLoading
   const error = preferencesError
 
   return (
@@ -162,13 +155,11 @@ export function ModerationScreenInner({
   const setMinimalShellMode = useSetMinimalShellMode()
   const {gtMobile} = useBreakpoints()
   const {mutedWordsDialogControl} = useGlobalDialogsControlContext()
-  const birthdateDialogControl = Dialog.useDialogControl()
   const {
     isLoading: isLabelersLoading,
     data: labelers,
     error: labelersError,
   } = useMyLabelersQuery()
-  const {declaredAge, isDeclaredUnderage, isAgeRestricted} = useAgeAssurance()
 
   useFocusEffect(
     useCallback(() => {
@@ -202,24 +193,6 @@ export function ModerationScreenInner({
 
   return (
     <View style={[a.pt_2xl, a.px_lg, gtMobile && a.px_2xl]}>
-      {isDeclaredUnderage && (
-        <View style={[a.pb_2xl]}>
-          <Admonition type="tip" style={[a.pb_md]}>
-            <Trans>
-              Your declared age is under 18. Some settings below may be
-              disabled. If this was a mistake, you may edit your birthdate in
-              your{' '}
-              <InlineLinkText
-                to="/settings/account"
-                label={_(msg`Go to account settings`)}>
-                account settings
-              </InlineLinkText>
-              .
-            </Trans>
-          </Admonition>
-        </View>
-      )}
-
       <Text
         style={[a.text_md, a.font_bold, a.pb_md, t.atoms.text_contrast_high]}>
         <Trans>Moderation tools</Trans>
@@ -323,144 +296,84 @@ export function ModerationScreenInner({
         </Link>
       </View>
 
-      {declaredAge === undefined && (
-        <>
-          <Text
-            style={[
-              a.pt_2xl,
-              a.pb_md,
-              a.text_md,
-              a.font_bold,
-              t.atoms.text_contrast_high,
-            ]}>
-            <Trans>Content filters</Trans>
-          </Text>
-
-          <Button
-            label={_(msg`Confirm your birthdate`)}
-            size="small"
-            variant="solid"
-            color="secondary"
-            onPress={() => {
-              birthdateDialogControl.open()
-            }}
-            style={[a.justify_between, a.rounded_md, a.px_lg, a.py_lg]}>
-            <ButtonText>
-              <Trans>Confirm your age:</Trans>
-            </ButtonText>
-            <ButtonText>
-              <Trans>Set birthdate</Trans>
-            </ButtonText>
-          </Button>
-
-          <BirthDateSettingsDialog control={birthdateDialogControl} />
-        </>
-      )}
-
-      {!isDeclaredUnderage && (
-        <>
-          <Text
-            style={[
-              a.pt_2xl,
-              a.pb_md,
-              a.text_md,
-              a.font_bold,
-              t.atoms.text_contrast_high,
-            ]}>
-            <Trans>Content filters</Trans>
-          </Text>
-
-          <AgeAssuranceAdmonition style={[a.pb_md]}>
-            <Trans>
-              You must complete age assurance in order to access the settings
-              below.
-            </Trans>
-          </AgeAssuranceAdmonition>
-
-          <View style={[a.gap_md]}>
-            <View
-              style={[
-                a.w_full,
-                a.rounded_md,
-                a.overflow_hidden,
-                t.atoms.bg_contrast_25,
-              ]}>
-              {!isDeclaredUnderage && (
-                <>
-                  <View
-                    style={[
-                      a.py_lg,
-                      a.px_lg,
-                      a.flex_row,
-                      a.align_center,
-                      a.justify_between,
-                      disabledOnIOS && {opacity: 0.5},
-                    ]}>
-                    <Text style={[a.font_bold, t.atoms.text_contrast_high]}>
-                      <Trans>Enable adult content</Trans>
+      <View style={[a.gap_md]}>
+        <View
+          style={[
+            a.w_full,
+            a.rounded_md,
+            a.overflow_hidden,
+            t.atoms.bg_contrast_25,
+          ]}>
+          {
+            <>
+              <View
+                style={[
+                  a.py_lg,
+                  a.px_lg,
+                  a.flex_row,
+                  a.align_center,
+                  a.justify_between,
+                  disabledOnIOS && {opacity: 0.5},
+                ]}>
+                <Text style={[a.font_bold, t.atoms.text_contrast_high]}>
+                  <Trans>Enable adult content</Trans>
+                </Text>
+                <Toggle.Item
+                  label={_(msg`Toggle to enable or disable adult content`)}
+                  disabled={disabledOnIOS}
+                  name="adultContent"
+                  value={adultContentEnabled}
+                  onChange={onToggleAdultContentEnabled}>
+                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+                    <Text style={[t.atoms.text_contrast_medium]}>
+                      {adultContentEnabled ? (
+                        <Trans>Enabled</Trans>
+                      ) : (
+                        <Trans>Disabled</Trans>
+                      )}
                     </Text>
-                    <Toggle.Item
-                      label={_(msg`Toggle to enable or disable adult content`)}
-                      disabled={disabledOnIOS || isAgeRestricted}
-                      name="adultContent"
-                      value={adultContentEnabled}
-                      onChange={onToggleAdultContentEnabled}>
-                      <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                        <Text style={[t.atoms.text_contrast_medium]}>
-                          {adultContentEnabled ? (
-                            <Trans>Enabled</Trans>
-                          ) : (
-                            <Trans>Disabled</Trans>
-                          )}
-                        </Text>
-                        <Toggle.Switch />
-                      </View>
-                    </Toggle.Item>
+                    <Toggle.Switch />
                   </View>
-                  {disabledOnIOS && (
-                    <View style={[a.pb_lg, a.px_lg]}>
-                      <Text>
-                        <Trans>
-                          Adult content can only be enabled via the Web at{' '}
-                          <InlineLinkText
-                            label={_(msg`The Bluesky web application`)}
-                            to=""
-                            onPress={evt => {
-                              evt.preventDefault()
-                              Linking.openURL('https://bsky.app/')
-                              return false
-                            }}>
-                            bsky.app
-                          </InlineLinkText>
-                          .
-                        </Trans>
-                      </Text>
-                    </View>
-                  )}
-
-                  {adultContentEnabled && (
-                    <>
-                      <Divider />
-                      <GlobalLabelPreference labelDefinition={LABELS.porn} />
-                      <Divider />
-                      <GlobalLabelPreference labelDefinition={LABELS.sexual} />
-                      <Divider />
-                      <GlobalLabelPreference
-                        labelDefinition={LABELS['graphic-media']}
-                      />
-                      <Divider />
-                      <GlobalLabelPreference
-                        disabled={isDeclaredUnderage || isAgeRestricted}
-                        labelDefinition={LABELS.nudity}
-                      />
-                    </>
-                  )}
-                </>
+                </Toggle.Item>
+              </View>
+              {disabledOnIOS && (
+                <View style={[a.pb_lg, a.px_lg]}>
+                  <Text>
+                    <Trans>
+                      Adult content can only be enabled via the Web at{' '}
+                      <InlineLinkText
+                        label={_(msg`The Bluesky web application`)}
+                        to=""
+                        onPress={evt => {
+                          evt.preventDefault()
+                          Linking.openURL('https://bsky.app/')
+                          return false
+                        }}>
+                        bsky.app
+                      </InlineLinkText>
+                      .
+                    </Trans>
+                  </Text>
+                </View>
               )}
-            </View>
-          </View>
-        </>
-      )}
+              <Divider />
+            </>
+          }
+          {adultContentEnabled && (
+            <>
+              <GlobalLabelPreference labelDefinition={LABELS.porn} />
+              <Divider />
+              <GlobalLabelPreference labelDefinition={LABELS.sexual} />
+              <Divider />
+              <GlobalLabelPreference
+                labelDefinition={LABELS['graphic-media']}
+              />
+              <Divider />
+            </>
+          )}
+          <GlobalLabelPreference labelDefinition={LABELS.nudity} />
+        </View>
+      </View>
 
       <Text
         style={[
@@ -519,9 +432,6 @@ export function ModerationScreenInner({
                           value={labeler.creator.description}
                           handle={labeler.creator.handle}
                         />
-                        {isNonConfigurableModerationAuthority(
-                          labeler.creator.did,
-                        ) && <LabelingService.RegionalNotice />}
                       </LabelingService.Content>
                     </LabelingService.Outer>
                   )}

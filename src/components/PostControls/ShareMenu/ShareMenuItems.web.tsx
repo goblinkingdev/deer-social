@@ -11,7 +11,6 @@ import {shareText, shareUrl} from '#/lib/sharing'
 import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {isWeb} from '#/platform/detection'
-import {useAgeAssurance} from '#/state/ageAssurance/useAgeAssurance'
 import {useProfileShadow} from '#/state/cache/profile-shadow'
 import {useSession} from '#/state/session'
 import {useBreakpoints} from '#/alf'
@@ -39,7 +38,6 @@ let ShareMenuItems = ({
   const embedPostControl = useDialogControl()
   const sendViaChatControl = useDialogControl()
   const [devModeEnabled] = useDevMode()
-  const {isAgeRestricted} = useAgeAssurance()
 
   const postUri = post.uri
   const postCid = post.cid
@@ -116,7 +114,7 @@ let ShareMenuItems = ({
       <Menu.Outer>
         {copyLinkItem}
 
-        {hasSession && !isAgeRestricted && (
+        {hasSession && (
           <Menu.Item
             testID="postDropdownSendViaDMBtn"
             label={_(msg`Send via direct message`)}

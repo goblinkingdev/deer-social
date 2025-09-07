@@ -7,8 +7,6 @@ export enum Nux {
   ExploreInterestsCard = 'ExploreInterestsCard',
   InitialVerificationAnnouncement = 'InitialVerificationAnnouncement',
   ActivitySubscriptions = 'ActivitySubscriptions',
-  AgeAssuranceDismissibleNotice = 'AgeAssuranceDismissibleNotice',
-  AgeAssuranceDismissibleFeedBanner = 'AgeAssuranceDismissibleFeedBanner',
   BookmarksAnnouncement = 'BookmarksAnnouncement',
 
   /*
@@ -37,14 +35,6 @@ export type AppNux = BaseNux<
       data: undefined
     }
   | {
-      id: Nux.AgeAssuranceDismissibleNotice
-      data: undefined
-    }
-  | {
-      id: Nux.AgeAssuranceDismissibleFeedBanner
-      data: undefined
-    }
-  | {
       id: Nux.PolicyUpdate202508
       data: undefined
     }
@@ -59,8 +49,6 @@ export const NuxSchemas: Record<Nux, zod.ZodObject<any> | undefined> = {
   [Nux.ExploreInterestsCard]: undefined,
   [Nux.InitialVerificationAnnouncement]: undefined,
   [Nux.ActivitySubscriptions]: undefined,
-  [Nux.AgeAssuranceDismissibleNotice]: undefined,
-  [Nux.AgeAssuranceDismissibleFeedBanner]: undefined,
   [Nux.PolicyUpdate202508]: undefined,
   [Nux.BookmarksAnnouncement]: undefined,
 }

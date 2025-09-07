@@ -49,7 +49,7 @@ module.exports = function (_config) {
       primaryColor: '#4b9b6c',
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'social.deer',
+        bundleIdentifier: 'dev.pages.deer_social_ayla',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -111,7 +111,8 @@ module.exports = function (_config) {
         entitlements: {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
-          'com.apple.security.application-groups': 'group.social.deer',
+          'com.apple.security.application-groups':
+            'group.dev.pages.deer_social_ayla',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -153,7 +154,7 @@ module.exports = function (_config) {
           backgroundColor: '#4b9b6c',
         },
         googleServicesFile: './google-services.json',
-        package: 'social.deer',
+        package: 'dev.pages.deer_social_ayla',
         intentFilters: [
           {
             action: 'VIEW',

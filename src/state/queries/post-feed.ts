@@ -8,7 +8,6 @@ import {
   type BskyAgent,
   moderatePost,
   type ModerationDecision,
-  type ModerationPrefs,
 } from '@atproto/api'
 import {
   type InfiniteData,
@@ -32,7 +31,6 @@ import {FeedTuner, type FeedTunerFn} from '#/lib/api/feed-manip'
 import {DISCOVER_FEED_URI} from '#/lib/constants'
 import {BSKY_FEED_OWNER_DIDS} from '#/lib/constants'
 import {logger} from '#/logger'
-import {useAgeAssuranceContext} from '#/state/ageAssurance'
 import {STALE} from '#/state/queries'
 import {DEFAULT_LOGGED_OUT_PREFERENCES} from '#/state/queries/preferences/const'
 import {useAgent} from '#/state/session'
@@ -137,18 +135,8 @@ export function usePostFeedQuery(
   const feedTuners = useFeedTuners(feedDesc)
   const moderationOpts = useModerationOpts()
   const {data: preferences} = usePreferencesQuery()
-  /**
-   * Load bearing: we need to await AA state or risk FOUC. This marginally
-   * delays feeds, but AA state is fetched immediately on load and is then
-   * available for the remainder of the session, so this delay only affects cold
-   * loads. -esb
-   */
-  const {isReady: isAgeAssuranceReady} = useAgeAssuranceContext()
   const enabled =
-    opts?.enabled !== false &&
-    Boolean(moderationOpts) &&
-    Boolean(preferences) &&
-    isAgeAssuranceReady
+    opts?.enabled !== false && Boolean(moderationOpts) && Boolean(preferences)
   const userInterests = aggregateUserInterests(preferences)
   const followingPinnedIndex =
     preferences?.savedFeeds?.findIndex(
@@ -221,11 +209,7 @@ export function usePostFeedQuery(
          * some not.
          */
         if (!agent.session) {
-          assertSomePostsPassModeration(
-            res.feed,
-            preferences?.moderationPrefs ||
-              DEFAULT_LOGGED_OUT_PREFERENCES.moderationPrefs,
-          )
+          assertSomePostsPassModeration(res.feed)
         }
 
         return {
@@ -615,10 +599,7 @@ export function* findAllProfilesInQueryData(
   }
 }
 
-function assertSomePostsPassModeration(
-  feed: AppBskyFeedDefs.FeedViewPost[],
-  moderationPrefs: ModerationPrefs,
-) {
+function assertSomePostsPassModeration(feed: AppBskyFeedDefs.FeedViewPost[]) {
   // no posts in this feed
   if (feed.length === 0) return true
 
@@ -628,7 +609,7 @@ function assertSomePostsPassModeration(
   for (const item of feed) {
     const moderation = moderatePost(item.post, {
       userDid: undefined,
-      prefs: moderationPrefs,
+      prefs: DEFAULT_LOGGED_OUT_PREFERENCES.moderationPrefs,
     })
 
     if (!moderation.ui('contentList').filter) {

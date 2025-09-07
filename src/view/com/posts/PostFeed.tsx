@@ -44,16 +44,11 @@ import {
 import {useLiveNowConfig} from '#/state/service-config'
 import {useSession} from '#/state/session'
 import {useProgressGuide} from '#/state/shell/progress-guide'
-import {useSelectedFeed} from '#/state/shell/selected-feed'
 import {List, type ListRef} from '#/view/com/util/List'
 import {PostFeedLoadingPlaceholder} from '#/view/com/util/LoadingPlaceholder'
 import {LoadMoreRetryBtn} from '#/view/com/util/LoadMoreRetryBtn'
 import {type VideoFeedSourceContext} from '#/screens/VideoFeed/types'
 import {useBreakpoints, useLayoutBreakpoints} from '#/alf'
-import {
-  AgeAssuranceDismissibleFeedBanner,
-  useInternalState as useAgeAssuranceBannerState,
-} from '#/components/ageAssurance/AgeAssuranceDismissibleFeedBanner'
 import {ProgressGuide, SuggestedFollows} from '#/components/FeedInterstitials'
 import {
   PostFeedVideoGridRow,
@@ -141,10 +136,6 @@ type FeedRow =
     }
   | {
       type: 'showLessFollowup'
-      key: string
-    }
-  | {
-      type: 'ageAssuranceBanner'
       key: string
     }
 
@@ -419,13 +410,6 @@ let PostFeed = ({
   if (feedType === 'following') {
     useRepostCarousel = repostCarouselEnabled
   }
-  const ageAssuranceBannerState = useAgeAssuranceBannerState()
-  const selectedFeed = useSelectedFeed()
-  /**
-   * Cached value of whether the current feed was selected at startup. We don't
-   * want this to update when user swipes.
-   */
-  const [isCurrentFeedAtStartupSelected] = useState(selectedFeed === feed)
 
   const feedItems: FeedRow[] = useMemo(() => {
     // wraps a slice item, and replaces it with a showLessFollowup item
@@ -546,21 +530,6 @@ let PostFeed = ({
                         type: 'interstitialProgressGuide',
                         key: 'interstitial-' + sliceIndex + '-' + lastFetchedAt,
                       })
-                    } else {
-                      /*
-                       * Only insert if Discover was the last selected feed at
-                       * startup, the progress guide isn't shown, and the
-                       * banner is eligible to be shown.
-                       */
-                      if (
-                        isCurrentFeedAtStartupSelected &&
-                        ageAssuranceBannerState.visible
-                      ) {
-                        arr.push({
-                          type: 'ageAssuranceBanner',
-                          key: 'ageAssuranceBanner-' + sliceIndex,
-                        })
-                      }
                     }
                     if (!rightNavVisible && !trendingDisabled) {
                       arr.push({
@@ -587,17 +556,6 @@ let PostFeed = ({
                     arr.push({
                       type: 'interstitialFollows',
                       key: 'interstitial-' + sliceIndex + '-' + lastFetchedAt,
-                    })
-                  }
-                } else {
-                  /*
-                   * Only insert if this feed was the last selected feed at
-                   * startup and the banner is eligible to be shown.
-                   */
-                  if (sliceIndex === 0 && isCurrentFeedAtStartupSelected) {
-                    arr.push({
-                      type: 'ageAssuranceBanner',
-                      key: 'ageAssuranceBanner-' + sliceIndex,
                     })
                   }
                 }
@@ -709,8 +667,6 @@ let PostFeed = ({
     areVideoFeedsEnabled,
     useRepostCarousel,
     hasPressedShowLessUris,
-    ageAssuranceBannerState,
-    isCurrentFeedAtStartupSelected,
   ])
 
   // events
@@ -797,8 +753,6 @@ let PostFeed = ({
         return <SuggestedFollows feed={feed} />
       } else if (row.type === 'interstitialProgressGuide') {
         return <ProgressGuide />
-      } else if (row.type === 'ageAssuranceBanner') {
-        return <AgeAssuranceDismissibleFeedBanner />
       } else if (row.type === 'interstitialTrending') {
         return <TrendingInterstitial />
       } else if (row.type === 'interstitialTrendingVideos') {

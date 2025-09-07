@@ -35,7 +35,6 @@ module.exports = {
           'Admonition',
           'Admonition.Admonition',
           'Toast.Action',
-          'AgeAssuranceAdmonition',
           'Span',
         ],
         impliedTextProps: [],

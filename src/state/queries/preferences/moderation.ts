@@ -5,7 +5,6 @@ import {
   interpretLabelValueDefinitions,
 } from '@atproto/api'
 
-import {isNonConfigurableModerationAuthority} from '#/state/session/additional-moderation-authorities'
 import {useLabelersDetailedInfoQuery} from '../labeler'
 import {usePreferencesQuery} from './index'
 
@@ -17,11 +16,7 @@ export const DEFAULT_LOGGED_OUT_LABEL_PREFERENCES: typeof DEFAULT_LABEL_SETTINGS
     Object.entries(DEFAULT_LABEL_SETTINGS).map(([key, _pref]) => [key, 'hide']),
   )
 
-export function useMyLabelersQuery({
-  excludeNonConfigurableLabelers = false,
-}: {
-  excludeNonConfigurableLabelers?: boolean
-} = {}) {
+export function useMyLabelersQuery() {
   const prefs = usePreferencesQuery()
   let dids = Array.from(
     new Set(
@@ -30,9 +25,6 @@ export function useMyLabelersQuery({
       ),
     ),
   )
-  if (excludeNonConfigurableLabelers) {
-    dids = dids.filter(did => !isNonConfigurableModerationAuthority(did))
-  }
   const labelers = useLabelersDetailedInfoQuery({dids})
   const isLoading = prefs.isLoading || labelers.isLoading
   const error = prefs.error || labelers.error

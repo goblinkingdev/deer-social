@@ -68,7 +68,6 @@ export function Buttons({
   ignoreLabel,
   warnLabel,
   hideLabel,
-  disabled,
 }: {
   name: string
   values: ToggleButton.GroupProps['values']
@@ -76,14 +75,12 @@ export function Buttons({
   ignoreLabel?: string
   warnLabel?: string
   hideLabel?: string
-  disabled?: boolean
 }) {
   const {_} = useLingui()
 
   return (
     <View style={[{minHeight: 35}, a.w_full]}>
       <ToggleButton.Group
-        disabled={disabled}
         label={_(
           msg`Configure content filtering setting for category: ${name}`,
         )}
@@ -149,21 +146,22 @@ export function GlobalLabelPreference({
         name={labelStrings.name}
         description={labelStrings.description}
       />
-      <Buttons
-        name={labelStrings.name.toLowerCase()}
-        values={[pref]}
-        onChange={values => {
-          mutate({
-            label: identifier,
-            visibility: values[0] as LabelPreference,
-            labelerDid: undefined,
-          })
-        }}
-        ignoreLabel={labelOptions.ignore}
-        warnLabel={labelOptions.warn}
-        hideLabel={labelOptions.hide}
-        disabled={disabled}
-      />
+      {!disabled && (
+        <Buttons
+          name={labelStrings.name.toLowerCase()}
+          values={[pref]}
+          onChange={values => {
+            mutate({
+              label: identifier,
+              visibility: values[0] as LabelPreference,
+              labelerDid: undefined,
+            })
+          }}
+          ignoreLabel={labelOptions.ignore}
+          warnLabel={labelOptions.warn}
+          hideLabel={labelOptions.hide}
+        />
+      )}
     </Outer>
   )
 }

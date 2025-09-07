@@ -420,15 +420,6 @@ export function DeerSettingsScreen({}: Props) {
               </Trans>
             </Admonition>
           </SettingsList.Item>
-          <SettingsList.Item>
-            <Admonition type="info" style={[a.flex_1]}>
-              <Trans>
-                App labelers are mandatory top-level labelers that can perform
-                "takedowns". This setting does not influence geolocation based
-                labelers.
-              </Trans>
-            </Admonition>
-          </SettingsList.Item>
 
           <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
             <SettingsList.ItemIcon icon={PaintRollerIcon} />

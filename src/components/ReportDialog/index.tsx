@@ -1,14 +1,14 @@
 import React from 'react'
 import {Pressable, View} from 'react-native'
-import {ScrollView} from 'react-native-gesture-handler'
+import {type ScrollView} from 'react-native-gesture-handler'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
-import {ReportOption} from '#/lib/moderation/useReportOptions'
+import {type ReportOption} from '#/lib/moderation/useReportOptions'
 import {useMyLabelersQuery} from '#/state/queries/preferences'
 export {useDialogControl as useReportDialogControl} from '#/components/Dialog'
 
-import {AppBskyLabelerDefs} from '@atproto/api'
+import {type AppBskyLabelerDefs} from '@atproto/api'
 
 import {atoms as a} from '#/alf'
 import * as Dialog from '#/components/Dialog'
@@ -18,7 +18,7 @@ import {Text} from '#/components/Typography'
 import {SelectLabelerView} from './SelectLabelerView'
 import {SelectReportOptionView} from './SelectReportOptionView'
 import {SubmitView} from './SubmitView'
-import {ReportDialogProps} from './types'
+import {type ReportDialogProps} from './types'
 
 export function ReportDialog(props: ReportDialogProps) {
   return (
@@ -35,7 +35,7 @@ function ReportDialogInner(props: ReportDialogProps) {
     isLoading: isLabelerLoading,
     data: labelers,
     error,
-  } = useMyLabelersQuery({excludeNonConfigurableLabelers: true})
+  } = useMyLabelersQuery()
   const isLoading = useDelayedLoading(500, isLabelerLoading)
 
   const ref = React.useRef<ScrollView>(null)

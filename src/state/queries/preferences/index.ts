@@ -1,4 +1,3 @@
-import {useCallback} from 'react'
 import {
   type AppBskyActorDefs,
   type BskyFeedViewPreference,
@@ -10,8 +9,6 @@ import {PROD_DEFAULT_FEED} from '#/lib/constants'
 import {replaceEqualDeep} from '#/lib/functions'
 import {getAge} from '#/lib/strings/time'
 import {logger} from '#/logger'
-import {useAgeAssuranceContext} from '#/state/ageAssurance'
-import {makeAgeRestrictedModerationPrefs} from '#/state/ageAssurance/const'
 import {STALE} from '#/state/queries'
 import {
   DEFAULT_HOME_FEED_PREFS,
@@ -34,8 +31,6 @@ export const preferencesQueryKey = [preferencesQueryKeyRoot]
 
 export function usePreferencesQuery() {
   const agent = useAgent()
-  const {isAgeRestricted} = useAgeAssuranceContext()
-
   return useQuery({
     staleTime: STALE.SECONDS.FIFTEEN,
     structuralSharing: replaceEqualDeep,
@@ -73,21 +68,6 @@ export function usePreferencesQuery() {
         return preferences
       }
     },
-    select: useCallback(
-      (data: UsePreferencesQueryResponse) => {
-        const isUnderage = (data.userAge || 0) < 18
-        if (isUnderage || isAgeRestricted) {
-          data = {
-            ...data,
-            moderationPrefs: makeAgeRestrictedModerationPrefs(
-              data.moderationPrefs,
-            ),
-          }
-        }
-        return data
-      },
-      [isAgeRestricted],
-    ),
   })
 }
 

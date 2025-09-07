@@ -9,7 +9,6 @@ import {useIntentHandler} from '#/lib/hooks/useIntentHandler'
 import {useWebMediaQueries} from '#/lib/hooks/useWebMediaQueries'
 import {type NavigationProp} from '#/lib/routes/types'
 import {useGate} from '#/lib/statsig/statsig'
-import {useGeolocationStatus} from '#/state/geolocation'
 import {useIsDrawerOpen, useSetDrawerOpen} from '#/state/shell'
 import {useComposerKeyboardShortcut} from '#/state/shell/composer/useComposerKeyboardShortcut'
 import {useCloseAllActiveElements} from '#/state/util'
@@ -17,8 +16,6 @@ import {Lightbox} from '#/view/com/lightbox/Lightbox'
 import {ModalsContainer} from '#/view/com/modals/Modal'
 import {ErrorBoundary} from '#/view/com/util/ErrorBoundary'
 import {atoms as a, select, useTheme} from '#/alf'
-import {AgeAssuranceRedirectDialog} from '#/components/ageAssurance/AgeAssuranceRedirectDialog'
-import {BlockedGeoOverlay} from '#/components/BlockedGeoOverlay'
 import {EmailDialog} from '#/components/dialogs/EmailDialog'
 import {LinkWarningDialog} from '#/components/dialogs/LinkWarning'
 import {MutedWordsDialog} from '#/components/dialogs/MutedWords'
@@ -81,7 +78,6 @@ function ShellInner() {
       <MutedWordsDialog />
       <SigninDialog />
       <EmailDialog />
-      <AgeAssuranceRedirectDialog />
       <LinkWarningDialog />
       <Lightbox />
 
@@ -142,16 +138,13 @@ function ShellInner() {
 
 export function Shell() {
   const t = useTheme()
-  const {status: geolocation} = useGeolocationStatus()
   return (
     <View style={[a.util_screen_outer, t.atoms.bg]}>
-      {geolocation?.isAgeBlockedGeo ? (
-        <BlockedGeoOverlay />
-      ) : (
+      {
         <RoutesContainer>
           <ShellInner />
         </RoutesContainer>
-      )}
+      }
     </View>
   )
 }
