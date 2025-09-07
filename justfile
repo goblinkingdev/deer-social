@@ -36,6 +36,9 @@ postbuild-web:
     # copy our static pages over!
     cp -r deer-static-about web-build/about
 
+    # temporarily copy over out bootleg config.txt to simulate geolocation
+    cp config.txt web-build/
+
 [group('dev')]
 dev-android-setup: prebuild-android
     yarn android
