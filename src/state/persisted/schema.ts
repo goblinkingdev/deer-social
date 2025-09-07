@@ -161,7 +161,7 @@ export const defaults: Schema = {
   },
   languagePrefs: {
     primaryLanguage: deviceLanguageCodes[0] || 'en',
-    contentLanguages: deviceLanguageCodes || [],
+    contentLanguages: [],
     postLanguage: deviceLanguageCodes[0] || 'en',
     postLanguageHistory: (deviceLanguageCodes || [])
       .concat(['en', 'ja', 'pt', 'de'])
@@ -189,21 +189,21 @@ export const defaults: Schema = {
   disableHaptics: false,
   disableAutoplay: PlatformInfo.getIsReducedMotionEnabled(),
   kawaii: false,
-  hasCheckedForStarterPack: false,
+  hasCheckedForStarterPack: true,
   subtitlesEnabled: true,
-  trendingDisabled: false,
-  trendingVideoDisabled: false,
+  trendingDisabled: true,
+  trendingVideoDisabled: true,
 
   // deer
-  goLinksEnabled: true,
-  constellationEnabled: false,
-  directFetchRecords: false,
-  noAppLabelers: false,
+  goLinksEnabled: false,
+  constellationEnabled: true,
+  directFetchRecords: true,
+  noAppLabelers: true,
   noDiscoverFallback: false,
   repostCarouselEnabled: false,
   hideFollowNotifications: false,
   constellationInstance: 'https://constellation.microcosm.blue/',
-  showLinkInHandle: false,
+  showLinkInHandle: true,
   deerVerification: {
     enabled: false,
     // https://deer-social-ayla.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k

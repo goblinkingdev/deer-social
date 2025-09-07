@@ -27,7 +27,7 @@ export function setFontScale(fontScale: Device['fontScale']) {
 }
 
 export function getFontFamily() {
-  return device.get(['fontFamily']) || 'theme'
+  return device.get(['fontFamily']) || 'system'
 }
 
 export function setFontFamily(fontFamily: Device['fontFamily']) {
