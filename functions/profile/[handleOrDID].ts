@@ -85,7 +85,7 @@ class HeadHandler {
         : ''
     element.append(
       html`
-        <meta property="og:site_name" content="social.daniela.lol" />
+        <meta property="og:site_name" content="deer-social-ayla.pages.dev" />
         <meta property="og:type" content="profile" />
         <meta property="profile:username" content="${view.handle}" />
         <meta property="og:url" content="${this.url}" />

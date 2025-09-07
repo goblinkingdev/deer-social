@@ -9,10 +9,10 @@ const IFRAME_HOST = isWeb
   ? // @ts-ignore only for web
     window.location.host === 'localhost:8100'
     ? 'http://localhost:8100'
-    : 'https://social.daniela.lol'
+    : 'https://deer-social-ayla.pages.dev'
   : __DEV__ && !process.env.JEST_WORKER_ID
     ? 'http://localhost:8100'
-    : 'https://social.daniela.lol'
+    : 'https://deer-social-ayla.pages.dev'
 
 export const embedPlayerSources = [
   'youtube',

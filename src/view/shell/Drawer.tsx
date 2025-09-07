@@ -695,12 +695,12 @@ function ExtraLinks() {
       <InlineLinkText
         style={[a.text_md]}
         label={_(msg`Terms of Service`)}
-        to="https://social.daniela.lol/about/tos">
+        to="https://deer-social-ayla.pages.dev/about/tos">
         <Trans>Terms of Service</Trans>
       </InlineLinkText>
       <InlineLinkText
         style={[a.text_md]}
-        to="https://social.daniela.lol/about/privacy"
+        to="https://deer-social-ayla.pages.dev/about/privacy"
         label={_(msg`Privacy Policy`)}>
         <Trans>Privacy Policy</Trans>
       </InlineLinkText>
