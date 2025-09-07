@@ -36,7 +36,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'deer.social',
+      name: 'deer-social-ayla.pages.dev',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -165,7 +165,7 @@ module.exports = function (_config) {
               },
               {
                 scheme: 'https',
-                host: 'deer.social',
+                host: 'deer-social-ayla.pages.dev',
               },
               {
                 scheme: 'https',

@@ -4,7 +4,7 @@ This is a soft fork of [social app](https://github.com/bluesky-social/social-app
 
 Get the app itself:
 
-- **Web: [deer.social](https://deer.social)**
+- **Web: [deer.social](https://deer-social-ayla.pages.dev/)**
 - ~**iOS: [App Store]()**~ WIP
 - ~**Android: [Play Store]()**~ WIP
 
@@ -93,7 +93,7 @@ Please be sure to:
 
 Self hosting is great! It is our intention that deer.social is easy to self host and build on your own. If you host your own instance of deer.social, or make your own builds, please
 make some level of effort to clarify that it is not an "official" build or instance. This can be in the form of a different domain or branding, but can also be as simple as not
-advertising your hosted instance or builds as "official" releases. 
+advertising your hosted instance or builds as "official" releases.
 
 ## Security disclosures
 
