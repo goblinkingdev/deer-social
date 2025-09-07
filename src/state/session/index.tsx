@@ -28,7 +28,7 @@ import {
 const StateContext = React.createContext<SessionStateContext>({
   accounts: [],
   currentAccount: undefined,
-  hasSession: true,
+  hasSession: false,
 })
 StateContext.displayName = 'SessionStateContext'
 
@@ -270,7 +270,7 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
       currentAccount: state.accounts.find(
         a => a.did === state.currentAgentState.did,
       ),
-      hasSession: true,
+      hasSession: !!state.currentAgentState.did,
     }),
     [state],
   )
