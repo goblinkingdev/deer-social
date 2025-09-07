@@ -10,7 +10,6 @@ import EventEmitter from 'eventemitter3'
 import BroadcastChannel from '#/lib/broadcast'
 import {resetBadgeCount} from '#/lib/notifications/notifications'
 import {logger} from '#/logger'
-import {useHideFollowNotifications} from '#/state/preferences/hide-follow-notifications'
 import {useAgent, useSession} from '#/state/session'
 import {useModerationOpts} from '../../preferences/moderation-opts'
 import {truncateAndInvalidate} from '../util'
@@ -50,7 +49,6 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
   const agent = useAgent()
   const queryClient = useQueryClient()
   const moderationOpts = useModerationOpts()
-  const hideFollowNotifications = useHideFollowNotifications()
 
   const [numUnread, setNumUnread] = React.useState('')
 
@@ -157,7 +155,6 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
             limit: 40,
             queryClient,
             moderationOpts,
-            hideFollowNotifications,
             reasons: [],
 
             // only fetch subjects when the page is going to be used
@@ -206,13 +203,7 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
         }
       },
     }
-  }, [
-    setNumUnread,
-    queryClient,
-    moderationOpts,
-    hideFollowNotifications,
-    agent,
-  ])
+  }, [setNumUnread, queryClient, moderationOpts, agent])
   checkUnreadRef.current = api.checkUnread
 
   return (

@@ -38,10 +38,6 @@ import {
   useSetHideFeedsPromoTab,
 } from '#/state/preferences/hide-feeds-promo-tab'
 import {
-  useHideFollowNotifications,
-  useSetHideFollowNotifications,
-} from '#/state/preferences/hide-follow-notifications'
-import {
   useHighQualityImages,
   useSetHighQualityImages,
 } from '#/state/preferences/high-quality-images'
@@ -70,7 +66,6 @@ import {Button, ButtonText} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import * as Toggle from '#/components/forms/Toggle'
 import {Atom_Stroke2_Corner0_Rounded as DeerIcon} from '#/components/icons/Atom'
-import {Bell_Stroke2_Corner0_Rounded as BellIcon} from '#/components/icons/Bell'
 import {Eye_Stroke2_Corner0_Rounded as VisibilityIcon} from '#/components/icons/Eye'
 import {Lab_Stroke2_Corner0_Rounded as BeakerIcon} from '#/components/icons/Lab'
 import {PaintRoller_Stroke2_Corner2_Rounded as PaintRollerIcon} from '#/components/icons/PaintRoller'
@@ -228,9 +223,6 @@ export function DeerSettingsScreen({}: Props) {
 
   const highQualityImages = useHighQualityImages()
   const setHighQualityImages = useSetHighQualityImages()
-
-  const hideFollowNotifications = useHideFollowNotifications()
-  const setHideFollowNotifications = useSetHideFollowNotifications()
 
   const hideFeedsPromoTab = useHideFeedsPromoTab()
   const setHideFeedsPromoTab = useSetHideFeedsPromoTab()
@@ -509,24 +501,6 @@ export function DeerSettingsScreen({}: Props) {
                 <Trans>
                   Hide "Feeds ✨" tab when only one feed is selected
                 </Trans>
-              </Toggle.LabelText>
-              <Toggle.Platform />
-            </Toggle.Item>
-          </SettingsList.Group>
-
-          <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
-            <SettingsList.ItemIcon icon={BellIcon} />
-            <SettingsList.ItemText>
-              <Trans>Notification Filters</Trans>
-            </SettingsList.ItemText>
-            <Toggle.Item
-              name="hide_follow_notifications"
-              label={_(msg`Hide follow notifications`)}
-              value={hideFollowNotifications ?? false}
-              onChange={value => setHideFollowNotifications(value)}
-              style={[a.w_full]}>
-              <Toggle.LabelText style={[a.flex_1]}>
-                <Trans>Hide follow notifications</Trans>
               </Toggle.LabelText>
               <Toggle.Platform />
             </Toggle.Item>
