@@ -6,6 +6,6 @@ export const makeAgeRestrictedModerationPrefs = (
   prefs: ModerationPrefs,
 ): ModerationPrefs => ({
   ...prefs,
-  adultContentEnabled: false,
+  adultContentEnabled: true,
   labels: DEFAULT_LOGGED_OUT_LABEL_PREFERENCES,
 })

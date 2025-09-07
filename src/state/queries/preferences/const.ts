@@ -21,9 +21,9 @@ export const DEFAULT_THREAD_VIEW_PREFS: ThreadViewPreferences = {
 }
 
 export const DEFAULT_LOGGED_OUT_PREFERENCES: UsePreferencesQueryResponse = {
-  birthDate: new Date('2022-11-17'), // TODO(pwi)
+  birthDate: new Date('2000-11-17'), // TODO(pwi)
   moderationPrefs: {
-    adultContentEnabled: false,
+    adultContentEnabled: true,
     labels: DEFAULT_LOGGED_OUT_LABEL_PREFERENCES,
     labelers: [],
     mutedWords: [],
