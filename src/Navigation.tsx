@@ -170,7 +170,7 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
       <Stack.Screen
         name="Lists"
         component={ListsScreen}
-        options={{title: title(msg`Lists`), requireAuth: true}}
+        options={{title: title(msg`Lists`)}}
       />
       <Stack.Screen
         name="Moderation"
@@ -180,7 +180,7 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
       <Stack.Screen
         name="ModerationModlists"
         getComponent={() => ModerationModlistsScreen}
-        options={{title: title(msg`Moderation Lists`), requireAuth: true}}
+        options={{title: title(msg`Moderation Lists`)}}
       />
       <Stack.Screen
         name="ModerationMutedAccounts"
@@ -367,14 +367,13 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
       <Stack.Screen
         name="PreferencesThreads"
         getComponent={() => ThreadPreferencesScreen}
-        options={{title: title(msg`Threads Preferences`), requireAuth: true}}
+        options={{title: title(msg`Threads Preferences`)}}
       />
       <Stack.Screen
         name="PreferencesExternalEmbeds"
         getComponent={() => ExternalMediaPreferencesScreen}
         options={{
           title: title(msg`External Media Preferences`),
-          requireAuth: true,
         }}
       />
       <Stack.Screen
@@ -382,7 +381,6 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         getComponent={() => AccessibilitySettingsScreen}
         options={{
           title: title(msg`Accessibility Settings`),
-          requireAuth: true,
         }}
       />
       <Stack.Screen
@@ -390,7 +388,6 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         getComponent={() => DeerSettingsScreen}
         options={{
           title: title(msg`Deer Settings`),
-          requireAuth: true,
         }}
       />
       <Stack.Screen
@@ -398,7 +395,6 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         getComponent={() => AppearanceSettingsScreen}
         options={{
           title: title(msg`Appearance`),
-          requireAuth: true,
         }}
       />
       <Stack.Screen
