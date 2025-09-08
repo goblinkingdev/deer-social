@@ -97,8 +97,9 @@ advertising your hosted instance or builds as "official" releases.
 
 ## Security disclosures
 
-If you discover any security issues, please send an email to aviva@rubenfamily.com.
-If the issue pertains to infastructure, code, or systems outside the scope of deer.social, please refer to the
+If you discover any security issues, please send an email to deer@aylac.top if it's something i caused.
+If it's upstream, on deer.social, go to the a-viv-a/deer-social github and look at there
+If the issue pertains to infrastructure, code, or systems outside the scope of deer.social, please refer to the
 [disclosure guidelines on social-app](https://github.com/bluesky-social/social-app#security-disclosures) if it is hosted by Bluesky PBC. Otherwise, reference the
 security policy of that system as applicable <3
 
