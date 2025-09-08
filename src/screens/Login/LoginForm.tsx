@@ -16,6 +16,7 @@ import {useLingui} from '@lingui/react'
 import {isNetworkError} from '#/lib/strings/errors'
 import {cleanError} from '#/lib/strings/errors'
 import {createFullHandle} from '#/lib/strings/handles'
+import {isValidDomain} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {useSetHasCheckedForStarterPack} from '#/state/preferences/used-starter-packs'
 import {useSessionApi} from '#/state/session'
@@ -83,7 +84,7 @@ export const LoginForm = ({
   }, [])
 
   const onPressNext = async () => {
-    if (isProcessing) return
+    if (isProcessing || isResolvingService || serviceUrl === undefined) return
     Keyboard.dismiss()
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
     setError('')
@@ -190,7 +191,7 @@ export const LoginForm = ({
           <Trans>Hosting provider</Trans>
           {isResolvingService && (
             <ActivityIndicator
-              size={12}
+              size={10}
               color={t.palette.contrast_500}
               style={a.ml_sm}
             />
@@ -226,7 +227,7 @@ export const LoginForm = ({
                 if (!id) return
                 if (
                   id.startsWith('did:') ||
-                  (id.includes('.') && !id.includes('@'))
+                  (!id.includes('@') && isValidDomain(id))
                 ) {
                   debouncedResolveService(id)
                 }
@@ -367,7 +368,8 @@ export const LoginForm = ({
             variant="solid"
             color="primary"
             size="large"
-            onPress={onPressNext}>
+            onPress={onPressNext}
+            disabled={isResolvingService || serviceUrl === undefined}>
             <ButtonText>
               <Trans>Next</Trans>
             </ButtonText>
