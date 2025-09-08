@@ -36,7 +36,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'deer-social-ayla.pages.dev',
+      name: 'deer-social-ayla',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -63,7 +63,7 @@ module.exports = function (_config) {
             'Used to save images to your library.',
           NSPhotoLibraryUsageDescription:
             'Used for profile pictures, posts, and other kinds of content',
-          CFBundleSpokenName: 'deer-social-ayla.pages.dev',
+          CFBundleSpokenName: 'deer-social-ayla',
           CFBundleLocalizations: [
             'en',
             'an',
