@@ -26,7 +26,6 @@ import {
   TIMELINE_SAVED_FEED,
   VIDEO_SAVED_FEED,
 } from '#/lib/constants'
-import {useRequestNotificationsPermission} from '#/lib/notifications/notifications'
 import {logEvent, useGate} from '#/lib/statsig/statsig'
 import {logger} from '#/logger'
 import {isNative} from '#/platform/detection'
@@ -75,7 +74,6 @@ export function StepFinished() {
   const [saving, setSaving] = useState(false)
   const queryClient = useQueryClient()
   const agent = useAgent()
-  const requestNotificationsPermission = useRequestNotificationsPermission()
   const activeStarterPack = useActiveStarterPack()
   const setActiveStarterPack = useSetActiveStarterPack()
   const setHasCheckedForStarterPack = useSetHasCheckedForStarterPack()
@@ -196,7 +194,6 @@ export function StepFinished() {
                 : 'default',
           })
         })(),
-        requestNotificationsPermission('AfterOnboarding'),
       ])
     } catch (e: any) {
       logger.info(`onboarding: bulk save failed`)
@@ -254,7 +251,6 @@ export function StepFinished() {
     onboardDispatch,
     activeStarterPack,
     state,
-    requestNotificationsPermission,
     setActiveStarterPack,
     setHasCheckedForStarterPack,
     startProgressGuide,

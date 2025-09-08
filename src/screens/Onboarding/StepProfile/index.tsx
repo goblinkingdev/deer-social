@@ -13,8 +13,7 @@ import {usePhotoLibraryPermission} from '#/lib/hooks/usePermissions'
 import {compressIfNeeded} from '#/lib/media/manip'
 import {openCropper} from '#/lib/media/picker'
 import {getDataUriSize} from '#/lib/media/util'
-import {useRequestNotificationsPermission} from '#/lib/notifications/notifications'
-import {logEvent, useGate} from '#/lib/statsig/statsig'
+import {logEvent} from '#/lib/statsig/statsig'
 import {isNative, isWeb} from '#/platform/detection'
 import {
   DescriptionText,
@@ -70,8 +69,6 @@ export function StepProfile() {
   const t = useTheme()
   const {gtMobile} = useBreakpoints()
   const {requestPhotoAccessIfNeeded} = usePhotoLibraryPermission()
-  const gate = useGate()
-  const requestNotificationsPermission = useRequestNotificationsPermission()
 
   const creatorControl = Dialog.useDialogControl()
   const [error, setError] = React.useState('')
@@ -86,10 +83,6 @@ export function StepProfile() {
   })
 
   const canvasRef = React.useRef<PlaceholderCanvasRef>(null)
-
-  React.useEffect(() => {
-    requestNotificationsPermission('StartOnboarding')
-  }, [gate, requestNotificationsPermission])
 
   const sheetWrapper = useSheetWrapper()
   const openPicker = React.useCallback(

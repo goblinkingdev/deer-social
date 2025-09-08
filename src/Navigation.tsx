@@ -1,6 +1,4 @@
 import {useCallback, useRef} from 'react'
-import {Linking} from 'react-native'
-import * as Notifications from 'expo-notifications'
 import {i18n, type MessageDescriptor} from '@lingui/core'
 import {msg} from '@lingui/macro'
 import {
@@ -19,14 +17,7 @@ import {
 
 import {timeout} from '#/lib/async/timeout'
 import {useColorSchemeStyle} from '#/lib/hooks/useColorSchemeStyle'
-import {
-  getNotificationPayload,
-  type NotificationPayload,
-  notificationToURL,
-  storePayloadForAccountSwitch,
-} from '#/lib/hooks/useNotificationHandler'
 import {useWebScrollRestoration} from '#/lib/hooks/useWebScrollRestoration'
-import {logger as notyLogger} from '#/lib/notifications/util'
 import {buildStateObject} from '#/lib/routes/helpers'
 import {
   type AllNavigatorParams,
@@ -135,10 +126,6 @@ import {
 } from '#/components/dialogs/EmailDialog'
 import {router} from '#/routes'
 import {Referrer} from '../modules/expo-bluesky-swiss-army'
-import {useAccountSwitcher} from './lib/hooks/useAccountSwitcher'
-import {useNonReactiveCallback} from './lib/hooks/useNonReactiveCallback'
-import {useLoggedOutViewControls} from './state/shell/logged-out'
-import {useCloseAllActiveElements} from './state/util'
 
 const navigationRef = createNavigationContainerRef<AllNavigatorParams>()
 
@@ -849,105 +836,11 @@ const LINKING = {
   },
 } satisfies LinkingOptions<AllNavigatorParams>
 
-/**
- * Used to ensure we don't handle the same notification twice
- */
-let lastHandledNotificationDateDedupe: number | undefined
-
 function RoutesContainer({children}: React.PropsWithChildren<{}>) {
   const theme = useColorSchemeStyle(DefaultTheme, DarkTheme)
-  const {currentAccount, accounts} = useSession()
-  const {onPressSwitchAccount} = useAccountSwitcher()
-  const {setShowLoggedOut} = useLoggedOutViewControls()
+  const {currentAccount} = useSession()
   const prevLoggedRouteName = useRef<string | undefined>(undefined)
   const emailDialogControl = useEmailDialogControl()
-  const closeAllActiveElements = useCloseAllActiveElements()
-
-  /**
-   * Handle navigation to a conversation, or prepares for account switch.
-   *
-   * Non-reactive because we need the latest data from some hooks
-   * after an async call - sfn
-   */
-  const handleChatMessage = useNonReactiveCallback(
-    (payload: Extract<NotificationPayload, {reason: 'chat-message'}>) => {
-      notyLogger.debug(`handleChatMessage`, {payload})
-
-      if (payload.recipientDid !== currentAccount?.did) {
-        // handled in useNotificationHandler after account switch finishes
-        storePayloadForAccountSwitch(payload)
-        closeAllActiveElements()
-
-        const account = accounts.find(a => a.did === payload.recipientDid)
-        if (account) {
-          onPressSwitchAccount(account, 'Notification')
-        } else {
-          setShowLoggedOut(true)
-        }
-      } else {
-        // @ts-expect-error nested navigators aren't typed -sfn
-        navigate('MessagesTab', {
-          screen: 'Messages',
-          params: {
-            pushToConversation: payload.convoId,
-          },
-        })
-      }
-    },
-  )
-
-  async function handlePushNotificationEntry() {
-    if (!isNative) return
-
-    // deep links take precedence - on android,
-    // getLastNotificationResponseAsync returns a "notification"
-    // that is actually a deep link. avoid handling it twice -sfn
-    if (await Linking.getInitialURL()) {
-      return
-    }
-
-    /**
-     * The notification that caused the app to open, if applicable
-     */
-    const response = await Notifications.getLastNotificationResponseAsync()
-
-    if (response) {
-      notyLogger.debug(`handlePushNotificationEntry: response`, {response})
-
-      if (response.notification.date === lastHandledNotificationDateDedupe)
-        return
-      lastHandledNotificationDateDedupe = response.notification.date
-
-      const payload = getNotificationPayload(response.notification)
-
-      if (payload) {
-        notyLogger.metric(
-          'notifications:openApp',
-          {reason: payload.reason, causedBoot: true},
-          {statsig: false},
-        )
-
-        if (payload.reason === 'chat-message') {
-          handleChatMessage(payload)
-        } else {
-          const path = notificationToURL(payload)
-
-          if (path === '/notifications') {
-            resetToTab('NotificationsTab')
-            notyLogger.debug(`handlePushNotificationEntry: default navigate`)
-          } else if (path) {
-            const [screen, params] = router.matchPath(path)
-            // @ts-expect-error nested navigators aren't typed -sfn
-            navigate('HomeTab', {screen, params})
-            notyLogger.debug(`handlePushNotificationEntry: navigate`, {
-              screen,
-              params,
-            })
-          }
-        }
-      }
-    }
-  }
 
   function onReady() {
     prevLoggedRouteName.current = getCurrentRouteName()
@@ -978,7 +871,6 @@ function RoutesContainer({children}: React.PropsWithChildren<{}>) {
           logModuleInitTime()
           onReady()
           logger.metric('router:navigate', {}, {statsig: false})
-          handlePushNotificationEntry()
         }}
         // WARNING: Implicit navigation to nested navigators is depreciated in React Navigation 7.x
         // However, there's a fair amount of places we do that, especially in when popping to the top of stacks.
