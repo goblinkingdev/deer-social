@@ -1,9 +1,9 @@
-name: Release Catsky
+name: Release deer
 on: workflow_dispatch # could be weekly/etc or on a separate branch.
 
 jobs:
   build-android:
-    name: Build Catsky for Android
+    name: Build deer for Android
     runs-on: ubuntu-latest
     outputs:
       apk-path: ${{ steps.upload-artifact.outputs.artifact-path }}
@@ -60,8 +60,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: catsky-v${{ github.run_number }}
-          release_name: Catsky v${{ github.run_number }}
+          tag_name: deer-v${{ github.run_number }}
+          release_name: deer v${{ github.run_number }}
           draft: false
           prerelease: false
 

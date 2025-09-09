@@ -1,9 +1,9 @@
-name: Build deer.social
+name: Build deer
 on: workflow_dispatch
 
 jobs:
   deer-build-android:
-    name: Build deer.social for Android
+    name: Build deer for Android
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
