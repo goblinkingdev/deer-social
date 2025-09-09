@@ -34,6 +34,10 @@ import {
   useSetDirectFetchRecords,
 } from '#/state/preferences/direct-fetch-records'
 import {
+  useDisableViaRepostNotification,
+  useSetDisableViaRepostNotification,
+} from '#/state/preferences/disable-via-repost-notification'
+import {
   useHideFeedsPromoTab,
   useSetHideFeedsPromoTab,
 } from '#/state/preferences/hide-feeds-promo-tab'
@@ -226,6 +230,9 @@ export function DeerSettingsScreen({}: Props) {
 
   const hideFeedsPromoTab = useHideFeedsPromoTab()
   const setHideFeedsPromoTab = useSetHideFeedsPromoTab()
+
+  const disableViaRepostNotification = useDisableViaRepostNotification()
+  const setDisableViaRepostNotification = useSetDisableViaRepostNotification()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -495,6 +502,24 @@ export function DeerSettingsScreen({}: Props) {
               </Toggle.LabelText>
               <Toggle.Platform />
             </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_via_repost_notification"
+              label={_(msg`Disable via repost notifications`)}
+              value={disableViaRepostNotification}
+              onChange={value => setDisableViaRepostNotification(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable via repost notifications</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+            <Admonition type="info" style={[a.flex_1]}>
+              <Trans>
+                Forcefully disables the notifications other people receive when
+                you like/repost a post someone else has reposted for privacy.
+              </Trans>
+            </Admonition>
           </SettingsList.Group>
 
           <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
