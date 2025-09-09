@@ -7,6 +7,7 @@ import {Provider as ConstellationInstanceProvider} from './constellation-instanc
 import {Provider as DeerVerificationProvider} from './deer-verification'
 import {Provider as DirectFetchRecordsProvider} from './direct-fetch-records'
 import {Provider as DisableHapticsProvider} from './disable-haptics'
+import {Provider as DisableViaRepostNotificationProvider} from './disable-via-repost-notification'
 import {Provider as ExternalEmbedsProvider} from './external-embeds-prefs'
 import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
@@ -69,7 +70,9 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                                             <RepostCarouselProvider>
                                               <KawaiiProvider>
                                                 <HideFeedsPromoTabProvider>
-                                                  {children}
+                                                  <DisableViaRepostNotificationProvider>
+                                                    {children}
+                                                  </DisableViaRepostNotificationProvider>
                                                 </HideFeedsPromoTabProvider>
                                               </KawaiiProvider>
                                             </RepostCarouselProvider>

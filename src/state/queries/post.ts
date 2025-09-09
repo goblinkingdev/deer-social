@@ -7,6 +7,7 @@ import {type LogEvents, toClout} from '#/lib/statsig/statsig'
 import {logger} from '#/logger'
 import {updatePostShadow} from '#/state/cache/post-shadow'
 import {type Shadow} from '#/state/cache/types'
+import {useDisableViaRepostNotification} from '#/state/preferences/disable-via-repost-notification'
 import {useAgent, useSession} from '#/state/session'
 import * as userActionHistory from '#/state/userActionHistory'
 import {useIsThreadMuted, useSetThreadMute} from '../cache/thread-mutes'
@@ -110,6 +111,7 @@ export function usePostLikeMutationQueue(
   const initialLikeUri = post.viewer?.like
   const likeMutation = usePostLikeMutation(feedDescriptor, logContext, post)
   const unlikeMutation = usePostUnlikeMutation(feedDescriptor, logContext)
+  const disableViaRepostNotification = useDisableViaRepostNotification()
 
   const queueToggle = useToggleMutationQueue({
     initialState: initialLikeUri,
@@ -118,7 +120,7 @@ export function usePostLikeMutationQueue(
         const {uri: likeUri} = await likeMutation.mutateAsync({
           uri: postUri,
           cid: postCid,
-          via: viaRepost,
+          via: disableViaRepostNotification ? undefined : viaRepost,
         })
         userActionHistory.like([postUri])
         return likeUri
@@ -227,6 +229,7 @@ export function usePostRepostMutationQueue(
   const initialRepostUri = post.viewer?.repost
   const repostMutation = usePostRepostMutation(feedDescriptor, logContext)
   const unrepostMutation = usePostUnrepostMutation(feedDescriptor, logContext)
+  const disableViaRepostNotification = useDisableViaRepostNotification()
 
   const queueToggle = useToggleMutationQueue({
     initialState: initialRepostUri,
@@ -235,7 +238,7 @@ export function usePostRepostMutationQueue(
         const {uri: repostUri} = await repostMutation.mutateAsync({
           uri: postUri,
           cid: postCid,
-          via: viaRepost,
+          via: disableViaRepostNotification ? undefined : viaRepost,
         })
         return repostUri
       } else {
