@@ -38,7 +38,7 @@ Get the app itself:
 - focus on power users (but all users are welome!)
 - enable things that are possible but annoying today **without** egging on antisocial behavior
 
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/NekoDrone/catsky-social">
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ayla6/deer-social-test">
 <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png?raw=true"
 alt="Get it on Obtainium" align="center" height="54" /></a>
 
