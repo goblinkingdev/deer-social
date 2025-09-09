@@ -1,10 +1,10 @@
-# deer.social
+# social.daniela.lol
 
-This is a soft fork of [social app](https://github.com/bluesky-social/social-app).
+This is a fork of the soft fork [deer.social](https://github.com/a-viv-a/deer-social).
 
 Get the app itself:
 
-- **Web: [deer.social](https://deer.social)**
+- **Web: [social.daniela.lol](https://social.daniela.lol)**
 - ~**iOS: [App Store]()**~ WIP
 - ~**Android: [Play Store]()**~ WIP
 

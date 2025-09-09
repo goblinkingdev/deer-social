@@ -219,7 +219,7 @@ export function SettingsScreen({}: Props) {
           <SettingsList.LinkItem to="/settings/deer" label={_(msg`Deer`)}>
             <SettingsList.ItemIcon icon={DeerIcon} />
             <SettingsList.ItemText>
-              <Trans>Deer</Trans>
+              <Trans>Kitty</Trans>
             </SettingsList.ItemText>
           </SettingsList.LinkItem>
           <SettingsList.LinkItem

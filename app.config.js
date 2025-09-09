@@ -36,7 +36,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'deer.social',
+      name: 'social.daniela.lol',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -46,10 +46,10 @@ module.exports = function (_config) {
       },
       icon: './assets/app-icons/ios_icon_default_light.png',
       userInterfaceStyle: 'automatic',
-      primaryColor: '#4b9b6c',
+      primaryColor: '#8e4b9b',
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'social.deer',
+        bundleIdentifier: 'lol.daniela.social',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -111,7 +111,7 @@ module.exports = function (_config) {
         entitlements: {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
-          'com.apple.security.application-groups': 'group.social.deer',
+          'com.apple.security.application-groups': 'group.lol.daniela.social',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -150,10 +150,10 @@ module.exports = function (_config) {
           foregroundImage: './assets/icon-android-foreground.png',
           monochromeImage: './assets/icon-android-foreground.png',
           backgroundImage: './assets/icon-android-background.png',
-          backgroundColor: '#4b9b6c',
+          backgroundColor: '#8e4b9b',
         },
         googleServicesFile: './google-services.json',
-        package: 'social.deer',
+        package: 'lol.daniela.social',
         intentFilters: [
           {
             action: 'VIEW',
@@ -249,7 +249,7 @@ module.exports = function (_config) {
           'expo-notifications',
           {
             icon: './assets/icon-android-notification.png',
-            color: '#4b9b6c',
+            color: '#8e4b9b',
             sounds: PLATFORM === 'ios' ? ['assets/dm.aiff'] : ['assets/dm.mp3'],
           },
         ],
@@ -298,17 +298,17 @@ module.exports = function (_config) {
               resizeMode: 'cover',
               dark: {
                 enableFullScreenImage_legacy: true,
-                backgroundColor: '#03180c',
+                backgroundColor: '#150318',
                 image: './assets/splash-dark.png',
                 resizeMode: 'cover',
               },
             },
             android: {
-              backgroundColor: '#4b9b6c',
+              backgroundColor: '#8e4b9b',
               image: './assets/splash-android-icon.png',
               imageWidth: 150,
               dark: {
-                backgroundColor: '#01331a',
+                backgroundColor: '#2b0133',
                 image: './assets/splash-android-icon-dark.png',
                 imageWidth: 150,
               },

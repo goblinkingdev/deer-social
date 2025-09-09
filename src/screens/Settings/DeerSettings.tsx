@@ -264,7 +264,7 @@ export function DeerSettingsScreen({}: Props) {
         <Layout.Header.BackButton />
         <Layout.Header.Content>
           <Layout.Header.TitleText>
-            <Trans>Deer</Trans>
+            <Trans>Kitty</Trans>
           </Layout.Header.TitleText>
         </Layout.Header.Content>
         <Layout.Header.Slot />
