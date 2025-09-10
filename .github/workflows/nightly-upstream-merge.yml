@@ -1,0 +1,160 @@
+# copied from here https://github.com/NekoDrone/catsky-social/blob/main/.github/workflows/nightly-upstream-merge.yml
+name: Nightly sync upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # run at 12 AM UTC
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: write
+  actions: write
+
+jobs:
+  sync-upstream:
+    name: Nightly sync upstream
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+          fetch-depth: 100
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/bluesky-social/social-app.git
+          git fetch upstream
+
+      - name: Check for new commits
+        id: check
+        run: |
+          # Get the latest commit from upstream
+          UPSTREAM_SHA=$(git rev-parse upstream/main)
+          CURRENT_SHA=$(git rev-parse HEAD)
+
+          if [ "$UPSTREAM_SHA" != "$CURRENT_SHA" ]; then
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+            echo "upstream_sha=$UPSTREAM_SHA" >> $GITHUB_OUTPUT
+
+            # Get commit count and summary for PR description
+            COMMIT_COUNT=$(git rev-list --count HEAD..upstream/main)
+            echo "commit_count=$COMMIT_COUNT" >> $GITHUB_OUTPUT
+          else
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create sync branch for PR
+        if: steps.check.outputs.has_updates == 'true'
+        run: |
+          # Create a new branch for the sync
+          BRANCH_NAME="upstream-sync-$(date +%Y-%m-%d-%H%M%S)"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
+          git checkout -b $BRANCH_NAME
+          git merge upstream/main -m "chore: merge from upstream at $(date +%Y-%m-%d-%H%M%S)"
+          git push origin $BRANCH_NAME
+
+      - name: Create PR
+        if: steps.check.outputs.has_updates == 'true'
+        uses: actions/github-script@v7
+        with:
+          github_token: ${{ secrets.WORKFLOW_TOKEN }}
+          script: |
+            const branchName = process.env.branch_name;
+            const commitCount = "${{ steps.check.outputs.commit_count }}";
+            const upstreamSha = "${{ steps.check.outputs.upstream_sha }}";
+
+            const { data: existingPRs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              head: `${context.repo.owner}:${branchName}`,
+            });
+
+            const { data: allSyncPRs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+            });
+
+            const existingSyncPR = allSyncPRs.find(
+              (pr) =>
+                pr.title.includes("Sync with upstream") ||
+                pr.head.ref.includes("upstream-sync"),
+            );
+
+            if (existingSyncPR) {
+              console.log(`Existing sync PR found: #${existingSyncPR.number}`);
+
+              // Add a comment to the existing PR
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingSyncPR.number,
+                body: `🔄 New upstream changes found!\\n\nA new sync branch (\`${branchName}\`) has been created. You may want to close this PR and review the new one, or update this PR with the latest changes.`,
+              });
+            } else {
+              // Create new PR
+              try {
+                const { data: pr } = await github.rest.pulls.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `Sync with upstream`,
+                  head: branchName,
+                  base: "main",
+                  body: `## 🔄 Upstream Sync
+
+            This PR syncs the latest changes from upstream.
+
+            **📊 Summary:**
+            - **Commits to sync:** ${commitCount}
+            - **Upstream SHA:** ${upstreamSha}
+            - **Generated:** ${new Date().toISOString()}
+
+            **⚠️ Next Steps:**
+            1. Review the changes in this PR
+            2. Resolve any merge conflicts if present
+            3. Test the changes if needed
+            4. Merge when ready
+
+            **🔧 If there are conflicts:**
+            \`\`\`bash
+            git checkout ${branchName}
+            git merge main
+            # Resolve conflicts
+            git add .
+            git commit
+            git push origin ${branchName}
+            \`\`\`
+
+            ---
+            *This PR was automatically generated by the upstream sync workflow.*`,
+                  draft: false,
+                });
+
+                // for any other future maintainers that would like to be pinged, add it here.
+                await github.rest.issues.addAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  assignees: ["ayla6"],
+                });
+
+                console.log(`Created PR #${pr.number}: ${pr.html_url}`);
+              } catch (err) {
+                if (
+                  err.message &&
+                  (err.message.includes("No commits between") ||
+                    err.message.includes("head and base are identical"))
+                ) {
+                  console.log("No conflict found.", err.message);
+                }
+              }
+            }
