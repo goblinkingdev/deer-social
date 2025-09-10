@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native'
 import {makeProfileLink} from '#/lib/routes/links'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareText, shareUrl} from '#/lib/sharing'
-import {toShareUrl} from '#/lib/strings/url-helpers'
+import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {isIOS} from '#/platform/detection'
 import {useAgeAssurance} from '#/state/ageAssurance/useAgeAssurance'
@@ -56,6 +56,13 @@ let ShareMenuItems = ({
   const onSharePost = () => {
     logger.metric('share:press:nativeShare', {}, {statsig: true})
     const url = toShareUrl(href)
+    shareUrl(url)
+    onShareProp()
+  }
+
+  const onSharePostBsky = () => {
+    logger.metric('share:press:nativeShare', {}, {statsig: true})
+    const url = toShareUrlBsky(href)
     shareUrl(url)
     onShareProp()
   }
@@ -118,6 +125,16 @@ let ShareMenuItems = ({
             onPress={onSharePost}>
             <Menu.ItemText>
               <Trans>Share via...</Trans>
+            </Menu.ItemText>
+            <Menu.ItemIcon icon={ArrowOutOfBoxIcon} position="right" />
+          </Menu.Item>
+
+          <Menu.Item
+            testID="postDropdownShareBtn"
+            label={_(msg`Share via...`)}
+            onPress={onSharePostBsky}>
+            <Menu.ItemText>
+              <Trans>Share via bsky.app...</Trans>
             </Menu.ItemText>
             <Menu.ItemIcon icon={ArrowOutOfBoxIcon} position="right" />
           </Menu.Item>

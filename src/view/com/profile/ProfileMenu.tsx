@@ -276,7 +276,11 @@ let ProfileMenu = ({
             </Menu.Item>
             <Menu.Item
               testID="profileHeaderDropdownShareBtn"
-              label={isWeb ? _(msg`Copy via bsky.app`) : _(msg`Share via...`)}
+              label={
+                isWeb
+                  ? _(msg`Copy via bsky.app`)
+                  : _(msg`Share via bsky.app...`)
+              }
               onPress={() => {
                 if (showLoggedOutWarning) {
                   loggedOutWarningPromptControl.open()
@@ -288,7 +292,7 @@ let ProfileMenu = ({
                 {isWeb ? (
                   <Trans>Copy via bsky.app</Trans>
                 ) : (
-                  <Trans>Share via...</Trans>
+                  <Trans>Share via bsky.app...</Trans>
                 )}
               </Menu.ItemText>
               <Menu.ItemIcon icon={isWeb ? ChainLinkIcon : ArrowOutOfBoxIcon} />
