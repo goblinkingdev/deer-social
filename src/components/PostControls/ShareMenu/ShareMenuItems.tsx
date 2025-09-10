@@ -80,6 +80,19 @@ let ShareMenuItems = ({
     onShareProp()
   }
 
+  const onCopyLinkBsky = async () => {
+    logger.metric('share:press:copyLink', {}, {statsig: true})
+    const url = toShareUrlBsky(href)
+    if (isIOS) {
+      // iOS only
+      await ExpoClipboard.setUrlAsync(url)
+    } else {
+      await ExpoClipboard.setStringAsync(url)
+    }
+    Toast.show(_(msg`Copied to clipboard`), 'clipboard-check')
+    onShareProp()
+  }
+
   const onSelectChatToShareTo = (conversation: string) => {
     navigation.navigate('MessagesConversation', {
       conversation,
@@ -131,7 +144,7 @@ let ShareMenuItems = ({
 
           <Menu.Item
             testID="postDropdownShareBtn"
-            label={_(msg`Share via...`)}
+            label={_(msg`Share via bsky.app...`)}
             onPress={onSharePostBsky}>
             <Menu.ItemText>
               <Trans>Share via bsky.app...</Trans>
@@ -145,6 +158,16 @@ let ShareMenuItems = ({
             onPress={onCopyLink}>
             <Menu.ItemText>
               <Trans>Copy link to post</Trans>
+            </Menu.ItemText>
+            <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
+          </Menu.Item>
+
+          <Menu.Item
+            testID="postDropdownShareBtn"
+            label={_(msg`Copy via bsky.app`)}
+            onPress={onCopyLinkBsky}>
+            <Menu.ItemText>
+              <Trans>Copy via bsky.app</Trans>
             </Menu.ItemText>
             <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
           </Menu.Item>
