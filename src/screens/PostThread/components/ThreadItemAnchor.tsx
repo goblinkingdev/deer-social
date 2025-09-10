@@ -487,7 +487,11 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                   <Text style={[a.text_md, a.font_bold, t.atoms.text]}>
                     {formatPostStatCount(post.bookmarkCount)}
                   </Text>{' '}
-                  <Plural value={post.bookmarkCount} one="save" other="saves" />
+                  <Plural
+                    value={post.bookmarkCount}
+                    one="bookmark"
+                    other="bookmarks"
+                  />
                 </Text>
               ) : null}
             </View>

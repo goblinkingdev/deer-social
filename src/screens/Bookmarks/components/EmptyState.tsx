@@ -32,7 +32,7 @@ export function EmptyState() {
             a.text_center,
             t.atoms.text_contrast_medium,
           ]}>
-          <Trans>Nothing saved yet</Trans>
+          <Trans>Nothing bookmarked yet</Trans>
         </Text>
       </View>
       <View style={[a.pt_2xl]}>

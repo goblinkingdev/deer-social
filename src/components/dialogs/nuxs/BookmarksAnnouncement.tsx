@@ -34,7 +34,7 @@ export function BookmarksAnnouncement() {
       <Dialog.Handle />
 
       <Dialog.ScrollableInner
-        label={_(msg`Introducing saved posts AKA bookmarks`)}
+        label={_(msg`Introducing bookmarks`)}
         style={[web({maxWidth: 440})]}
         contentContainerStyle={[
           {
@@ -140,7 +140,7 @@ export function BookmarksAnnouncement() {
                   maxWidth: 300,
                 },
               ]}>
-              <Trans>Saved Posts</Trans>
+              <Trans>Bookmarks</Trans>
             </Text>
             <Text
               style={[
@@ -152,8 +152,8 @@ export function BookmarksAnnouncement() {
                 },
               ]}>
               <Trans>
-                Finally! Keep track of posts that matter to you. Save them to
-                revisit anytime.
+                Finally! Keep track of posts that matter to you. Bookmark them
+                to revisit anytime.
               </Trans>
             </Text>
           </View>

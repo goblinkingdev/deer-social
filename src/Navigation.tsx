@@ -597,7 +597,7 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         name="Bookmarks"
         getComponent={() => BookmarksScreen}
         options={{
-          title: title(msg`Saved Posts`),
+          title: title(msg`Bookmarks`),
           requireAuth: true,
         }}
       />

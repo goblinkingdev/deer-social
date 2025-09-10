@@ -747,7 +747,7 @@ export function DesktopLeftNav() {
             label={_(msg`Lists`)}
           />
           <NavItem
-            href="/saved"
+            href="/bookmarks"
             icon={
               <Bookmark
                 style={pal.text}
@@ -764,7 +764,7 @@ export function DesktopLeftNav() {
             }
             label={_(
               msg({
-                message: 'Saved',
+                message: 'Bookmarks',
                 context: 'link to bookmarks screen',
               }),
             )}

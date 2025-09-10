@@ -39,7 +39,7 @@ export const BookmarkButton = memo(function BookmarkButton({
   const undoLabel = _(
     msg({
       message: `Undo`,
-      context: `Button label to undo saving/removing a post from saved posts.`,
+      context: `Button label to undo saving/removing a post from your bookmarks.`,
     }),
   )
 
@@ -91,7 +91,7 @@ export const BookmarkButton = memo(function BookmarkButton({
         <toast.Outer>
           <toast.Icon icon={TrashIcon} />
           <toast.Text>
-            <Trans>Removed from saved posts</Trans>
+            <Trans>Removed from your bookmarks</Trans>
           </toast.Text>
           {!disableUndo && (
             <toast.Action
@@ -125,8 +125,8 @@ export const BookmarkButton = memo(function BookmarkButton({
       big={big}
       label={
         isBookmarked
-          ? _(msg`Remove from saved posts`)
-          : _(msg`Add to saved posts`)
+          ? _(msg`Remove from your bookmarks`)
+          : _(msg`Add to your bookmarks`)
       }
       onPress={onHandlePress}
       hitSlop={hitSlop}>
