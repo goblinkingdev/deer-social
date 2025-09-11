@@ -85,6 +85,10 @@ msgstr ""
 msgid "{0, plural, one {#mo} other {#mo}}"
 msgstr ""
 
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:490
+msgid "{0, plural, one {bookmark} other {bookmarks}}"
+msgstr ""
+
 #: src/components/ProfileHoverCard/index.web.tsx:444
 #: src/screens/Profile/Header/Metrics.tsx:22
 msgid "{0, plural, one {follower} other {followers}}"
@@ -110,10 +114,6 @@ msgstr ""
 #: src/screens/PostThread/components/ThreadItemAnchor.tsx:445
 #: src/view/com/posts/PostFeedItemCarousel.tsx:63
 msgid "{0, plural, one {repost} other {reposts}}"
-msgstr ""
-
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:490
-msgid "{0, plural, one {save} other {saves}}"
 msgstr ""
 
 #: src/screens/Search/modules/ExploreTrendingTopics.tsx:82
@@ -787,14 +787,14 @@ msgstr ""
 msgid "Add to lists"
 msgstr ""
 
-#: src/components/PostControls/BookmarkButton.tsx:129
-msgid "Add to saved posts"
-msgstr ""
-
 #: src/components/dialogs/StarterPackDialog.tsx:176
 #: src/view/com/profile/ProfileMenu.tsx:340
 #: src/view/com/profile/ProfileMenu.tsx:343
 msgid "Add to starter packs"
+msgstr ""
+
+#: src/components/PostControls/BookmarkButton.tsx:129
+msgid "Add to your bookmarks"
 msgstr ""
 
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:156
@@ -1157,12 +1157,12 @@ msgstr ""
 msgid "Apply Pull Request"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:659
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:663
 msgid "Archived from {0}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:628
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:667
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:632
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:671
 msgid "Archived post"
 msgstr ""
 
@@ -1400,7 +1400,7 @@ msgstr ""
 msgid "Blocking will not prevent labels from being applied on your account, but it will stop this account from replying in your threads or interacting with you."
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:684
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:688
 msgid "Bluesky cannot confirm the authenticity of the claimed date."
 msgstr ""
 
@@ -1455,6 +1455,18 @@ msgstr ""
 
 #: src/lib/moderation/useLabelBehaviorDescription.ts:54
 msgid "Blur images and filter from feeds"
+msgstr ""
+
+#: src/components/dialogs/nuxs/BookmarksAnnouncement.tsx:143
+#: src/Navigation.tsx:600
+#: src/screens/Bookmarks/index.tsx:55
+msgid "Bookmarks"
+msgstr ""
+
+#: src/view/shell/desktop/LeftNav.tsx:766
+#: src/view/shell/Drawer.tsx:572
+msgctxt "link to bookmarks screen"
+msgid "Bookmarks"
 msgstr ""
 
 #: src/screens/Onboarding/index.tsx:46
@@ -3690,7 +3702,7 @@ msgid "Finalizing"
 msgstr ""
 
 #: src/components/dialogs/nuxs/BookmarksAnnouncement.tsx:154
-msgid "Finally! Keep track of posts that matter to you. Save them to revisit anytime."
+msgid "Finally! Keep track of posts that matter to you. Bookmark them to revisit anytime."
 msgstr ""
 
 #: src/view/com/posts/CustomFeedEmptyState.tsx:48
@@ -4529,7 +4541,7 @@ msgid "Introducing activity notifications"
 msgstr ""
 
 #: src/components/dialogs/nuxs/BookmarksAnnouncement.tsx:37
-msgid "Introducing saved posts AKA bookmarks"
+msgid "Introducing bookmarks"
 msgstr ""
 
 #: src/screens/Login/LoginForm.tsx:163
@@ -4995,7 +5007,7 @@ msgid "Logo by @sawaratsuki.bsky.social"
 msgstr ""
 
 #: src/view/shell/desktop/RightNav.tsx:131
-#: src/view/shell/Drawer.tsx:709
+#: src/view/shell/Drawer.tsx:711
 msgid "Logo by <0>@sawaratsuki.bsky.social</0>"
 msgstr ""
 
@@ -5733,12 +5745,12 @@ msgstr ""
 msgid "Note: This post is only visible to logged-in users."
 msgstr ""
 
-#: src/screens/Messages/ChatList.tsx:275
-msgid "Nothing here"
+#: src/screens/Bookmarks/components/EmptyState.tsx:35
+msgid "Nothing bookmarked yet"
 msgstr ""
 
-#: src/screens/Bookmarks/components/EmptyState.tsx:35
-msgid "Nothing saved yet"
+#: src/screens/Messages/ChatList.tsx:275
+msgid "Nothing here"
 msgstr ""
 
 #: src/Navigation.tsx:414
@@ -5816,7 +5828,7 @@ msgid "OK"
 msgstr ""
 
 #: src/screens/Login/PasswordUpdatedForm.tsx:37
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:689
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:693
 msgid "Okay"
 msgstr ""
 
@@ -6600,8 +6612,8 @@ msgstr ""
 #: src/screens/Settings/AboutSettings.tsx:90
 #: src/screens/Settings/AboutSettings.tsx:93
 #: src/view/screens/PrivacyPolicy.tsx:34
-#: src/view/shell/Drawer.tsx:704
-#: src/view/shell/Drawer.tsx:705
+#: src/view/shell/Drawer.tsx:706
+#: src/view/shell/Drawer.tsx:707
 msgid "Privacy Policy"
 msgstr ""
 
@@ -6622,7 +6634,7 @@ msgstr ""
 #: src/view/shell/bottom-bar/BottomBar.tsx:316
 #: src/view/shell/desktop/LeftNav.tsx:788
 #: src/view/shell/Drawer.tsx:77
-#: src/view/shell/Drawer.tsx:596
+#: src/view/shell/Drawer.tsx:598
 msgid "Profile"
 msgstr ""
 
@@ -6907,6 +6919,10 @@ msgstr ""
 msgid "Remove feed?"
 msgstr ""
 
+#: src/screens/Bookmarks/index.tsx:249
+msgid "Remove from bookmarks"
+msgstr ""
+
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:319
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:325
 #: src/screens/ProfileList/components/MoreOptionsMenu.tsx:188
@@ -6926,8 +6942,7 @@ msgid "Remove from saved feeds"
 msgstr ""
 
 #: src/components/PostControls/BookmarkButton.tsx:128
-#: src/screens/Bookmarks/index.tsx:249
-msgid "Remove from saved posts"
+msgid "Remove from your bookmarks"
 msgstr ""
 
 #: src/components/FeedCard.tsx:338
@@ -6993,6 +7008,10 @@ msgstr ""
 msgid "Removed by you"
 msgstr ""
 
+#: src/screens/Bookmarks/index.tsx:207
+msgid "Removed from bookmarks"
+msgstr ""
+
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:117
 #: src/view/com/modals/UserAddRemoveLists.tsx:170
 msgid "Removed from list"
@@ -7002,13 +7021,12 @@ msgstr ""
 msgid "Removed from saved feeds"
 msgstr ""
 
-#: src/components/PostControls/BookmarkButton.tsx:94
-#: src/screens/Bookmarks/index.tsx:207
-msgid "Removed from saved posts"
-msgstr ""
-
 #: src/components/dialogs/StarterPackDialog.tsx:277
 msgid "Removed from starter pack"
+msgstr ""
+
+#: src/components/PostControls/BookmarkButton.tsx:94
+msgid "Removed from your bookmarks"
 msgstr ""
 
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:122
@@ -7447,20 +7465,8 @@ msgstr ""
 msgid "Save to my feeds"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:766
-#: src/view/shell/Drawer.tsx:571
-msgctxt "link to bookmarks screen"
-msgid "Saved"
-msgstr ""
-
 #: src/screens/SavedFeeds.tsx:184
 msgid "Saved Feeds"
-msgstr ""
-
-#: src/components/dialogs/nuxs/BookmarksAnnouncement.tsx:143
-#: src/Navigation.tsx:600
-#: src/screens/Bookmarks/index.tsx:55
-msgid "Saved Posts"
 msgstr ""
 
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:132
@@ -7873,7 +7879,7 @@ msgstr ""
 #: src/Navigation.tsx:201
 #: src/screens/Settings/Settings.tsx:99
 #: src/view/shell/desktop/LeftNav.tsx:806
-#: src/view/shell/Drawer.tsx:609
+#: src/view/shell/Drawer.tsx:611
 msgid "Settings"
 msgstr ""
 
@@ -8117,7 +8123,7 @@ msgstr ""
 msgid "Show warning and filter from feeds"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:630
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:634
 msgid "Shows information about when this post was created"
 msgstr ""
 
@@ -8609,8 +8615,8 @@ msgstr ""
 #: src/screens/Settings/AboutSettings.tsx:82
 #: src/screens/Settings/AboutSettings.tsx:85
 #: src/view/screens/TermsOfService.tsx:34
-#: src/view/shell/Drawer.tsx:697
 #: src/view/shell/Drawer.tsx:699
+#: src/view/shell/Drawer.tsx:701
 msgid "Terms of Service"
 msgstr ""
 
@@ -9045,7 +9051,7 @@ msgstr ""
 msgid "This moderation service is unavailable. See below for more details. If this issue persists, contact us."
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:670
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:674
 msgid "This post claims to have been created on <0>{0}</0>, but was first seen by Bluesky on <1>{1}</1>."
 msgstr ""
 
@@ -9215,8 +9221,8 @@ msgstr ""
 #: src/components/dms/MessageContextMenu.tsx:139
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:542
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:544
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:592
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:595
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:596
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:599
 msgid "Translate"
 msgstr ""
 
@@ -9344,7 +9350,7 @@ msgid "Unblock list"
 msgstr ""
 
 #: src/components/PostControls/BookmarkButton.tsx:40
-msgctxt "Button label to undo saving/removing a post from saved posts."
+msgctxt "Button label to undo saving/removing a post from your bookmarks."
 msgid "Undo"
 msgstr ""
 
