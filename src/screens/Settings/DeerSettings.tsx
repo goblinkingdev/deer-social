@@ -34,6 +34,26 @@ import {
   useSetDirectFetchRecords,
 } from '#/state/preferences/direct-fetch-records'
 import {
+  useDisableLikesMetrics,
+  useSetDisableLikesMetrics,
+} from '#/state/preferences/disable-likes-metrics'
+import {
+  useDisableQuotesMetrics,
+  useSetDisableQuotesMetrics,
+} from '#/state/preferences/disable-quotes-metrics'
+import {
+  useDisableReplyMetrics,
+  useSetDisableReplyMetrics,
+} from '#/state/preferences/disable-reply-metrics'
+import {
+  useDisableRepostsMetrics,
+  useSetDisableRepostsMetrics,
+} from '#/state/preferences/disable-reposts-metrics'
+import {
+  useDisableSavesMetrics,
+  useSetDisableSavesMetrics,
+} from '#/state/preferences/disable-saves-metrics'
+import {
   useDisableViaRepostNotification,
   useSetDisableViaRepostNotification,
 } from '#/state/preferences/disable-via-repost-notification'
@@ -233,6 +253,21 @@ export function DeerSettingsScreen({}: Props) {
 
   const disableViaRepostNotification = useDisableViaRepostNotification()
   const setDisableViaRepostNotification = useSetDisableViaRepostNotification()
+
+  const disableLikesMetrics = useDisableLikesMetrics()
+  const setDisableLikesMetrics = useSetDisableLikesMetrics()
+
+  const disableRepostsMetrics = useDisableRepostsMetrics()
+  const setDisableRepostsMetrics = useSetDisableRepostsMetrics()
+
+  const disableQuotesMetrics = useDisableQuotesMetrics()
+  const setDisableQuotesMetrics = useSetDisableQuotesMetrics()
+
+  const disableSavesMetrics = useDisableSavesMetrics()
+  const setDisableSavesMetrics = useSetDisableSavesMetrics()
+
+  const disableReplyMetrics = useDisableReplyMetrics()
+  const setDisableReplyMetrics = useSetDisableReplyMetrics()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -520,6 +555,73 @@ export function DeerSettingsScreen({}: Props) {
                 you like/repost a post someone else has reposted for privacy.
               </Trans>
             </Admonition>
+          </SettingsList.Group>
+
+          <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
+            <SettingsList.ItemIcon icon={VisibilityIcon} />
+            <SettingsList.ItemText>
+              <Trans>Metrics</Trans>
+            </SettingsList.ItemText>
+
+            <Toggle.Item
+              name="disable_likes_metrics"
+              label={_(msg`Disable Likes Metrics`)}
+              value={disableLikesMetrics}
+              onChange={value => setDisableLikesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Likes Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_reposts_metrics"
+              label={_(msg`Disable Reposts Metrics`)}
+              value={disableRepostsMetrics}
+              onChange={value => setDisableRepostsMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Reposts Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_quotes_metrics"
+              label={_(msg`Disable Quotes Metrics`)}
+              value={disableQuotesMetrics}
+              onChange={value => setDisableQuotesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Quotes Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_saves_metrics"
+              label={_(msg`Disable Saves Metrics`)}
+              value={disableSavesMetrics}
+              onChange={value => setDisableSavesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Saves Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_reply_metrics"
+              label={_(msg`Disable Reply Metrics`)}
+              value={disableReplyMetrics}
+              onChange={value => setDisableReplyMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Reply Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
           </SettingsList.Group>
 
           <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
