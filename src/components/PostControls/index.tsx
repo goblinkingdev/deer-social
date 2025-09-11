@@ -15,6 +15,9 @@ import {useHaptics} from '#/lib/haptics'
 import {useOpenComposer} from '#/lib/hooks/useOpenComposer'
 import {type Shadow} from '#/state/cache/types'
 import {useFeedFeedbackContext} from '#/state/feed-feedback'
+import {useDisableLikesMetrics} from '#/state/preferences/disable-likes-metrics'
+import {useDisableReplyMetrics} from '#/state/preferences/disable-reply-metrics'
+import {useDisableRepostsMetrics} from '#/state/preferences/disable-reposts-metrics'
 import {
   usePostLikeMutationQueue,
   usePostRepostMutationQueue,
@@ -98,6 +101,11 @@ let PostControls = ({
   const formatPostStatCount = useFormatPostStatCount()
 
   const [hasLikeIconBeenToggled, setHasLikeIconBeenToggled] = useState(false)
+
+  // disable metrics
+  const disableLikesMetrics = useDisableLikesMetrics()
+  const disableRepostsMetrics = useDisableRepostsMetrics()
+  const disableReplyMetrics = useDisableReplyMetrics()
 
   const onPressToggleLike = async () => {
     if (isBlocked) {
@@ -231,17 +239,23 @@ let PostControls = ({
             )}
             big={big}>
             <PostControlButtonIcon icon={Bubble} />
-            {typeof post.replyCount !== 'undefined' && post.replyCount > 0 && (
-              <PostControlButtonText>
-                {formatPostStatCount(post.replyCount)}
-              </PostControlButtonText>
-            )}
+            {typeof post.replyCount !== 'undefined' &&
+              post.replyCount > 0 &&
+              !disableReplyMetrics && (
+                <PostControlButtonText>
+                  {formatPostStatCount(post.replyCount)}
+                </PostControlButtonText>
+              )}
           </PostControlButton>
         </View>
         <View style={[a.flex_1, a.align_start]}>
           <RepostButton
             isReposted={!!post.viewer?.repost}
-            repostCount={(post.repostCount ?? 0) + (post.quoteCount ?? 0)}
+            repostCount={
+              !disableRepostsMetrics
+                ? (post.repostCount ?? 0) + (post.quoteCount ?? 0)
+                : 0
+            }
             onRepost={onRepost}
             onQuote={onQuote}
             big={big}
@@ -281,12 +295,14 @@ let PostControls = ({
               big={big}
               hasBeenToggled={hasLikeIconBeenToggled}
             />
-            <CountWheel
-              likeCount={post.likeCount ?? 0}
-              big={big}
-              isLiked={Boolean(post.viewer?.like)}
-              hasBeenToggled={hasLikeIconBeenToggled}
-            />
+            {!disableLikesMetrics ? (
+              <CountWheel
+                likeCount={post.likeCount ?? 0}
+                big={big}
+                isLiked={Boolean(post.viewer?.like)}
+                hasBeenToggled={hasLikeIconBeenToggled}
+              />
+            ) : null}
           </PostControlButton>
         </View>
         {/* Spacer! */}
