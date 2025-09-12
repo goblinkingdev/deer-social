@@ -17,6 +17,7 @@ import {Provider as ExternalEmbedsProvider} from './external-embeds-prefs'
 import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
 import {Provider as HideFeedsPromoTabProvider} from './hide-feeds-promo-tab'
+import {Provider as HideSimilarAccountsRecommProvider} from './hide-similar-accounts-recommendations'
 import {Provider as HighQualityImagesProvider} from './high-quality-images'
 import {Provider as InAppBrowserProvider} from './in-app-browser'
 import {Provider as KawaiiProvider} from './kawaii'
@@ -81,7 +82,9 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                                                         <DisableQuotesMetricsProvider>
                                                           <DisableSavesMetricsProvider>
                                                             <DisableReplyMetricsProvider>
-                                                              {children}
+                                                              <HideSimilarAccountsRecommProvider>
+                                                                {children}
+                                                              </HideSimilarAccountsRecommProvider>
                                                             </DisableReplyMetricsProvider>
                                                           </DisableSavesMetricsProvider>
                                                         </DisableQuotesMetricsProvider>
