@@ -140,6 +140,7 @@ const schema = z.object({
   disableQuotesMetrics: z.boolean().optional(),
   disableSavesMetrics: z.boolean().optional(),
   disableReplyMetrics: z.boolean().optional(),
+  hideSimilarAccountsRecomm: z.boolean().optional(),
   deerVerification: z
     .object({
       enabled: z.boolean(),
@@ -216,6 +217,7 @@ export const defaults: Schema = {
   disableQuotesMetrics: false,
   disableSavesMetrics: false,
   disableReplyMetrics: false,
+  hideSimilarAccountsRecomm: false,
   deerVerification: {
     enabled: false,
     // https://deer-social-ayla.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k

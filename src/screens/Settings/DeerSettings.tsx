@@ -62,6 +62,10 @@ import {
   useSetHideFeedsPromoTab,
 } from '#/state/preferences/hide-feeds-promo-tab'
 import {
+  useHideSimilarAccountsRecomm,
+  useSetHideSimilarAccountsRecomm,
+} from '#/state/preferences/hide-similar-accounts-recommendations'
+import {
   useHighQualityImages,
   useSetHighQualityImages,
 } from '#/state/preferences/high-quality-images'
@@ -268,6 +272,9 @@ export function DeerSettingsScreen({}: Props) {
 
   const disableReplyMetrics = useDisableReplyMetrics()
   const setDisableReplyMetrics = useSetDisableReplyMetrics()
+
+  const hideSimilarAccountsRecomm = useHideSimilarAccountsRecomm()
+  const setHideSimilarAccountsRecomm = useSetHideSimilarAccountsRecomm()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -555,6 +562,18 @@ export function DeerSettingsScreen({}: Props) {
                 you like/repost a post someone else has reposted for privacy.
               </Trans>
             </Admonition>
+
+            <Toggle.Item
+              name="hide_similar_accounts_recommendations"
+              label={_(msg`Hide similar accounts recommendations`)}
+              value={hideSimilarAccountsRecomm}
+              onChange={value => setHideSimilarAccountsRecomm(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Hide similar accounts recommendations</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
           </SettingsList.Group>
 
           <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
