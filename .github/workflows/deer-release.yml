@@ -1,12 +1,9 @@
 name: Release deer
-
 on:
   workflow_dispatch:
-
 env:
   NODE_VERSION: '20'
   JAVA_VERSION: '17'
-
 jobs:
   deploy-pages:
     name: Deploy to Cloudflare Pages
@@ -19,31 +16,40 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-
+          
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
-      - name: Install Wrangler
-        run: yarn add wrangler@latest
-
+        
       - name: Compile internationalization messages
         run: yarn intl:compile 
-
+        
       - name: Build web project
         run: yarn build-web
-
+        
+      - name: Verify build output exists
+        run: |
+          echo "Checking if dist directory exists..."
+          ls -la
+          if [ -d "dist" ]; then
+            echo "✅ dist directory found"
+            ls -la dist/
+          else
+            echo "❌ dist directory not found"
+            exit 1
+          fi
+        
       - name: Deploy to Cloudflare Pages
         run: yarn wrangler pages deploy dist --project-name=deer-social
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
+          
   build-android:
     name: Build deer for Android
     needs: deploy-pages
@@ -84,7 +90,7 @@ jobs:
         with:
           name: android
           path: android/app/build/outputs/apk/release/app-release.apk
-
+          
   release:
     name: Create GitHub Release
     needs: build-android
