@@ -5,7 +5,6 @@ name: Release deer
 on:
   workflow_dispatch:
   push:
-    branches: [main]
     tags: ['v*.*.*']
 
 # Variables de entorno globales
