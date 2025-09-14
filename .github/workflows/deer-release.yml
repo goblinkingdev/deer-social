@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Install Wrangler
+        run: yarn add wrangler@latest
+
       - name: Compile internationalization messages
         run: yarn intl:compile 
 
@@ -36,11 +39,7 @@ jobs:
         run: yarn build-web
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=deer-social --commit-dirty=true
+        run: yarn wrangler pages deploy dist --project-name=deer-social
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
