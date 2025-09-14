@@ -26,6 +26,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
+      - name: Install Wrangler
+        run: npm install -g wrangler@latest
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
