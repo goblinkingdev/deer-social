@@ -1,5 +1,5 @@
 name = "deer-social"
-pages_build_output_dir = "./dist"
+pages_build_output_dir = "/dist"
 compatibility_date = "2025-04-16"
 compatibility_flags = ["nodejs_compat"]
 
