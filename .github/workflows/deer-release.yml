@@ -95,6 +95,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'deer-social'
           directory: 'web-build'
+          branch: 'main'
 
   release:
     name: Create GitHub Release
