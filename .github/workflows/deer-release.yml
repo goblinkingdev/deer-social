@@ -1,4 +1,4 @@
-ame: Release deer
+name: Release deer
 on:
   workflow_dispatch:
 env:
