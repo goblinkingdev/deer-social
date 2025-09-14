@@ -3,11 +3,6 @@ name: Build, Release, and Deploy
 
 # Disparadores: Se ejecuta en push a 'main', en push de tags (ej. v1.0.0), o manualmente
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*.*.*' # Patrón para tags de versión
   workflow_dispatch:
 
 # Variables de entorno globales
