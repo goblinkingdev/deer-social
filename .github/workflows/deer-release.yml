@@ -1,4 +1,4 @@
-name: Release deer
+ame: Release deer
 on:
   workflow_dispatch:
 env:
@@ -30,7 +30,10 @@ jobs:
         run: yarn intl:compile 
         
       - name: Build web project
-        run: yarn build-web
+        run: |
+          echo "Building web project..."
+          yarn build-web
+          echo "Build completed, checking output..."
         
       - name: Verify build output exists
         run: |
@@ -38,9 +41,13 @@ jobs:
           ls -la
           if [ -d "dist" ]; then
             echo "✅ dist directory found"
-            ls -la dist/
+            ls -la dist/ | head -10
+            echo "Total files in dist:" 
+            find dist -type f | wc -l
           else
             echo "❌ dist directory not found"
+            echo "Available directories:"
+            ls -la
             exit 1
           fi
         
