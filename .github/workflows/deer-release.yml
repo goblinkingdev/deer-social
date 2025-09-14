@@ -1,63 +1,67 @@
 name: Release deer
+
 on:
   workflow_dispatch:
+
 env:
   NODE_VERSION: '20'
   JAVA_VERSION: '17'
-jobs: 
+
+jobs:
   build-android:
     name: Build deer for Android
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       apk-path: ${{ steps.upload-artifact.outputs.artifact-path }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
-      
+
       - uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: gradle
-      
+
       - uses: android-actions/setup-android@v3
-      
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      
+
       - name: Copy example build settings
         run: |
           cp .env.example .env
           cp google-services.json.example google-services.json
-      
+
       - name: Build APK
-        run: yarn android:prod 
-      
+        run: yarn android:prod
+
       - name: Upload APK artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: android
           path: android/app/build/outputs/apk/release/app-release.apk
-          
+
   release:
     name: Create GitHub Release
     needs: build-android
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') 
-    
+    if: startsWith(github.ref, 'refs/tags/')
+
     steps:
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
           name: android
           path: .
-      
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -68,7 +72,7 @@ jobs:
           release_name: deer.social ${{ github.ref_name }}
           draft: false
           prerelease: false
-      
+
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
         env:
@@ -78,3 +82,33 @@ jobs:
           asset_path: ./app-release.apk
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
+
+  deploy-to-cloudflare:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build Web App
+        run: yarn build-web
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'deer-social' # Asegúrate de que este es el nombre de tu proyecto en Cloudflare
+          directory: 'web-build' # El directorio de salida de la compilación web
