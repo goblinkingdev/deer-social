@@ -99,6 +99,9 @@ jobs:
       # 2. Instalar las dependencias del proyecto
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        
+      - name: Update browserlist db
+        run: npx update-browserslist-db@latest
 
       # 3. Compilar los archivos de idioma
       - name: Compile locale files
