@@ -1,47 +1,48 @@
-name: Release deer
+# Nombre del workflow
+name: Build, Release, and Deploy
 
+# Disparadores: Se ejecuta en push a 'main', en push de tags (ej. v1.0.0), o manualmente
 on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*' # Patrón para tags de versión
   workflow_dispatch:
 
+# Variables de entorno globales
 env:
   NODE_VERSION: '20'
   JAVA_VERSION: '17'
 
 jobs:
+  # --- TAREA PARA CONSTRUIR EL APK DE ANDROID ---
   build-android:
     name: Build deer for Android
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       apk-path: ${{ steps.upload-artifact.outputs.artifact-path }}
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
-
       - uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: gradle
-
       - uses: android-actions/setup-android@v3
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
       - name: Copy example build settings
         run: |
           cp .env.example .env
           cp google-services.json.example google-services.json
-
       - name: Build APK
-        run: yarn android:prod
-
+        run: yarn build-android
       - name: Upload APK artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
@@ -49,19 +50,18 @@ jobs:
           name: android
           path: android/app/build/outputs/apk/release/app-release.apk
 
+  # --- TAREA PARA CREAR UN RELEASE EN GITHUB ---
   release:
     name: Create GitHub Release
     needs: build-android
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
-
     steps:
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
           name: android
           path: .
-
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -72,7 +72,6 @@ jobs:
           release_name: deer.social ${{ github.ref_name }}
           draft: false
           prerelease: false
-
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
         env:
@@ -83,9 +82,11 @@ jobs:
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
 
+  # --- TAREA PARA DESPLEGAR EN CLOUDFLARE PAGES (CORREGIDA) ---
   deploy-to-cloudflare:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
       deployments: write
@@ -93,18 +94,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 1. Configurar el entorno de Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
 
+      # 2. Instalar las dependencias del proyecto
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      # 3. Compilar los archivos de idioma
+      - name: Compile locale files
+        run: yarn intl:compile
+
+      # 4. Compilar la aplicación web
       - name: Build Web App
         run: yarn build-web
 
+      # 5. Publicar el directorio de salida en Cloudflare Pages
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
