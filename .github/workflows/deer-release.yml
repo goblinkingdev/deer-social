@@ -11,7 +11,7 @@ env:
   JAVA_VERSION: '17'
 
 jobs:
- build-android:
+   build-android:
     name: Build deer for Android
     runs-on: ubuntu-latest
     outputs:
