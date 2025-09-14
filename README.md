@@ -4,7 +4,7 @@ This is a soft fork of [social app](https://github.com/bluesky-social/social-app
 
 Get the app itself:
 
-- **Web: [deer.social](https://deer-social-ayla.pages.dev/)**
+- **Web: [deer.social](https://deer-social-7m8.pages.dev/)**
 - ~**iOS: [App Store]()**~ WIP
 - ~**Android: [Play Store]()**~ WIP
 
@@ -38,7 +38,7 @@ Get the app itself:
 - focus on power users (but all users are welome!)
 - enable things that are possible but annoying today **without** egging on antisocial behavior
 
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ayla6/deer-social-test">
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/goblinkingdev/deer-social">
 <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png?raw=true"
 alt="Get it on Obtainium" align="center" height="54" /></a>
 
@@ -101,7 +101,7 @@ advertising your hosted instance or builds as "official" releases.
 
 ## Security disclosures
 
-If you discover any security issues, please send an email to deer@aylac.top if it's something i caused.
+If you discover any security issues, please send an email to goblinking_f@proton.me if it's something i caused.
 If it's upstream, on deer.social, go to the a-viv-a/deer-social github and look at there
 If the issue pertains to infrastructure, code, or systems outside the scope of deer.social, please refer to the
 [disclosure guidelines on social-app](https://github.com/bluesky-social/social-app#security-disclosures) if it is hosted by Bluesky PBC. Otherwise, reference the

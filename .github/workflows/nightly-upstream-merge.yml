@@ -144,7 +144,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: pr.number,
-                  assignees: ["ayla6"],
+                  assignees: ["goblinkingdev"],
                 });
 
                 console.log(`Created PR #${pr.number}: ${pr.html_url}`);

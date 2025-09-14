@@ -206,7 +206,7 @@ export const defaults: Schema = {
   hideFeedsPromoTab: false,
   deerVerification: {
     enabled: false,
-    // https://deer-social-ayla.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
+    // https://deer-social-7m8.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
     // using https://bverified.vercel.app/ as a source
     trusted: [
       'did:plc:z72i7hdynmk6r22z27h6tvur',

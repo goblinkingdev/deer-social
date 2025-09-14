@@ -36,7 +36,7 @@ async function _registerPushToken({
         : PUBLIC_APPVIEW_DID,
       platform: Platform.OS,
       token: token.data,
-      appId: 'dev.pages.deer_social_ayla',
+      appId: 'dev.pages.deer_social',
       ageRestricted: false,
     }
 

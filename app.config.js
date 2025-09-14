@@ -18,7 +18,7 @@ module.exports = function (_config) {
   const IS_DEV = !IS_TESTFLIGHT || !IS_PRODUCTION
 
   const ASSOCIATED_DOMAINS = [
-    'applinks:deer-social-ayla.pages.dev',
+    'applinks:deer-social-7m8.pages.dev',
     // When testing local services, enter an ngrok (et al) domain here. It must use a standard HTTP/HTTPS port.
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
@@ -36,7 +36,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'deer-social-ayla',
+      name: 'deer-social',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -49,7 +49,7 @@ module.exports = function (_config) {
       primaryColor: '#4b9b6c',
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'dev.pages.deer_social_ayla',
+        bundleIdentifier: 'dev.pages.deer_social',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -63,7 +63,7 @@ module.exports = function (_config) {
             'Used to save images to your library.',
           NSPhotoLibraryUsageDescription:
             'Used for profile pictures, posts, and other kinds of content',
-          CFBundleSpokenName: 'deer-social-ayla',
+          CFBundleSpokenName: 'deer-social',
           CFBundleLocalizations: [
             'en',
             'an',
@@ -112,7 +112,7 @@ module.exports = function (_config) {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
           'com.apple.security.application-groups':
-            'group.dev.pages.deer_social_ayla',
+            'group.dev.pages.deer_social',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -154,7 +154,7 @@ module.exports = function (_config) {
           backgroundColor: '#4b9b6c',
         },
         googleServicesFile: './google-services.json',
-        package: 'dev.pages.deer_social_ayla',
+        package: 'dev.pages.deer_social',
         intentFilters: [
           {
             action: 'VIEW',
@@ -162,11 +162,11 @@ module.exports = function (_config) {
             data: [
               {
                 scheme: 'https',
-                host: 'deer-social-ayla.pages.dev',
+                host: 'deer-social-7m8.pages.dev',
               },
               {
                 scheme: 'https',
-                host: 'deer-social-ayla.pages.dev',
+                host: 'deer-social-7m8.pages.dev',
               },
               {
                 scheme: 'https',
