@@ -27,7 +27,7 @@ import {
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, flatten, useBreakpoints} from '#/alf'
 import {Reply as Bubble} from '#/components/icons/Reply'
-import {Statics} from '#/components/icons/Statics'
+import {Statics_Stroke2_Corner0_Rounded as Statics} from '#/components/icons/Statics'
 import {useFormatPostStatCount} from '#/components/PostControls/util'
 import {BookmarkButton} from './BookmarkButton'
 import {
