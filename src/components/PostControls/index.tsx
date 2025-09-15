@@ -27,6 +27,7 @@ import {
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, flatten, useBreakpoints} from '#/alf'
 import {Reply as Bubble} from '#/components/icons/Reply'
+import {Statics} from '#/components/icons/Statics'
 import {useFormatPostStatCount} from '#/components/PostControls/util'
 import {BookmarkButton} from './BookmarkButton'
 import {
@@ -294,15 +295,14 @@ let PostControls = ({
             testID="interactionsBtn"
             big={big}
             onPress={() => {}}
-            label={_(msg`Interactions`)}
-          >
-            <PostControlButtonIcon icon={Bubble} />
+            label={_(msg`Interactions`)}>
+            <PostControlButtonIcon icon={Statics} />
             <PostControlButtonText>
               {formatPostStatCount(
                 (post.likeCount || 0) +
-                (post.repostCount || 0) +
-                (post.quoteCount || 0) +
-                (post.viewer?.bookmarked ? 1 : 0)
+                  (post.repostCount || 0) +
+                  (post.quoteCount || 0) +
+                  (post.viewer?.bookmarked ? 1 : 0),
               )}
             </PostControlButtonText>
           </PostControlButton>
