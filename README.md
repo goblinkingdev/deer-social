@@ -5,8 +5,8 @@ This is a fork of the soft fork [deer.social](https://github.com/a-viv-a/deer-so
 Get the app itself:
 
 - **Web: [social.daniela.lol](https://social.daniela.lol)**
+- **Android: [Github Actions](https://github.com/danielah05/deer-social/actions/workflows/deer-build.yml)**
 - ~**iOS: [App Store]()**~ WIP
-- ~**Android: [Play Store]()**~ WIP
 
 ## Features Today
 
