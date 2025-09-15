@@ -289,6 +289,24 @@ let PostControls = ({
             />
           </PostControlButton>
         </View>
+        <View style={[a.flex_1, a.align_start]}>
+          <PostControlButton
+            testID="interactionsBtn"
+            big={big}
+            onPress={() => {}}
+            label={_(msg`Interactions`)}
+          >
+            <PostControlButtonIcon icon={Bubble} />
+            <PostControlButtonText>
+              {formatPostStatCount(
+                (post.likeCount || 0) +
+                (post.repostCount || 0) +
+                (post.quoteCount || 0) +
+                (post.viewer?.bookmarked ? 1 : 0)
+              )}
+            </PostControlButtonText>
+          </PostControlButton>
+        </View>
         {/* Spacer! */}
         <View />
       </View>
