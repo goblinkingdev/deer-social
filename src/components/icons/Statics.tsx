@@ -1,5 +1,5 @@
 import {createSinglePathSVG} from './TEMPLATE'
 
 export const Statics_Stroke2_Corner0_Rounded = createSinglePathSVG({
-  path: 'M192-192v-288h144v288H192Zm216 0v-576h144v576H408Zm216 0v-384h144v384H624Z',
+  path: 'M 160 -160 v -320 h 160 v 320 H 160 Z m 240 0 v -640 h 160 v 640 H 400 Z m 240 0 v -440 h 160 v 440 H 640 Z',
 })
