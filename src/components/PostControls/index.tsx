@@ -302,6 +302,7 @@ let PostControls = ({
                 (post.likeCount || 0) +
                   (post.repostCount || 0) +
                   (post.quoteCount || 0) +
+                  (post.replyCount || 0) +
                   (post.viewer?.bookmarked ? 1 : 0),
               )}
             </PostControlButtonText>
