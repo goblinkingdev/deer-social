@@ -205,7 +205,7 @@ let PostControls = ({
         a.gap_md,
         style,
       ]}>
-      <View style={[a.flex_row, a.flex_1, {maxWidth: 320}]}>
+      <View style={[a.flex_row, a.flex_1, {maxWidth: 520}]}>
         <View
           style={[
             a.flex_1,
