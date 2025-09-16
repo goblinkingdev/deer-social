@@ -13,8 +13,8 @@ export const GEOLOCATION_CONFIG_URL = BAPP_CONFIG_URL
  * Default geolocation config.
  */
 export const DEFAULT_GEOLOCATION_CONFIG: Device['geolocation'] = {
-  countryCode: undefined,
-  regionCode: undefined,
+  countryCode: 'US',
+  regionCode: 'CA',
   ageRestrictedGeos: [],
   ageBlockedGeos: [],
 }
@@ -23,8 +23,8 @@ export const DEFAULT_GEOLOCATION_CONFIG: Device['geolocation'] = {
  * Default geolocation status.
  */
 export const DEFAULT_GEOLOCATION_STATUS: GeolocationStatus = {
-  countryCode: undefined,
-  regionCode: undefined,
+  countryCode: 'US',
+  regionCode: 'CA',
   isAgeRestrictedGeo: false,
   isAgeBlockedGeo: false,
 }
