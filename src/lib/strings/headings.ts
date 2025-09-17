@@ -1,4 +1,4 @@
 export function bskyTitle(page: string, unreadCountLabel?: string) {
   const unreadPrefix = unreadCountLabel ? `(${unreadCountLabel}) ` : ''
-  return `${unreadPrefix}${page} — deer-social-ayla.pages.dev`
+  return `${unreadPrefix}${page} — Deer`
 }
