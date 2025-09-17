@@ -1,7 +1,7 @@
-appId: xyz.blueskyweb.app
+appId: dev.pages.deer_social_ayla
 ---
 - launchApp:
-   appId: "xyz.blueskyweb.app"
+   appId: "dev.pages.deer_social_ayla"
    clearState: true
 - waitForAnimationToEnd
 - tapOn: "http://localhost:8081"

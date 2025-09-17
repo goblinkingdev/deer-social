@@ -1,7 +1,7 @@
 
 # flow.yaml
 
-appId: xyz.blueskyweb.app
+appId: dev.pages.deer_social_ayla
 ---
 - launchApp
 # Login
