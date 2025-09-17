@@ -27,7 +27,9 @@ export function HostingProvider({
   const t = useTheme()
   const {_} = useLingui()
   const serviceProviderLabel =
-    serviceUrl === undefined ? _(msg`Automatic`) : toNiceDomain(serviceUrl)
+    serviceUrl === undefined
+      ? _(msg`Auto identity resolving`)
+      : toNiceDomain(serviceUrl)
 
   const onPressSelectService = React.useCallback(() => {
     Keyboard.dismiss()
