@@ -212,11 +212,7 @@ export const LoginForm = ({
             <TextField.Icon icon={At} />
             <TextField.Input
               testID="loginUsernameInput"
-              label={_(
-                serviceUrl === undefined
-                  ? msg`Handle or DID`
-                  : msg`Handle, DID or email address`,
-              )}
+              label={_(msg`Handle or DID`)}
               autoCapitalize="none"
               autoFocus
               autoCorrect={false}
