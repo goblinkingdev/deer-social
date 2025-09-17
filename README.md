@@ -1,12 +1,13 @@
-# deer.social
+# deer-social-ayla
 
-This is a soft fork of [social app](https://github.com/bluesky-social/social-app).
+This is a soft fork of [deer.social](https://github.com/a-viv-a/deer-social), which is a soft fork of [social app](https://github.com/bluesky-social/social-app).
+
+Sorry for the branding being mostly unchanged, I'm not good at coming up with names.
 
 Get the app itself:
 
-- **Web: [deer.social](https://deer-social-ayla.pages.dev/)**
-- ~**iOS: [App Store]()**~ WIP
-- ~**Android: [Play Store]()**~ WIP
+- **Web: [deer-social-ayla.pages.dev](https://deer-social-ayla.pages.dev/)**
+- **Android: [GitHub Releases](https://github.com/ayla6/deer-social-test/releases/latest), [Obtaininium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ayla6/deer-social-test)**
 
 ## Features Today
 
@@ -16,12 +17,13 @@ Get the app itself:
 - see through quote blocks and detatchments (nuclear block wrt quotes)
   - <img src="https://github.com/user-attachments/assets/e5084afd-b17e-43a7-9622-f6d7f19f53ca" width="300px" />
 - enable features gates
-- configure the location used to determine regional labelers
-- entirely ignore `!no-unauthenticated` labels, even for logged out users
+- stripped out age verification and age gating
+- stripped out geolocation
+- entirely ignore `!no-unauthenticated` labels, even for logged out users (getPostThread v2 blocks this)
 
 ### WIP/Planned
 
-- rewrite shared URLs to reference deer.social
+- rewrite shared URLs to reference deer-social-ayla.pages.dev
 - opengraph support for sharing posts and profiles
 - selecting custom appviews
 - seeing past blocks in post threads (nuclear block for reply chains)
@@ -37,10 +39,6 @@ Get the app itself:
   - specifically patches that won't require large conflicts to be resolved
 - focus on power users (but all users are welome!)
 - enable things that are possible but annoying today **without** egging on antisocial behavior
-
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ayla6/deer-social-test">
-<img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png?raw=true"
-alt="Get it on Obtainium" align="center" height="54" /></a>
 
 ## Development Resources
 
