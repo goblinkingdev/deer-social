@@ -1232,8 +1232,8 @@ msgstr ""
 msgid "ATmosphere"
 msgstr ""
 
-#: src/components/forms/HostingProvider.tsx:30
-msgid "Automatic"
+#: src/components/forms/HostingProvider.tsx:31
+msgid "Auto identity resolving"
 msgstr ""
 
 #: src/screens/Settings/ContentAndMediaSettings.tsx:116
@@ -1685,8 +1685,8 @@ msgstr ""
 msgid "Changes app icon"
 msgstr ""
 
-#: src/components/forms/HostingProvider.tsx:51
-#: src/components/forms/HostingProvider.tsx:69
+#: src/components/forms/HostingProvider.tsx:53
+#: src/components/forms/HostingProvider.tsx:71
 msgid "Changes hosting provider"
 msgstr ""
 
@@ -3177,7 +3177,7 @@ msgid "Enter the email you used to create your account. We'll send you a \"reset
 msgstr ""
 
 #: src/screens/Login/LoginForm.tsx:241
-msgid "Enter the username or email address you used when you created your account"
+msgid "Enter your account's handle, DID or, if you inserted your hosting provider manually, also email address"
 msgstr ""
 
 #: src/components/dialogs/BirthDateSettings.tsx:116
@@ -4150,6 +4150,10 @@ msgstr ""
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:195
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:354
 msgid "Handle changed!"
+msgstr ""
+
+#: src/screens/Login/LoginForm.tsx:215
+msgid "Handle or DID"
 msgstr ""
 
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:605
@@ -9694,10 +9698,6 @@ msgstr ""
 msgid "Username must only contain letters (a-z), numbers, and hyphens"
 msgstr ""
 
-#: src/screens/Login/LoginForm.tsx:215
-msgid "Username or email address"
-msgstr ""
-
 #: src/components/WhoCanReply.tsx:303
 msgid "users followed by <0>@{0}</0>"
 msgstr ""
@@ -10320,7 +10320,7 @@ msgstr ""
 msgid "You are a trusted verifier"
 msgstr ""
 
-#: src/components/forms/HostingProvider.tsx:47
+#: src/components/forms/HostingProvider.tsx:49
 msgid "You are creating an account on"
 msgstr ""
 
