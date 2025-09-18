@@ -96,7 +96,9 @@ export const SplashScreen = ({
 
               <Text
                 style={[a.text_md, a.font_bold, t.atoms.text_contrast_medium]}>
-                <Trans>What's up?</Trans>
+                <Trans>
+                  Just to make it clear that this isn't actually deer.social
+                </Trans>
               </Text>
             </View>
 
