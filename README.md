@@ -88,7 +88,7 @@ Just like social-app, you have our blessing 🪄✨ to fork this application! Ho
 
 Please be sure to:
 
-- Change all branding in the repository and UI to clearly differentiate from deer.social.
+- Change all branding in the repository and UI to clearly differentiate from deer.social. (soon)
 - Change any support links (feedback, email, terms of service, issue tracker, etc) to your own systems.
 
 ## Self hosting & personal builds
