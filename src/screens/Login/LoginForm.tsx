@@ -212,7 +212,7 @@ export const LoginForm = ({
             <TextField.Icon icon={At} />
             <TextField.Input
               testID="loginUsernameInput"
-              label={_(msg`Username or email address`)}
+              label={_(msg`Handle or DID`)}
               autoCapitalize="none"
               autoFocus
               autoCorrect={false}
@@ -238,7 +238,7 @@ export const LoginForm = ({
               blurOnSubmit={false} // prevents flickering due to onSubmitEditing going to next field
               editable={!isProcessing}
               accessibilityHint={_(
-                msg`Enter the username or email address you used when you created your account`,
+                msg`Enter your account's handle, DID or, if you inserted your hosting provider manually, also email address`,
               )}
             />
           </TextField.Root>

@@ -63,7 +63,7 @@ module.exports = function (_config) {
             'Used to save images to your library.',
           NSPhotoLibraryUsageDescription:
             'Used for profile pictures, posts, and other kinds of content',
-          CFBundleSpokenName: 'deer-social',
+          CFBundleSpokenName: 'Deer',
           CFBundleLocalizations: [
             'en',
             'an',
