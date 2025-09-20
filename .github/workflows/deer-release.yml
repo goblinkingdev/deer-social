@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: deer-android-${{ github.run_number }}
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: android/app/build/outputs/apk/release/deer-release.apk
           retention-days: 30
 
   deploy-to-cloudflare:
@@ -132,7 +132,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ./artifacts/app-release.apk
+            ./artifacts/deer-release.apk
           body: |
             ## 🦌 Deer Release ${{ steps.tag.outputs.tag }}
             
@@ -142,7 +142,7 @@ jobs:
             - Web app deployed to Cloudflare Pages
             
             ### Downloads
-            - **Android APK**: Download the `app-release.apk` file below
+            - **Android APK**: Download the `deer-release.apk` file below
             - **Web App**: Available at your Cloudflare Pages URL
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
