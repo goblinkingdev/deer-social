@@ -25,6 +25,12 @@ export function ProfileHeaderHandle({
   const blockHide = profile.viewer?.blocking || profile.viewer?.blockedBy
   const isBskySocialHandle = profile.handle.endsWith('.bsky.social')
   const showProfileInHandle = useShowLinkInHandle()
+  const sanitized = sanitizeHandle(
+    profile.handle,
+    '@',
+    // forceLTR handled by CSS above on web
+    isNative,
+  )
   return (
     <View
       style={[a.flex_row, a.gap_sm, a.align_center, {maxWidth: '100%'}]}
@@ -64,21 +70,11 @@ export function ProfileHeaderHandle({
             to={`https://${profile.handle}`}
             label={profile.handle}>
             <Text style={[a.text_md, {color: t.palette.primary_500}]}>
-              {sanitizeHandle(
-                profile.handle,
-                '@',
-                // forceLTR handled by CSS above on web
-                isNative,
-              )}
+              {sanitized}
             </Text>
           </InlineLinkText>
         ) : (
-          sanitizeHandle(
-            profile.handle,
-            '@',
-            // forceLTR handled by CSS above on web
-            isNative,
-          )
+          sanitized
         )}
       </Text>
     </View>
