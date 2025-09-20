@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native'
 import {makeProfileLink} from '#/lib/routes/links'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareText, shareUrl} from '#/lib/sharing'
-import {toShareUrl} from '#/lib/strings/url-helpers'
+import {toShareUrl, toShareUrlBsky} from '#/lib/strings/url-helpers'
 import {logger} from '#/logger'
 import {isIOS} from '#/platform/detection'
 import {useProfileShadow} from '#/state/cache/profile-shadow'
@@ -58,9 +58,29 @@ let ShareMenuItems = ({
     onShareProp()
   }
 
+  const onSharePostBsky = () => {
+    logger.metric('share:press:nativeShare', {}, {statsig: true})
+    const url = toShareUrlBsky(href)
+    shareUrl(url)
+    onShareProp()
+  }
+
   const onCopyLink = async () => {
     logger.metric('share:press:copyLink', {}, {statsig: true})
     const url = toShareUrl(href)
+    if (isIOS) {
+      // iOS only
+      await ExpoClipboard.setUrlAsync(url)
+    } else {
+      await ExpoClipboard.setStringAsync(url)
+    }
+    Toast.show(_(msg`Copied to clipboard`), 'clipboard-check')
+    onShareProp()
+  }
+
+  const onCopyLinkBsky = async () => {
+    logger.metric('share:press:copyLink', {}, {statsig: true})
+    const url = toShareUrlBsky(href)
     if (isIOS) {
       // iOS only
       await ExpoClipboard.setUrlAsync(url)
@@ -122,10 +142,30 @@ let ShareMenuItems = ({
 
           <Menu.Item
             testID="postDropdownShareBtn"
+            label={_(msg`Share via Deer...`)}
+            onPress={onSharePostBsky}>
+            <Menu.ItemText>
+              <Trans>Share via Deer...</Trans>
+            </Menu.ItemText>
+            <Menu.ItemIcon icon={ArrowOutOfBoxIcon} position="right" />
+          </Menu.Item>
+
+          <Menu.Item
+            testID="postDropdownShareBtn"
             label={_(msg`Copy link to post`)}
             onPress={onCopyLink}>
             <Menu.ItemText>
               <Trans>Copy link to post</Trans>
+            </Menu.ItemText>
+            <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
+          </Menu.Item>
+
+          <Menu.Item
+            testID="postDropdownShareBtn"
+            label={_(msg`Copy via Deer`)}
+            onPress={onCopyLinkBsky}>
+            <Menu.ItemText>
+              <Trans>Copy via Deer</Trans>
             </Menu.ItemText>
             <Menu.ItemIcon icon={ChainLinkIcon} position="right" />
           </Menu.Item>

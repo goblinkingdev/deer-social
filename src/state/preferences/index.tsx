@@ -7,10 +7,17 @@ import {Provider as ConstellationInstanceProvider} from './constellation-instanc
 import {Provider as DeerVerificationProvider} from './deer-verification'
 import {Provider as DirectFetchRecordsProvider} from './direct-fetch-records'
 import {Provider as DisableHapticsProvider} from './disable-haptics'
+import {Provider as DisableLikesMetricsProvider} from './disable-likes-metrics'
+import {Provider as DisableQuotesMetricsProvider} from './disable-quotes-metrics'
+import {Provider as DisableReplyMetricsProvider} from './disable-reply-metrics'
+import {Provider as DisableRepostsMetricsProvider} from './disable-reposts-metrics'
+import {Provider as DisableSavesMetricsProvider} from './disable-saves-metrics'
+import {Provider as DisableViaRepostNotificationProvider} from './disable-via-repost-notification'
 import {Provider as ExternalEmbedsProvider} from './external-embeds-prefs'
 import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
 import {Provider as HideFeedsPromoTabProvider} from './hide-feeds-promo-tab'
+import {Provider as HideSimilarAccountsRecommProvider} from './hide-similar-accounts-recommendations'
 import {Provider as HighQualityImagesProvider} from './high-quality-images'
 import {Provider as InAppBrowserProvider} from './in-app-browser'
 import {Provider as KawaiiProvider} from './kawaii'
@@ -69,7 +76,21 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                                             <RepostCarouselProvider>
                                               <KawaiiProvider>
                                                 <HideFeedsPromoTabProvider>
-                                                  {children}
+                                                  <DisableViaRepostNotificationProvider>
+                                                    <DisableLikesMetricsProvider>
+                                                      <DisableRepostsMetricsProvider>
+                                                        <DisableQuotesMetricsProvider>
+                                                          <DisableSavesMetricsProvider>
+                                                            <DisableReplyMetricsProvider>
+                                                              <HideSimilarAccountsRecommProvider>
+                                                                {children}
+                                                              </HideSimilarAccountsRecommProvider>
+                                                            </DisableReplyMetricsProvider>
+                                                          </DisableSavesMetricsProvider>
+                                                        </DisableQuotesMetricsProvider>
+                                                      </DisableRepostsMetricsProvider>
+                                                    </DisableLikesMetricsProvider>
+                                                  </DisableViaRepostNotificationProvider>
                                                 </HideFeedsPromoTabProvider>
                                               </KawaiiProvider>
                                             </RepostCarouselProvider>

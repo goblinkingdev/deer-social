@@ -9,6 +9,7 @@ import {type NavigationProp} from '#/lib/routes/types'
 import {logEvent} from '#/lib/statsig/statsig'
 import {logger} from '#/logger'
 import {isIOS} from '#/platform/detection'
+import {useHideSimilarAccountsRecomm} from '#/state/preferences/hide-similar-accounts-recommendations'
 import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {useGetPopularFeedsQuery} from '#/state/queries/feed'
 import {type FeedDescriptor} from '#/state/queries/post-feed'
@@ -258,6 +259,9 @@ export function ProfileGrid({
   const maxLength = gtMobile ? 3 : isProfileHeaderContext ? 12 : 6
   const minLength = gtMobile ? 3 : 4
 
+  // hide similar accounts
+  const hideSimilarAccountsRecomm = useHideSimilarAccountsRecomm()
+
   const content = isLoading
     ? Array(maxLength)
         .fill(0)
@@ -363,61 +367,63 @@ export function ProfileGrid({
     return null
   }
 
-  return (
-    <View
-      style={[
-        !isProfileHeaderContext && a.border_t,
-        t.atoms.border_contrast_low,
-        t.atoms.bg_contrast_25,
-      ]}
-      pointerEvents={isIOS ? 'auto' : 'box-none'}>
+  if (!hideSimilarAccountsRecomm) {
+    return (
       <View
         style={[
-          a.px_lg,
-          a.pt_md,
-          a.flex_row,
-          a.align_center,
-          a.justify_between,
+          !isProfileHeaderContext && a.border_t,
+          t.atoms.border_contrast_low,
+          t.atoms.bg_contrast_25,
         ]}
         pointerEvents={isIOS ? 'auto' : 'box-none'}>
-        <Text style={[a.text_sm, a.font_bold, t.atoms.text]}>
-          {isFeedContext ? (
-            <Trans>Suggested for you</Trans>
-          ) : (
-            <Trans>Similar accounts</Trans>
+        <View
+          style={[
+            a.px_lg,
+            a.pt_md,
+            a.flex_row,
+            a.align_center,
+            a.justify_between,
+          ]}
+          pointerEvents={isIOS ? 'auto' : 'box-none'}>
+          <Text style={[a.text_sm, a.font_bold, t.atoms.text]}>
+            {isFeedContext ? (
+              <Trans>Suggested for you</Trans>
+            ) : (
+              <Trans>Similar accounts</Trans>
+            )}
+          </Text>
+          {!isProfileHeaderContext && (
+            <InlineLinkText
+              label={_(msg`See more suggested profiles on the Explore page`)}
+              to="/search">
+              <Trans>See more</Trans>
+            </InlineLinkText>
           )}
-        </Text>
-        {!isProfileHeaderContext && (
-          <InlineLinkText
-            label={_(msg`See more suggested profiles on the Explore page`)}
-            to="/search">
-            <Trans>See more</Trans>
-          </InlineLinkText>
+        </View>
+
+        {gtMobile ? (
+          <View style={[a.p_lg, a.pt_md]}>
+            <View style={[a.flex_1, a.flex_row, a.flex_wrap, a.gap_md]}>
+              {content}
+            </View>
+          </View>
+        ) : (
+          <BlockDrawerGesture>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[a.p_lg, a.pt_md, a.flex_row, a.gap_md]}
+              snapToInterval={MOBILE_CARD_WIDTH + a.gap_md.gap}
+              decelerationRate="fast">
+              {content}
+
+              {!isProfileHeaderContext && <SeeMoreSuggestedProfilesCard />}
+            </ScrollView>
+          </BlockDrawerGesture>
         )}
       </View>
-
-      {gtMobile ? (
-        <View style={[a.p_lg, a.pt_md]}>
-          <View style={[a.flex_1, a.flex_row, a.flex_wrap, a.gap_md]}>
-            {content}
-          </View>
-        </View>
-      ) : (
-        <BlockDrawerGesture>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[a.p_lg, a.pt_md, a.flex_row, a.gap_md]}
-            snapToInterval={MOBILE_CARD_WIDTH + a.gap_md.gap}
-            decelerationRate="fast">
-            {content}
-
-            {!isProfileHeaderContext && <SeeMoreSuggestedProfilesCard />}
-          </ScrollView>
-        </BlockDrawerGesture>
-      )}
-    </View>
-  )
+    )
+  }
 }
 
 function SeeMoreSuggestedProfilesCard() {

@@ -134,6 +134,13 @@ const schema = z.object({
   constellationInstance: z.string().optional(),
   showLinkInHandle: z.boolean().optional(),
   hideFeedsPromoTab: z.boolean().optional(),
+  disableViaRepostNotification: z.boolean().optional(),
+  disableLikesMetrics: z.boolean().optional(),
+  disableRepostsMetrics: z.boolean().optional(),
+  disableQuotesMetrics: z.boolean().optional(),
+  disableSavesMetrics: z.boolean().optional(),
+  disableReplyMetrics: z.boolean().optional(),
+  hideSimilarAccountsRecomm: z.boolean().optional(),
   deerVerification: z
     .object({
       enabled: z.boolean(),
@@ -204,6 +211,13 @@ export const defaults: Schema = {
   constellationInstance: 'https://constellation.microcosm.blue/',
   showLinkInHandle: true,
   hideFeedsPromoTab: false,
+  disableViaRepostNotification: false,
+  disableLikesMetrics: false,
+  disableRepostsMetrics: false,
+  disableQuotesMetrics: false,
+  disableSavesMetrics: false,
+  disableReplyMetrics: false,
+  hideSimilarAccountsRecomm: false,
   deerVerification: {
     enabled: false,
     // https://deer-social-7m8.pages.dev/profile/did:plc:p2cp5gopk7mgjegy6wadk3ep/post/3lndyqyyr4k2k
