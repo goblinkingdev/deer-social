@@ -1,8 +1,8 @@
-# deer-social-ayla
+# deer-social
 
 This is a soft fork of [deer.social](https://github.com/a-viv-a/deer-social), which is a soft fork of [social app](https://github.com/bluesky-social/social-app).
 
-Sorry for the branding being mostly unchanged, I'm not good at coming up with names.
+Sorry for the branding being mostly unchanged
 
 Get the app itself:
 
@@ -27,6 +27,7 @@ Get the app itself:
 - opengraph support for sharing posts and profiles
 - selecting custom appviews
 - seeing past blocks in post threads (nuclear block for reply chains)
+- rebranding (I promise)
 
 ## Philosophy
 
@@ -88,7 +89,7 @@ Just like social-app, you have our blessing 🪄✨ to fork this application! Ho
 
 Please be sure to:
 
-- Change all branding in the repository and UI to clearly differentiate from deer.social. (soon)
+- Change all branding in the repository and UI to clearly differentiate from deer.social. (soon, i promise)
 - Change any support links (feedback, email, terms of service, issue tracker, etc) to your own systems.
 
 ## Self hosting & personal builds
