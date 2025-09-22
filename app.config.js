@@ -19,6 +19,7 @@ module.exports = function (_config) {
 
   const ASSOCIATED_DOMAINS = [
     'applinks:deer-social-ayla.pages.dev',
+    'applinks:deer.aylac.top',
     // When testing local services, enter an ngrok (et al) domain here. It must use a standard HTTP/HTTPS port.
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
@@ -49,7 +50,7 @@ module.exports = function (_config) {
       primaryColor: '#4b9b6c',
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'dev.pages.deer_social_ayla',
+        bundleIdentifier: 'top.aylac.deer',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -111,8 +112,7 @@ module.exports = function (_config) {
         entitlements: {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
-          'com.apple.security.application-groups':
-            'group.dev.pages.deer_social_ayla',
+          'com.apple.security.application-groups': 'group.top.aylac.deer',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -154,7 +154,7 @@ module.exports = function (_config) {
           backgroundColor: '#4b9b6c',
         },
         googleServicesFile: './google-services.json',
-        package: 'dev.pages.deer_social_ayla',
+        package: 'top.aylac.deer',
         intentFilters: [
           {
             action: 'VIEW',
@@ -166,7 +166,11 @@ module.exports = function (_config) {
               },
               {
                 scheme: 'https',
-                host: 'deer-social-ayla.pages.dev',
+                host: 'deer.aylac.top',
+              },
+              {
+                scheme: 'https',
+                host: 'deer.social',
               },
               {
                 scheme: 'https',
@@ -332,11 +336,6 @@ module.exports = function (_config) {
               android: './assets/app-icons/android_icon_default_dark.png',
               prerendered: true,
             },
-            next: {
-              ios: './assets/app-icons/icon_default_next.png',
-              android: './assets/app-icons/icon_default_next.png',
-              prerendered: true,
-            },
 
             /**
              * Bluesky+ core set
@@ -389,7 +388,6 @@ module.exports = function (_config) {
           },
         ],
         ['expo-screen-orientation', {initialOrientation: 'PORTRAIT_UP'}],
-        ['expo-location'],
       ].filter(Boolean),
       extra: {
         eas: {

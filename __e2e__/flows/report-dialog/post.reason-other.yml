@@ -1,4 +1,4 @@
-appId: dev.pages.deer_social_ayla
+appId: top.aylac.deer
 ---
 - runScript:
     file: ../../setupServer.js

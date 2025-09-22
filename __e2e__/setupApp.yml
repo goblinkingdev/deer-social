@@ -1,7 +1,7 @@
-appId: dev.pages.deer_social_ayla
+appId: top.aylac.deer
 ---
 - launchApp:
-   appId: "dev.pages.deer_social_ayla"
+   appId: "top.aylac.deer"
    clearState: true
 - waitForAnimationToEnd
 - tapOn: "http://localhost:8081"
