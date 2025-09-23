@@ -3,14 +3,9 @@ import {View} from 'react-native'
 import {parseLanguage} from '@atproto/api'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import lande from 'lande'
+import {eldr} from 'eldr'
 
-import {
-  code2ToCode3,
-  code3ToCode2Strict,
-  codeToLanguageName,
-  koreanRegex,
-} from '#/locale/helpers'
+import {codeToLanguageName} from '#/locale/helpers'
 import {
   toPostLanguages,
   useLanguagePrefs,
@@ -38,9 +33,6 @@ export function SuggestedLanguage({
   >(text.length === 0 ? replyToLanguage : undefined)
   const langPrefs = useLanguagePrefs()
   const setLangPrefs = useLanguagePrefsApi()
-  const languageHistory = langPrefs.postLanguageHistory.map(language =>
-    code2ToCode3(language),
-  )
   const t = useTheme()
   const {_} = useLingui()
 
@@ -54,19 +46,12 @@ export function SuggestedLanguage({
 
     const textTrimmed = text.trim()
 
-    // Don't run the language model on small posts, the results are likely
-    // to be inaccurate anyway.
-    if (textTrimmed.length < 20) {
-      setSuggestedLanguage(undefined)
-      return
-    }
-
     const idle = onIdle(() => {
-      setSuggestedLanguage(guessLanguage(textTrimmed, languageHistory))
+      setSuggestedLanguage(guessLanguage(textTrimmed))
     })
 
     return () => cancelIdle(idle)
-  }, [text, replyToLanguage, languageHistory])
+  }, [text, replyToLanguage])
 
   if (
     suggestedLanguage &&
@@ -118,25 +103,22 @@ export function SuggestedLanguage({
 }
 
 /**
- * This function is using the lande language model to attempt to detect the language
+ * This function is using the eldr language model to attempt to detect the language
  * We want to only make suggestions when we feel a high degree of certainty
  * The magic numbers are based on debugging sessions against some test strings
  */
-function guessLanguage(
-  text: string,
-  languageHistory: string[],
-): string | undefined {
-  let scores = lande(text).filter(
-    ([lang, value]) =>
-      (value >= 0.9 || (languageHistory.includes(lang) && value >= 0.6)) &&
-      !(lang === 'kor' && !koreanRegex.test(text)),
+function guessLanguage(text: string): string | undefined {
+  let analysis = eldr.detect(text)
+  console.log(
+    analysis.isReliable(),
+    analysis.iso639_1,
+    analysis.languageName,
+    analysis.getScores(),
   )
 
-  if (scores.length !== 1) {
-    return undefined
-  }
-  const [lang, _] = scores[0]
-  return code3ToCode2Strict(lang)
+  return analysis.isReliable() && analysis.getScores()[analysis.iso639_1] > 0.3
+    ? analysis.iso639_1
+    : undefined
 }
 
 function cleanUpLanguage(text: string | undefined): string | undefined {

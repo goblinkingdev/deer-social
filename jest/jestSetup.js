@@ -60,11 +60,6 @@ jest.mock('expo-media-library', () => ({
   usePermissions: jest.fn(() => [true]),
 }))
 
-jest.mock('lande', () => ({
-  __esModule: true, // this property makes it work
-  default: jest.fn().mockReturnValue([['eng']]),
-}))
-
 jest.mock('sentry-expo', () => ({
   init: () => jest.fn(),
   Native: {
