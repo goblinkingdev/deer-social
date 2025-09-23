@@ -5,7 +5,12 @@ import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import lande from 'lande'
 
-import {code3ToCode2Strict, codeToLanguageName} from '#/locale/helpers'
+import {
+  code2ToCode3,
+  code3ToCode2Strict,
+  codeToLanguageName,
+  koreanRegex,
+} from '#/locale/helpers'
 import {
   toPostLanguages,
   useLanguagePrefs,
@@ -33,6 +38,9 @@ export function SuggestedLanguage({
   >(text.length === 0 ? replyToLanguage : undefined)
   const langPrefs = useLanguagePrefs()
   const setLangPrefs = useLanguagePrefsApi()
+  const languageHistory = langPrefs.postLanguageHistory.map(language =>
+    code2ToCode3(language),
+  )
   const t = useTheme()
   const {_} = useLingui()
 
@@ -48,17 +56,17 @@ export function SuggestedLanguage({
 
     // Don't run the language model on small posts, the results are likely
     // to be inaccurate anyway.
-    if (textTrimmed.length < 40) {
+    if (textTrimmed.length < 20) {
       setSuggestedLanguage(undefined)
       return
     }
 
     const idle = onIdle(() => {
-      setSuggestedLanguage(guessLanguage(textTrimmed))
+      setSuggestedLanguage(guessLanguage(textTrimmed, languageHistory))
     })
 
     return () => cancelIdle(idle)
-  }, [text, replyToLanguage])
+  }, [text, replyToLanguage, languageHistory])
 
   if (
     suggestedLanguage &&
@@ -114,17 +122,20 @@ export function SuggestedLanguage({
  * We want to only make suggestions when we feel a high degree of certainty
  * The magic numbers are based on debugging sessions against some test strings
  */
-function guessLanguage(text: string): string | undefined {
-  const scores = lande(text).filter(([_lang, value]) => value >= 0.0002)
-  // if the model has multiple items with a score higher than 0.0002, it isn't certain enough
+function guessLanguage(
+  text: string,
+  languageHistory: string[],
+): string | undefined {
+  let scores = lande(text).filter(
+    ([lang, value]) =>
+      (value >= 0.9 || (languageHistory.includes(lang) && value >= 0.6)) &&
+      !(lang === 'kor' && !koreanRegex.test(text)),
+  )
+
   if (scores.length !== 1) {
     return undefined
   }
-  const [lang, value] = scores[0]
-  // if the model doesn't give a score of 0.97 or above, it isn't certain enough
-  if (value < 0.97) {
-    return undefined
-  }
+  const [lang, _] = scores[0]
   return code3ToCode2Strict(lang)
 }
 

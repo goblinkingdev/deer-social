@@ -279,3 +279,6 @@ export function findSupportedAppLanguage(languageTags: (string | undefined)[]) {
   }
   return AppLanguage.en
 }
+
+export const koreanRegex =
+  /[\\uAC00-\\uD7A3]|[\\u1100-\\u11FF]|[\\u3130-\\u318F]/
