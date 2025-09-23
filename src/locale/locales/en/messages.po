@@ -502,7 +502,7 @@ msgstr ""
 msgid "<0>You</0> and<1> </1><2>{0} </2>are included in your starter pack"
 msgstr ""
 
-#: src/screens/Profile/Header/Handle.tsx:57
+#: src/screens/Profile/Header/Handle.tsx:61
 msgid "⚠Invalid Handle"
 msgstr ""
 
@@ -707,11 +707,11 @@ msgstr ""
 msgid "Add another account"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:907
+#: src/view/com/composer/Composer.tsx:927
 msgid "Add another post"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1610
+#: src/view/com/composer/Composer.tsx:1559
 msgid "Add another post to thread"
 msgstr ""
 
@@ -1194,11 +1194,11 @@ msgstr ""
 msgid "Are you sure you want to remove this from your feeds?"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:845
+#: src/view/com/composer/Composer.tsx:873
 msgid "Are you sure you'd like to discard this draft?"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1116
+#: src/view/com/composer/Composer.tsx:1065
 msgid "Are you sure you'd like to discard this post?"
 msgstr ""
 
@@ -1579,8 +1579,8 @@ msgstr ""
 #: src/screens/Settings/Settings.tsx:293
 #: src/screens/Takendown.tsx:108
 #: src/screens/Takendown.tsx:111
-#: src/view/com/composer/Composer.tsx:1171
-#: src/view/com/composer/Composer.tsx:1182
+#: src/view/com/composer/Composer.tsx:1120
+#: src/view/com/composer/Composer.tsx:1131
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:43
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:52
 #: src/view/com/modals/CreateOrEditList.tsx:333
@@ -1958,7 +1958,7 @@ msgstr ""
 msgid "Closes password update alert"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1179
+#: src/view/com/composer/Composer.tsx:1128
 msgid "Closes post composer and discards post draft"
 msgstr ""
 
@@ -2022,7 +2022,7 @@ msgstr ""
 msgid "Compose new post"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1080
+#: src/view/com/composer/Composer.tsx:1029
 msgid "Compose posts up to {0, plural, other {# characters}} in length"
 msgstr ""
 
@@ -2030,7 +2030,7 @@ msgstr ""
 msgid "Compose reply"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:2000
+#: src/view/com/composer/Composer.tsx:1949
 msgid "Compressing video..."
 msgstr ""
 
@@ -2582,7 +2582,7 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:783
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:785
-#: src/view/com/composer/Composer.tsx:1090
+#: src/view/com/composer/Composer.tsx:1039
 msgid "Delete post"
 msgstr ""
 
@@ -2693,8 +2693,8 @@ msgid "Disabled"
 msgstr ""
 
 #: src/screens/Profile/Header/EditProfileDialog.tsx:83
-#: src/view/com/composer/Composer.tsx:847
-#: src/view/com/composer/Composer.tsx:1123
+#: src/view/com/composer/Composer.tsx:875
+#: src/view/com/composer/Composer.tsx:1072
 msgid "Discard"
 msgstr ""
 
@@ -2702,11 +2702,11 @@ msgstr ""
 msgid "Discard changes?"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:844
+#: src/view/com/composer/Composer.tsx:872
 msgid "Discard draft?"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1115
+#: src/view/com/composer/Composer.tsx:1064
 msgid "Discard post?"
 msgstr ""
 
@@ -2729,7 +2729,7 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1924
+#: src/view/com/composer/Composer.tsx:1873
 msgid "Dismiss error"
 msgstr ""
 
@@ -3205,7 +3205,7 @@ msgstr ""
 msgid "Entertainment"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:2009
+#: src/view/com/composer/Composer.tsx:1958
 #: src/view/com/util/error/ErrorScreen.tsx:42
 msgid "Error"
 msgstr ""
@@ -3861,7 +3861,7 @@ msgstr ""
 msgid "Following Feed Preferences"
 msgstr ""
 
-#: src/screens/Profile/Header/Handle.tsx:32
+#: src/screens/Profile/Header/Handle.tsx:36
 msgid "Follows you"
 msgstr ""
 
@@ -4609,7 +4609,7 @@ msgstr ""
 msgid "It's just you right now! Add more people to your starter pack by searching above."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1943
+#: src/view/com/composer/Composer.tsx:1892
 msgid "Job ID: {0}"
 msgstr ""
 
@@ -5861,11 +5861,11 @@ msgstr ""
 msgid "Onboarding reset"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:441
+#: src/view/com/composer/Composer.tsx:469
 msgid "One or more GIFs is missing alt text."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:438
+#: src/view/com/composer/Composer.tsx:466
 msgid "One or more images is missing alt text."
 msgstr ""
 
@@ -5877,7 +5877,7 @@ msgstr ""
 msgid "One or more of your selected files are too large. Maximum size is 100 MB."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:448
+#: src/view/com/composer/Composer.tsx:476
 msgid "One or more videos is missing alt text."
 msgstr ""
 
@@ -5938,7 +5938,7 @@ msgid "Open drawer menu"
 msgstr ""
 
 #: src/screens/Messages/components/MessageInput.web.tsx:181
-#: src/view/com/composer/Composer.tsx:1595
+#: src/view/com/composer/Composer.tsx:1544
 msgid "Open emoji picker"
 msgstr ""
 
@@ -6038,7 +6038,7 @@ msgstr ""
 msgid "Opens device gallery to select up to {MAX_IMAGES, plural, other {# images}}, or a single video or GIF."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1596
+#: src/view/com/composer/Composer.tsx:1545
 msgid "Opens emoji picker"
 msgstr ""
 
@@ -6430,7 +6430,7 @@ msgstr ""
 
 #: src/lib/hooks/useAccountSwitcher.ts:45
 #: src/lib/hooks/useAccountSwitcher.ts:55
-#: src/view/com/composer/Composer.tsx:277
+#: src/view/com/composer/Composer.tsx:302
 msgid "Please sign in as @{0}"
 msgstr ""
 
@@ -6457,12 +6457,12 @@ msgctxt "description"
 msgid "Post"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1242
+#: src/view/com/composer/Composer.tsx:1191
 msgctxt "action"
 msgid "Post"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1240
+#: src/view/com/composer/Composer.tsx:1189
 msgctxt "action"
 msgid "Post All"
 msgstr ""
@@ -6627,7 +6627,7 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:2006
+#: src/view/com/composer/Composer.tsx:1955
 msgid "Processing video..."
 msgstr ""
 
@@ -6666,22 +6666,22 @@ msgid "Public, sharable lists which can be used to drive feeds."
 msgstr ""
 
 #. Accessibility label for button to publish a single post
-#: src/view/com/composer/Composer.tsx:1222
+#: src/view/com/composer/Composer.tsx:1171
 msgid "Publish post"
 msgstr ""
 
 #. Accessibility label for button to publish multiple posts in a thread
-#: src/view/com/composer/Composer.tsx:1215
+#: src/view/com/composer/Composer.tsx:1164
 msgid "Publish posts"
 msgstr ""
 
 #. Accessibility label for button to publish multiple replies in a thread
-#: src/view/com/composer/Composer.tsx:1200
+#: src/view/com/composer/Composer.tsx:1149
 msgid "Publish replies"
 msgstr ""
 
 #. Accessibility label for button to publish a single reply
-#: src/view/com/composer/Composer.tsx:1207
+#: src/view/com/composer/Composer.tsx:1156
 msgid "Publish reply"
 msgstr ""
 
@@ -7093,7 +7093,7 @@ msgstr ""
 msgid "Replies to this post are disabled."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1238
+#: src/view/com/composer/Composer.tsx:1187
 msgctxt "action"
 msgid "Reply"
 msgstr ""
@@ -8527,10 +8527,10 @@ msgstr ""
 #: src/screens/Settings/Settings.tsx:121
 #: src/screens/Settings/Settings.tsx:135
 #: src/screens/Settings/Settings.tsx:608
-#: src/view/com/composer/Composer.tsx:981
-#: src/view/com/composer/Composer.tsx:986
-#: src/view/com/composer/Composer.tsx:1002
-#: src/view/com/composer/Composer.tsx:1036
+#: src/view/com/composer/account-switcher/AccountSwitcher.tsx:38
+#: src/view/com/composer/account-switcher/AccountSwitcher.web.tsx:37
+#: src/view/com/composer/account-switcher/AccountSwitcher.web.tsx:42
+#: src/view/com/composer/account-switcher/AccountSwitcher.web.tsx:56
 #: src/view/shell/desktop/LeftNav.tsx:247
 msgid "Switch account"
 msgstr ""
@@ -8546,7 +8546,7 @@ msgstr ""
 msgid "Switch accounts"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1010
+#: src/view/com/composer/account-switcher/AccountSwitcher.web.tsx:64
 #: src/view/shell/desktop/LeftNav.tsx:346
 msgid "Switch to {0}"
 msgstr ""
@@ -9088,7 +9088,7 @@ msgstr ""
 msgid "This post will be hidden from feeds and threads. This cannot be undone."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:557
+#: src/view/com/composer/Composer.tsx:585
 msgid "This post's author has disabled quote posts."
 msgstr ""
 
@@ -9526,7 +9526,7 @@ msgstr ""
 msgid "Unsubscribed from list"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:949
+#: src/view/com/composer/Composer.tsx:968
 msgid "Unsupported video type: {mimeType}"
 msgstr ""
 
@@ -9612,7 +9612,7 @@ msgstr ""
 msgid "Uploading link thumbnail..."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:2003
+#: src/view/com/composer/Composer.tsx:1952
 msgid "Uploading video..."
 msgstr ""
 
@@ -9849,7 +9849,7 @@ msgstr ""
 msgid "Video settings"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:2013
+#: src/view/com/composer/Composer.tsx:1962
 msgid "Video uploaded"
 msgstr ""
 
@@ -9869,7 +9869,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:628
+#: src/view/com/composer/Composer.tsx:656
 msgctxt "Action to view the post the user just created"
 msgid "View"
 msgstr ""
@@ -9931,7 +9931,7 @@ msgstr ""
 msgid "View more trending videos"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:623
+#: src/view/com/composer/Composer.tsx:651
 msgid "View post"
 msgstr ""
 
@@ -10140,7 +10140,7 @@ msgstr ""
 msgid "We're sorry, but your search could not be completed. Please try again in a few minutes."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:554
+#: src/view/com/composer/Composer.tsx:582
 msgid "We're sorry! The post you are replying to has been deleted."
 msgstr ""
 
@@ -10189,7 +10189,7 @@ msgstr ""
 msgid "What do you want to call your starter pack?"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:908
+#: src/view/com/composer/Composer.tsx:928
 msgid "What's up?"
 msgstr ""
 
@@ -10271,12 +10271,12 @@ msgstr ""
 msgid "Write a message"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:1078
+#: src/view/com/composer/Composer.tsx:1027
 msgid "Write post"
 msgstr ""
 
 #: src/screens/PostThread/components/ThreadComposePrompt.tsx:90
-#: src/view/com/composer/Composer.tsx:906
+#: src/view/com/composer/Composer.tsx:926
 msgid "Write your reply"
 msgstr ""
 
@@ -10824,11 +10824,11 @@ msgstr ""
 msgid "Your password must be at least 8 characters long."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:619
+#: src/view/com/composer/Composer.tsx:647
 msgid "Your post was sent"
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:616
+#: src/view/com/composer/Composer.tsx:644
 msgid "Your posts were sent"
 msgstr ""
 
@@ -10848,7 +10848,7 @@ msgstr ""
 msgid "Your profile, posts, feeds, and lists will no longer be visible to other Bluesky users. You can reactivate your account at any time by logging in."
 msgstr ""
 
-#: src/view/com/composer/Composer.tsx:618
+#: src/view/com/composer/Composer.tsx:646
 msgid "Your reply was sent"
 msgstr ""
 
