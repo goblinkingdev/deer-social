@@ -427,7 +427,7 @@ function DevOptions() {
         {
           style: 'default',
           text: 'Apply',
-          onPress: channel => {
+          onPress: (channel?: string) => {
             tryApplyUpdate(channel ?? '')
           },
         },
