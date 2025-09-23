@@ -1,5 +1,4 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config')
-const CompressionPlugin = require('compression-webpack-plugin')
 const {withAlias} = require('@expo/webpack-config/addons')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
@@ -35,16 +34,6 @@ module.exports = async function (env, argv) {
     // Support static CDN for chunks
     config.output.publicPath = 'auto'
   }
-
-  config.plugins.push(
-    new CompressionPlugin({
-      test: /\.js$|\.css$|\.html$|\.ts$/,
-      filename: '[path][base].gz',
-      algorithm: 'gzip',
-      threshold: 1024,
-      minRatio: 0.8,
-    }),
-  )
 
   if (GENERATE_STATS || OPEN_ANALYZER) {
     config.plugins.push(
