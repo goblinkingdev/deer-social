@@ -1,5 +1,5 @@
 import React from 'react'
-import {init} from 'emoji-mart'
+import {init} from '@slidoapp/emoji-mart'
 
 /**
  * Only load the emoji picker data once per page load.
