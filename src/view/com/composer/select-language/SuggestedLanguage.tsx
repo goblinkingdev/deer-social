@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {View} from 'react-native'
 import {parseLanguage} from '@atproto/api'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {eldr} from 'eldr'
 
-import {codeToLanguageName} from '#/locale/helpers'
+import {code3ToCode2, codeToLanguageName} from '#/locale/helpers'
 import {
   toPostLanguages,
   useLanguagePrefs,
@@ -33,6 +33,10 @@ export function SuggestedLanguage({
   >(text.length === 0 ? replyToLanguage : undefined)
   const langPrefs = useLanguagePrefs()
   const setLangPrefs = useLanguagePrefsApi()
+  const languageHistory = useMemo(
+    () => langPrefs.postLanguageHistory.map(lang => code3ToCode2(lang)),
+    [langPrefs.postLanguageHistory],
+  )
   const t = useTheme()
   const {_} = useLingui()
 
@@ -46,12 +50,19 @@ export function SuggestedLanguage({
 
     const textTrimmed = text.trim()
 
+    // Don't run the language model on small posts, the results are likely
+    // to be inaccurate anyway.
+    if (textTrimmed.length < 20) {
+      setSuggestedLanguage(undefined)
+      return
+    }
+
     const idle = onIdle(() => {
-      setSuggestedLanguage(guessLanguage(textTrimmed))
+      setSuggestedLanguage(guessLanguage(textTrimmed, languageHistory))
     })
 
     return () => cancelIdle(idle)
-  }, [text, replyToLanguage])
+  }, [text, replyToLanguage, languageHistory])
 
   if (
     suggestedLanguage &&
@@ -107,18 +118,26 @@ export function SuggestedLanguage({
  * We want to only make suggestions when we feel a high degree of certainty
  * The magic numbers are based on debugging sessions against some test strings
  */
-function guessLanguage(text: string): string | undefined {
-  let analysis = eldr.detect(text)
-  console.log(
-    analysis.isReliable(),
-    analysis.iso639_1,
-    analysis.languageName,
-    analysis.getScores(),
-  )
+function guessLanguage(
+  text: string,
+  languageHistory: string[],
+): string | undefined {
+  const analysis = eldr.detect(text)
+  const scores = analysis
+    .getScoresArray()
+    .map(
+      score =>
+        [
+          score[0],
+          score[1] *
+            (languageHistory.includes(score[0]) ? 2 : 1) *
+            (languageHistory[0] === score[0] ? 2 : 1),
+        ] as [string, number],
+    )
+    .filter(score => score[1] >= 0.3)
+    .sort((x, y) => y[1] - x[1])
 
-  return analysis.isReliable() && analysis.getScores()[analysis.iso639_1] > 0.3
-    ? analysis.iso639_1
-    : undefined
+  return scores.length > 0 ? scores[0][0] : undefined
 }
 
 function cleanUpLanguage(text: string | undefined): string | undefined {
