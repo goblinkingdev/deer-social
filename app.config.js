@@ -48,6 +48,7 @@ module.exports = function (_config) {
       icon: './assets/app-icons/ios_icon_default_light.png',
       userInterfaceStyle: 'automatic',
       primaryColor: '#4b9b6c',
+      newArchEnabled: false,
       ios: {
         supportsTablet: false,
         bundleIdentifier: 'top.aylac.deer',
@@ -107,6 +108,7 @@ module.exports = function (_config) {
             'zh-Hans',
             'zh-Hant',
           ],
+          UIDesignRequiresCompatibility: true,
         },
         associatedDomains: ASSOCIATED_DOMAINS,
         entitlements: {
@@ -240,13 +242,12 @@ module.exports = function (_config) {
           {
             ios: {
               deploymentTarget: '15.1',
-              newArchEnabled: false,
+              buildReactNativeFromSource: true,
             },
             android: {
               compileSdkVersion: 35,
               targetSdkVersion: 35,
               buildToolsVersion: '35.0.0',
-              newArchEnabled: false,
             },
           },
         ],

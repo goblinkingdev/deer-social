@@ -434,7 +434,6 @@ function NavItem({count, hasNew, href, icon, iconFilled, label}: NavItemProps) {
         style={[
           a.align_center,
           a.justify_center,
-          a.z_10,
           {
             width: 24,
             height: 24,
@@ -469,6 +468,7 @@ function NavItem({count, hasNew, href, icon, iconFilled, label}: NavItemProps) {
                 a.rounded_full,
                 a.text_center,
                 a.leading_tight,
+                a.z_20,
                 {
                   top: '-10%',
                   left: count.length === 1 ? 12 : 8,
@@ -494,6 +494,7 @@ function NavItem({count, hasNew, href, icon, iconFilled, label}: NavItemProps) {
             style={[
               a.absolute,
               a.rounded_full,
+              a.z_20,
               {
                 backgroundColor: t.palette.primary_500,
                 width: 8,
