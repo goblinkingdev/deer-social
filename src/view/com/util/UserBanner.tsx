@@ -24,6 +24,7 @@ import {
 import {compressIfNeeded} from '#/lib/media/manip'
 import {openCamera, openCropper, openPicker} from '#/lib/media/picker'
 import {type PickerImage} from '#/lib/media/picker.shared'
+import {modifyImageFormat} from '#/lib/media/util'
 import {logger} from '#/logger'
 import {isAndroid, isNative} from '#/platform/detection'
 import {
@@ -32,10 +33,8 @@ import {
   createComposerImage,
 } from '#/state/gallery'
 import {useLightboxControls} from '#/state/lightbox'
-import {
-  maybeModifyHighQualityImage,
-  useHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+import {useFullsizeFormat} from '#/state/preferences/fullsize-format'
+import {useThumbnailFormat} from '#/state/preferences/thumbnail-format'
 import {EditImageDialog} from '#/view/com/composer/photos/EditImageDialog'
 import {EventStopper} from '#/view/com/util/EventStopper'
 import {atoms as a, tokens, useTheme} from '#/alf'
@@ -68,7 +67,8 @@ export function UserBanner({
   const [rawImage, setRawImage] = useState<ComposerImage | undefined>()
   const editImageDialogControl = useDialogControl()
   const {openLightbox} = useLightboxControls()
-  const highQualityImages = useHighQualityImages()
+  const fullsizeFormat = useFullsizeFormat()
+  const thumbnailFormat = useThumbnailFormat()
 
   const bannerRef = useAnimatedRef()
 
@@ -129,8 +129,8 @@ export function UserBanner({
       openLightbox({
         images: [
           {
-            uri: maybeModifyHighQualityImage(uri, highQualityImages),
-            thumbUri: maybeModifyHighQualityImage(uri, highQualityImages),
+            uri: modifyImageFormat(uri, fullsizeFormat),
+            thumbUri: modifyImageFormat(uri, thumbnailFormat),
             thumbRect,
             dimensions: thumbRect,
             thumbDimensions: null,
@@ -140,7 +140,7 @@ export function UserBanner({
         index: 0,
       })
     },
-    [openLightbox, highQualityImages],
+    [openLightbox, fullsizeFormat, thumbnailFormat],
   )
 
   const onPressBanner = useCallback(() => {
@@ -174,10 +174,7 @@ export function UserBanner({
                     testID="userBannerImage"
                     style={styles.bannerImage}
                     source={{
-                      uri: maybeModifyHighQualityImage(
-                        banner,
-                        highQualityImages,
-                      ),
+                      uri: modifyImageFormat(banner, thumbnailFormat),
                     }}
                     accessible={true}
                     accessibilityIgnoresInvertColors
@@ -271,7 +268,7 @@ export function UserBanner({
         testID="userBannerImage"
         style={[styles.bannerImage, t.atoms.bg_contrast_25]}
         contentFit="cover"
-        source={{uri: maybeModifyHighQualityImage(banner, highQualityImages)}}
+        source={{uri: modifyImageFormat(banner, fullsizeFormat)}}
         blurRadius={moderation?.blur ? 100 : 0}
         accessible={true}
         accessibilityIgnoresInvertColors

@@ -413,6 +413,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
               <View style={[a.py_xs]}>
                 <Embed
                   embed={post.embed}
+                  recordEmbed={record.embed}
                   moderation={moderation}
                   viewContext={PostEmbedViewContext.ThreadHighlighted}
                   onOpen={onOpenEmbed}

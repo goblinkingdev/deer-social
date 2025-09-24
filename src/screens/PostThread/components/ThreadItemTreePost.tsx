@@ -362,6 +362,7 @@ const ThreadItemTreePostInner = memo(function ThreadItemTreePostInner({
                     <View style={[a.pb_xs]}>
                       <Embed
                         embed={post.embed}
+                        recordEmbed={record.embed}
                         moderation={moderation}
                         viewContext={PostEmbedViewContext.Feed}
                       />

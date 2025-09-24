@@ -160,3 +160,8 @@ export interface BetterImage {
   quality?: number
   size?: number
 }
+
+export interface BetterImages {
+  $type?: 'app.bsky.embed.images'
+  images: BetterImage[]
+}

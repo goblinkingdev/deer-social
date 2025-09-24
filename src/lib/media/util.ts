@@ -26,3 +26,8 @@ export function blobToDataUri(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob)
   })
 }
+
+export function modifyImageFormat(uri: string, format: string) {
+  const sliced = uri.slice(0, -4)
+  return sliced.at(-1) === '@' ? sliced + format : uri
+}

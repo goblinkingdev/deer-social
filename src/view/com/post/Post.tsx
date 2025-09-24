@@ -219,6 +219,7 @@ function PostInner({
             {post.embed ? (
               <Embed
                 embed={post.embed}
+                recordEmbed={record.embed}
                 moderation={moderation}
                 viewContext={PostEmbedViewContext.Feed}
               />

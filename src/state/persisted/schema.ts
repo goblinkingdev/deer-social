@@ -147,7 +147,9 @@ const schema = z.object({
       trusted: z.array(z.string()),
     })
     .optional(),
-  highQualityImages: z.boolean().optional(),
+  fullsizeFormat: z.string(),
+  thumbnailFormat: z.string(),
+  loadAsPngs: z.boolean(),
 
   /** @deprecated */
   mutedThreads: z.array(z.string()),
@@ -239,7 +241,9 @@ export const defaults: Schema = {
       'did:plc:ofbkqcjzvm6gtwuufsubnkaf',
     ],
   },
-  highQualityImages: false,
+  thumbnailFormat: 'jpeg',
+  fullsizeFormat: 'jpeg',
+  loadAsPngs: true,
 }
 
 export function tryParse(rawData: string): Schema | undefined {
