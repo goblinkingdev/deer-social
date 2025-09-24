@@ -21,6 +21,7 @@ import {logger} from '#/logger'
 import {isAndroid, isIOS} from '#/platform/detection'
 import {type PickerImage} from './picker.shared'
 import {type Dimensions} from './types'
+import {getDataUriSize} from './util'
 import {mimeToExt} from './video/util'
 
 export async function compressIfNeeded(
@@ -38,7 +39,7 @@ export async function compressIfNeeded(
   })
   const finalImageMovedPath = await moveToPermanentPath(
     resizedImage.path,
-    '.jpg',
+    '.webp',
   )
   const finalImg = {
     ...resizedImage,
@@ -63,6 +64,8 @@ export async function downloadAndResize(opts: DownloadAndResizeOpts) {
     const ext = urip.pathname.split('.').pop()
     if (ext === 'png') {
       appendExt = 'png'
+    } else if (ext === 'webp') {
+      appendExt = 'webp'
     }
   } catch (e: any) {
     console.error('Invalid URI', opts.uri, e)
@@ -195,21 +198,19 @@ async function doResize(
     width: imageRes.width,
     height: imageRes.height,
   })
+  const originalSize = getDataUriSize(localUri) + 1024
 
-  let minQualityPercentage = 0
-  let maxQualityPercentage = 101 // exclusive
+  let maxQualityPercentage = 110 // exclusive
   let newDataUri
   const intermediateUris = []
 
-  while (maxQualityPercentage - minQualityPercentage > 1) {
-    const qualityPercentage = Math.round(
-      (maxQualityPercentage + minQualityPercentage) / 2,
-    )
+  while (maxQualityPercentage > 1) {
+    const qualityPercentage = Math.round(maxQualityPercentage - 10)
     const resizeRes = await manipulateAsync(
       localUri,
       [{resize: newDimensions}],
       {
-        format: SaveFormat.JPEG,
+        format: SaveFormat.WEBP,
         compress: qualityPercentage / 100,
       },
     )
@@ -223,15 +224,16 @@ async function doResize(
       )
     }
 
-    if (fileInfo.size < opts.maxSize) {
-      minQualityPercentage = qualityPercentage
+    if (fileInfo.size < opts.maxSize && fileInfo.size < originalSize) {
       newDataUri = {
         path: normalizePath(resizeRes.uri),
-        mime: 'image/jpeg',
+        mime: 'image/webp',
         size: fileInfo.size,
         width: resizeRes.width,
         height: resizeRes.height,
+        quality: qualityPercentage,
       }
+      break
     } else {
       maxQualityPercentage = qualityPercentage
     }

@@ -28,10 +28,11 @@ async function getFile() {
 
   return await compressIfNeeded({
     path: file,
-    mime: 'image/jpeg',
+    mime: 'image/webp',
     size: fileInfo.size,
     width: 4288,
     height: 2848,
+    quality: 100,
   })
 }
 
@@ -62,7 +63,7 @@ export async function openCamera(): Promise<PickerImage> {
 export async function openCropper(opts: OpenCropperOptions) {
   const item = await ExpoImageCropTool.openCropperAsync({
     ...opts,
-    format: 'jpeg',
+    format: 'png',
   })
 
   return {

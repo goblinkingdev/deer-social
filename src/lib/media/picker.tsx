@@ -22,17 +22,18 @@ export async function openCamera(customOpts: ImagePickerOptions) {
 
   return {
     path: asset.uri,
-    mime: asset.mimeType ?? 'image/jpeg',
+    mime: asset.mimeType ?? 'image/png',
     size: asset.fileSize ?? 0,
     width: asset.width,
     height: asset.height,
+    quality: 100,
   }
 }
 
 export async function openCropper(opts: OpenCropperOptions) {
   const item = await ExpoImageCropTool.openCropperAsync({
     ...opts,
-    format: 'jpeg',
+    format: 'png',
   })
 
   return {
@@ -41,5 +42,6 @@ export async function openCropper(opts: OpenCropperOptions) {
     size: item.size,
     width: item.width,
     height: item.height,
+    quality: 100,
   }
 }

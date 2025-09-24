@@ -83,8 +83,8 @@ export const STAGING_FEEDS = [
 ]
 
 export const POST_IMG_MAX = {
-  width: 2000,
-  height: 2000,
+  width: 5000,
+  height: 5000,
   size: 1000000,
 }
 

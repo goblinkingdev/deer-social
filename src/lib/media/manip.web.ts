@@ -91,15 +91,15 @@ async function doResize(
   dataUri: string,
   opts: DoResizeOpts,
 ): Promise<PickerImage> {
+  const originalSize = getDataUriSize(dataUri) + 1024
+
   let newDataUri
 
-  let minQualityPercentage = 0
-  let maxQualityPercentage = 101 //exclusive
+  let maxQualityPercentage = 110 //exclusive
+  let finalCompressionPercentage: number = 100
 
-  while (maxQualityPercentage - minQualityPercentage > 1) {
-    const qualityPercentage = Math.round(
-      (maxQualityPercentage + minQualityPercentage) / 2,
-    )
+  while (maxQualityPercentage > 1) {
+    const qualityPercentage = Math.round(maxQualityPercentage - 10)
     const tempDataUri = await createResizedImage(dataUri, {
       width: opts.width,
       height: opts.height,
@@ -107,9 +107,11 @@ async function doResize(
       mode: opts.mode,
     })
 
-    if (getDataUriSize(tempDataUri) < opts.maxSize) {
-      minQualityPercentage = qualityPercentage
+    const size = getDataUriSize(tempDataUri)
+    if (size < opts.maxSize && size < originalSize) {
       newDataUri = tempDataUri
+      finalCompressionPercentage = qualityPercentage
+      break
     } else {
       maxQualityPercentage = qualityPercentage
     }
@@ -120,10 +122,11 @@ async function doResize(
   }
   return {
     path: newDataUri,
-    mime: 'image/jpeg',
+    mime: 'image/webp',
     size: getDataUriSize(newDataUri),
     width: opts.width,
     height: opts.height,
+    quality: finalCompressionPercentage,
   }
 }
 
@@ -163,7 +166,7 @@ function createResizedImage(
       canvas.height = h
 
       ctx.drawImage(img, 0, 0, w, h)
-      resolve(canvas.toDataURL('image/jpeg', quality))
+      resolve(canvas.toDataURL('image/webp', quality))
     })
     img.addEventListener('error', ev => {
       reject(ev.error)

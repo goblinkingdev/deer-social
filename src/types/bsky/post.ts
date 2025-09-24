@@ -1,5 +1,6 @@
 import {
   type $Typed,
+  type AppBskyEmbedDefs,
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
   AppBskyEmbedRecord,
@@ -8,6 +9,7 @@ import {
   AppBskyFeedDefs,
   AppBskyGraphDefs,
   AppBskyLabelerDefs,
+  type BlobRef,
 } from '@atproto/api'
 
 export type Embed =
@@ -146,4 +148,15 @@ export function parseEmbed(embed: AppBskyFeedDefs.PostView['embed']): Embed {
       view: null,
     }
   }
+}
+
+export interface BetterImage {
+  $type?: 'app.bsky.embed.images#image'
+  image: BlobRef
+  /** Alt text description of the image, for accessibility. */
+  alt: string
+  aspectRatio?: AppBskyEmbedDefs.AspectRatio
+  mime?: string
+  quality?: number
+  size?: number
 }

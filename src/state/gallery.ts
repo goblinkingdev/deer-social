@@ -94,7 +94,7 @@ export function createInitialImages(
         path: uri,
         width: width,
         height: height,
-        mime: 'image/jpeg',
+        mime: 'image/png',
       },
     }
   })
@@ -113,7 +113,7 @@ export async function pasteImage(
       path: uri,
       width: width,
       height: height,
-      mime: match ? match[1] : 'image/jpeg',
+      mime: match ? match[1] : 'image/png',
     },
   }
 }
@@ -197,39 +197,39 @@ export function resetImageManipulation(
 
 export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   const source = img.transformed || img.source
+  const originalSize = getDataUriSize(img.source.path) + 1024
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
-  let minQualityPercentage = 0
-  let maxQualityPercentage = 101 // exclusive
+  let maxQualityPercentage =
+    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0) // exclusive
   let newDataUri
 
-  while (maxQualityPercentage - minQualityPercentage > 1) {
-    const qualityPercentage = Math.round(
-      (maxQualityPercentage + minQualityPercentage) / 2,
-    )
+  while (maxQualityPercentage > 1) {
+    const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
     const res = await manipulateAsync(
       source.path,
       [{resize: {width: w, height: h}}],
       {
         compress: qualityPercentage / 100,
-        format: SaveFormat.JPEG,
+        format: SaveFormat.WEBP,
         base64: true,
       },
     )
 
     const base64 = res.base64
     const size = base64 ? getDataUriSize(base64) : 0
-    if (base64 && size <= POST_IMG_MAX.size) {
-      minQualityPercentage = qualityPercentage
+    if (base64 && size <= POST_IMG_MAX.size && size <= originalSize) {
       newDataUri = {
         path: await moveIfNecessary(res.uri),
         width: res.width,
         height: res.height,
-        mime: 'image/jpeg',
+        mime: 'image/webp',
         size,
+        quality: qualityPercentage,
       }
+      break
     } else {
       maxQualityPercentage = qualityPercentage
     }
