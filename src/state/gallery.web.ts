@@ -1,27 +1,19 @@
-import * as WebP from 'react-native-webp-converter'
-import {
-  cacheDirectory,
-  deleteAsync,
-  makeDirectoryAsync,
-  moveAsync,
-} from 'expo-file-system/legacy'
 import {
   type Action,
   type ActionCrop,
+  type ImageResult,
   manipulateAsync,
   SaveFormat,
-} from 'expo-image-manipulator'
-import {
-  type ImageResult,
   type SaveOptions,
-} from 'expo-image-manipulator/src/ImageManipulator.types'
+} from 'expo-image-manipulator'
+import {encode} from '@jsquash/webp'
 import {nanoid} from 'nanoid/non-secure'
 
 import {POST_IMG_MAX} from '#/lib/constants'
 import {getImageDim} from '#/lib/media/manip'
-import {openCropper} from '#/lib/media/picker'
 import {type PickerImage} from '#/lib/media/picker.shared'
 import {getDataUriSize} from '#/lib/media/util'
+import {resize} from '../../node_modules/expo-image-manipulator/src/web/actions/index.web'
 
 export type ImageTransformation = {
   crop?: ActionCrop['crop']
@@ -55,12 +47,6 @@ export type ComposerImage =
   | ComposerImageWithoutTransformation
   | ComposerImageWithTransformation
 
-let _imageCacheDirectory: string
-
-function getImageCacheDirectory(): string | null {
-  return (_imageCacheDirectory ??= joinPath(cacheDirectory!, 'bsky-composer'))
-}
-
 export async function createComposerImage(
   raw: ImageMeta,
 ): Promise<ComposerImageWithoutTransformation> {
@@ -68,7 +54,7 @@ export async function createComposerImage(
     alt: '',
     source: {
       id: nanoid(),
-      path: await moveIfNecessary(raw.path),
+      path: raw.path,
       width: raw.width,
       height: raw.height,
       mime: raw.mime,
@@ -119,32 +105,7 @@ export async function pasteImage(
 }
 
 export async function cropImage(img: ComposerImage): Promise<ComposerImage> {
-  const source = img.source
-
-  // @todo: we're always passing the original image here, does image-cropper
-  // allows for setting initial crop dimensions? -mary
-  try {
-    const cropped = await openCropper({
-      imageUri: source.path,
-    })
-
-    return {
-      alt: img.alt,
-      source: source,
-      transformed: {
-        path: await moveIfNecessary(cropped.path),
-        width: cropped.width,
-        height: cropped.height,
-        mime: cropped.mime,
-      },
-    }
-  } catch (e) {
-    if (e instanceof Error && e.message.includes('User cancelled')) {
-      return img
-    }
-
-    throw e
-  }
+  return img
 }
 
 export async function manipulateImage(
@@ -172,7 +133,7 @@ export async function manipulateImage(
     alt: img.alt,
     source: img.source,
     transformed: {
-      path: await moveIfNecessary(result.uri),
+      path: result.uri,
       width: result.width,
       height: result.height,
       mime: 'image/png',
@@ -204,18 +165,15 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   while (maxQualityPercentage > 1) {
     const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
-    const res = await manipulateWebp(
-      source.path,
-      {resize: {width: w, height: h}},
-      {
-        compress: qualityPercentage,
-        format: SaveFormat.WEBP,
-      },
-    )
+    const res = await manipulateWebp(source.path, {
+      compress: qualityPercentage,
+      format: SaveFormat.WEBP,
+      resize: {width: w, height: h},
+    })
 
     if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {
       newDataUri = {
-        path: await moveIfNecessary(res.uri),
+        path: res.uri,
         width: res.width,
         height: res.height,
         mime: 'image/webp',
@@ -237,78 +195,39 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
 
 export const manipulateWebp = async (
   uri: string,
-  resize: {resize: {width: number; height: number}} = {
-    resize: {width: 128, height: 128},
-  },
-  saveOptions: SaveOptions = {},
+  saveOptions: SaveOptions & {resize?: {width: number; height: number}} = {},
 ): Promise<ImageResult & {size: number}> => {
-  const resized = await manipulateAsync(uri, [resize], {
-    format: SaveFormat.PNG,
+  const img = document.createElement('img')
+  img.src = uri
+  await new Promise(resolve => {
+    img.onload = resolve
   })
-  const tempOut = (await getTemporaryImageFile()) as string
+  const canvas = document.createElement('canvas')
+  ;[canvas.width, canvas.height] = [img.width, img.height]
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+  ctx.drawImage(img, 0, 0)
 
-  const resultUri = await WebP.convertImage(resized.uri, tempOut, {
-    type: saveOptions.compress === 100 ? WebP.Type.LOSSLESS : WebP.Type.LOSSY,
+  if (saveOptions.resize) {
+    resize(canvas, saveOptions.resize)
+  }
+
+  const rawImageData = ctx.getImageData(0, 0, img.width, img.height)
+
+  const webpBuffer = await encode(rawImageData, {
+    lossless: saveOptions.compress === 100 ? 1 : 0,
     quality: saveOptions.compress || 100,
+    method: 6,
   })
 
-  const blob = await (await fetch(resultUri)).blob()
+  const blob = new Blob([webpBuffer], {type: 'image/webp'})
+  const resultUri = URL.createObjectURL(blob)
 
   return {
     uri: resultUri,
-    width: resize.resize.width,
-    height: resize.resize.height,
+    width: rawImageData.width,
+    height: rawImageData.height,
     size: blob.size,
   }
-}
-
-async function moveIfNecessary(from: string) {
-  const cacheDir = getImageCacheDirectory()
-
-  if (cacheDir && from.startsWith(cacheDir)) {
-    const to = joinPath(cacheDir, nanoid(36))
-
-    await makeDirectoryAsync(cacheDir, {intermediates: true})
-    await moveAsync({from, to})
-
-    return to
-  }
-
-  return from
-}
-
-async function getTemporaryImageFile() {
-  const cacheDir = getImageCacheDirectory()
-
-  if (cacheDir) {
-    const path = joinPath(cacheDir, nanoid(36))
-
-    await makeDirectoryAsync(cacheDir, {intermediates: true})
-
-    return path
-  }
-}
-
-/** Purge files that were created to accomodate image manipulation */
-export async function purgeTemporaryImageFiles() {
-  const cacheDir = getImageCacheDirectory()
-
-  if (cacheDir) {
-    await deleteAsync(cacheDir, {idempotent: true})
-    await makeDirectoryAsync(cacheDir)
-  }
-}
-
-function joinPath(a: string, b: string) {
-  if (a.endsWith('/')) {
-    if (b.startsWith('/')) {
-      return a.slice(0, -1) + b
-    }
-    return a + b
-  } else if (b.startsWith('/')) {
-    return a + b
-  }
-  return a + '/' + b
 }
 
 function containImageRes(
@@ -325,4 +244,8 @@ function containImageRes(
   }
 
   return [w, h]
+}
+
+export async function purgeTemporaryImageFiles() {
+  return null
 }
