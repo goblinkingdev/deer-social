@@ -10,7 +10,8 @@ import {logger} from '#/logger'
 export const BSKY_APP_HOST = 'https://deer-social-ayla.pages.dev'
 const BSKY_TRUSTED_HOSTS = [
   'deer\\.social',
-  'social\\.daniela\\.lol',
+  'deer-social-ayla\\.pages\\.dev',
+  'deer\\.aylac\\.top',
   'bsky\\.app',
   'bsky\\.social',
   'blueskyweb\\.xyz',
