@@ -296,6 +296,17 @@ export function ModerationScreenInner({
         </Link>
       </View>
 
+      <Text
+        style={[
+          a.pt_2xl,
+          a.pb_md,
+          a.text_md,
+          a.font_bold,
+          t.atoms.text_contrast_high,
+        ]}>
+        <Trans>Content filters</Trans>
+      </Text>
+
       <View style={[a.gap_md]}>
         <View
           style={[
