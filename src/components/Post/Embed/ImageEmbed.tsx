@@ -47,17 +47,25 @@ export function ImageEmbed({
     const items = images.map((img, index) => {
       const recordImage = recordImages[index] ?? []
 
+      const lowRes =
+        img.aspectRatio &&
+        img.aspectRatio.width <= 1000 &&
+        img.aspectRatio.height <= 1000
+
       const pngSized =
         (loadAsPngs
-          ? recordImage.size
-            ? recordImage.quality === 100 &&
-              recordImage.size <= PNG_IMG_MAX_BYTE
-            : img.aspectRatio &&
+          ? (recordImage.size &&
+              recordImage.quality === 100 &&
+              recordImage.size <= PNG_IMG_MAX_BYTE) ||
+            (img.aspectRatio &&
               img.aspectRatio.width <= PNG_IMG_MAX_SIZE &&
-              img.aspectRatio.height <= PNG_IMG_MAX_SIZE
+              img.aspectRatio.height <= PNG_IMG_MAX_SIZE)
           : false) || false
 
-      const fullsizeUri = modifyImageFormat(
+      // i'm aware of how ridiculous this looks
+      // but i think this is the easiest way of doing this
+      // and it doesn't look thaaaat bad but yeah
+      img.fullsize = modifyImageFormat(
         img.fullsize,
         pngSized ||
           (loadAsPngs &&
@@ -67,13 +75,10 @@ export function ImageEmbed({
           : fullsizeFormat,
       )
 
-      // i'm aware of how ridiculous this looks
-      // but i think this is the easiest way of doing this
-      // and it doesn't look thaaaat bad but yeah
-      img.fullsize = fullsizeUri
-      img.thumb = pngSized
-        ? fullsizeUri
-        : modifyImageFormat(img.thumb, thumbnailFormat)
+      img.thumb =
+        pngSized && lowRes
+          ? img.fullsize
+          : modifyImageFormat(img.thumb, thumbnailFormat)
 
       return {
         uri: img.fullsize,
