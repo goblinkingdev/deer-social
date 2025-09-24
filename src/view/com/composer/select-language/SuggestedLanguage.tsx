@@ -34,9 +34,11 @@ export function SuggestedLanguage({
   const langPrefs = useLanguagePrefs()
   const setLangPrefs = useLanguagePrefsApi()
   const languageHistory = useMemo(
-    () => langPrefs.postLanguageHistory.map(lang => code3ToCode2(lang)),
+    () =>
+      new Set(langPrefs.postLanguageHistory.map(lang => code3ToCode2(lang))),
     [langPrefs.postLanguageHistory],
   )
+  const postLanguage = code3ToCode2(langPrefs.postLanguage)
   const t = useTheme()
   const {_} = useLingui()
 
@@ -58,11 +60,13 @@ export function SuggestedLanguage({
     }
 
     const idle = onIdle(() => {
-      setSuggestedLanguage(guessLanguage(textTrimmed, languageHistory))
+      setSuggestedLanguage(
+        guessLanguage(textTrimmed, languageHistory, postLanguage),
+      )
     })
 
     return () => cancelIdle(idle)
-  }, [text, replyToLanguage, languageHistory])
+  }, [text, replyToLanguage, languageHistory, postLanguage])
 
   if (
     suggestedLanguage &&
@@ -120,24 +124,27 @@ export function SuggestedLanguage({
  */
 function guessLanguage(
   text: string,
-  languageHistory: string[],
+  languageHistory: Set<string>,
+  postLanguage: string,
 ): string | undefined {
-  const analysis = eldr.detect(text)
-  const scores = analysis
-    .getScoresArray()
-    .map(
-      score =>
-        [
-          score[0],
-          score[1] *
-            (languageHistory.includes(score[0]) ? 2 : 1) *
-            (languageHistory[0] === score[0] ? 2 : 1),
-        ] as [string, number],
-    )
-    .filter(score => score[1] >= 0.3)
-    .sort((x, y) => y[1] - x[1])
+  const scores = eldr.detect(text).getScoresArray()
 
-  return scores.length > 0 ? scores[0][0] : undefined
+  let selected: string | undefined
+  let selectedScore = 0.3
+
+  for (const [lang, score] of scores) {
+    const weightedScore =
+      score *
+      (languageHistory.has(lang) ? 2 : 1) *
+      (postLanguage === lang ? 2 : 1)
+
+    if (weightedScore >= selectedScore) {
+      selected = lang
+      selectedScore = weightedScore
+    }
+  }
+
+  return selected
 }
 
 function cleanUpLanguage(text: string | undefined): string | undefined {
