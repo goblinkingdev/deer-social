@@ -123,3 +123,6 @@ bskyogcard/src/assets/fonts/noto-*
 # deer
 .direnv
 .wrangler
+
+# crashes
+core
