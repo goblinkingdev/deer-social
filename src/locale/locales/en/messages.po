@@ -85,7 +85,7 @@ msgstr ""
 msgid "{0, plural, one {#mo} other {#mo}}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:490
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:507
 msgid "{0, plural, one {bookmark} other {bookmarks}}"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 msgid "{0, plural, one {following} other {following}}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:479
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:494
 msgid "{0, plural, one {like} other {likes}}"
 msgstr ""
 
@@ -107,11 +107,11 @@ msgstr ""
 msgid "{0, plural, one {post} other {posts}}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:463
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:476
 msgid "{0, plural, one {quote} other {quotes}}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:445
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:457
 #: src/view/com/posts/PostFeedItemCarousel.tsx:63
 msgid "{0, plural, one {repost} other {reposts}}"
 msgstr ""
@@ -966,11 +966,11 @@ msgstr ""
 msgid "An error occurred while generating your starter pack. Want to try again?"
 msgstr ""
 
-#: src/components/Post/Embed/VideoEmbed/index.tsx:157
+#: src/components/Post/Embed/VideoEmbed/index.tsx:160
 msgid "An error occurred while loading the video. Please try again later."
 msgstr ""
 
-#: src/components/Post/Embed/VideoEmbed/index.web.tsx:232
+#: src/components/Post/Embed/VideoEmbed/index.web.tsx:244
 msgid "An error occurred while loading the video. Please try again."
 msgstr ""
 
@@ -1157,12 +1157,12 @@ msgstr ""
 msgid "Apply Pull Request"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:663
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:680
 msgid "Archived from {0}"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:632
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:671
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:649
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:688
 msgid "Archived post"
 msgstr ""
 
@@ -1206,7 +1206,7 @@ msgstr ""
 msgid "Are you sure?"
 msgstr ""
 
-#: src/view/com/composer/select-language/SuggestedLanguage.tsx:82
+#: src/view/com/composer/select-language/SuggestedLanguage.tsx:93
 msgid "Are you writing in <0>{suggestedLanguageName}</0>?"
 msgstr ""
 
@@ -1400,7 +1400,7 @@ msgstr ""
 msgid "Blocking will not prevent labels from being applied on your account, but it will stop this account from replying in your threads or interacting with you."
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:688
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:705
 msgid "Bluesky cannot confirm the authenticity of the claimed date."
 msgstr ""
 
@@ -1474,20 +1474,20 @@ msgstr ""
 msgid "Books"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:431
+#: src/components/FeedInterstitials.tsx:437
 msgid "Browse more accounts on the Explore page"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:559
+#: src/components/FeedInterstitials.tsx:565
 msgid "Browse more feeds on the Explore page"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:540
-#: src/components/FeedInterstitials.tsx:543
+#: src/components/FeedInterstitials.tsx:546
+#: src/components/FeedInterstitials.tsx:549
 msgid "Browse more suggestions"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:568
+#: src/components/FeedInterstitials.tsx:574
 msgid "Browse more suggestions on the Explore page"
 msgstr ""
 
@@ -1617,9 +1617,9 @@ msgstr ""
 msgid "Cancel search"
 msgstr ""
 
-#: src/components/PostControls/index.tsx:105
-#: src/components/PostControls/index.tsx:136
-#: src/components/PostControls/index.tsx:164
+#: src/components/PostControls/index.tsx:113
+#: src/components/PostControls/index.tsx:144
+#: src/components/PostControls/index.tsx:172
 #: src/state/shell/composer/index.tsx:94
 msgid "Cannot interact with a blocked user"
 msgstr ""
@@ -1634,7 +1634,7 @@ msgid "Captions & alt text"
 msgstr ""
 
 #: src/screens/Settings/components/Email2FAToggle.tsx:31
-#: src/screens/Settings/DeerSettings.tsx:377
+#: src/screens/Settings/DeerSettings.tsx:426
 msgid "Change"
 msgstr ""
 
@@ -1669,7 +1669,7 @@ msgstr ""
 msgid "Change password dialog"
 msgstr ""
 
-#: src/view/com/composer/select-language/SuggestedLanguage.tsx:93
+#: src/view/com/composer/select-language/SuggestedLanguage.tsx:104
 msgid "Change post language to {suggestedLanguageName}"
 msgstr ""
 
@@ -1988,8 +1988,8 @@ msgstr ""
 msgid "Color theme"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:431
-#: src/screens/Settings/DeerSettings.tsx:436
+#: src/screens/Settings/DeerSettings.tsx:480
+#: src/screens/Settings/DeerSettings.tsx:485
 msgid "Combine reposts into a horizontal carousel"
 msgstr ""
 
@@ -2072,16 +2072,16 @@ msgstr ""
 msgid "Connecting..."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:374
+#: src/screens/Settings/DeerSettings.tsx:423
 msgid "Constellation Instance"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:383
+#: src/screens/Settings/DeerSettings.tsx:432
 msgid "Constellation is used to supplement AppView responses for custom verifications and nuclear block bypass, via backlinks. Current instance: {constellationInstance}"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:111
-#: src/screens/Settings/DeerSettings.tsx:114
+#: src/screens/Settings/DeerSettings.tsx:139
+#: src/screens/Settings/DeerSettings.tsx:142
 msgid "Constellations instance URL"
 msgstr ""
 
@@ -2487,7 +2487,7 @@ msgstr ""
 msgid "Debug panel"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:260
+#: src/screens/Settings/DeerSettings.tsx:309
 #: src/screens/Settings/Settings.tsx:216
 #: src/screens/Settings/Settings.tsx:219
 msgid "Deer"
@@ -2681,8 +2681,38 @@ msgstr ""
 msgid "Disable haptic feedback"
 msgstr ""
 
+#: src/screens/Settings/DeerSettings.tsx:587
+#: src/screens/Settings/DeerSettings.tsx:592
+msgid "Disable Likes Metrics"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:611
+#: src/screens/Settings/DeerSettings.tsx:616
+msgid "Disable Quotes Metrics"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:635
+#: src/screens/Settings/DeerSettings.tsx:640
+msgid "Disable Reply Metrics"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:599
+#: src/screens/Settings/DeerSettings.tsx:604
+msgid "Disable Reposts Metrics"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:623
+#: src/screens/Settings/DeerSettings.tsx:628
+msgid "Disable Saves Metrics"
+msgstr ""
+
 #: src/components/Post/Embed/VideoEmbed/VideoEmbedInner/web-controls/VideoControls.tsx:388
 msgid "Disable subtitles"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:550
+#: src/screens/Settings/DeerSettings.tsx:555
+msgid "Disable via repost notifications"
 msgstr ""
 
 #: src/lib/moderation/useLabelBehaviorDescription.ts:35
@@ -2745,8 +2775,8 @@ msgstr ""
 msgid "Dismiss this section"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:469
-#: src/screens/Settings/DeerSettings.tsx:474
+#: src/screens/Settings/DeerSettings.tsx:518
+#: src/screens/Settings/DeerSettings.tsx:523
 msgid "Display images in higher quality"
 msgstr ""
 
@@ -2774,16 +2804,16 @@ msgstr ""
 msgid "Do not apply this mute word to users you follow"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:398
+#: src/screens/Settings/DeerSettings.tsx:447
 msgid "Do not declare any app labelers"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:403
+#: src/screens/Settings/DeerSettings.tsx:452
 msgid "Do not declare any default app labelers"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:442
-#: src/screens/Settings/DeerSettings.tsx:447
+#: src/screens/Settings/DeerSettings.tsx:491
+#: src/screens/Settings/DeerSettings.tsx:496
 msgid "Do not fall back to discover feed"
 msgstr ""
 
@@ -3590,7 +3620,7 @@ msgstr ""
 msgid "Failed to verify handle. Please try again."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:309
+#: src/screens/Settings/DeerSettings.tsx:358
 msgid "Fall back to constellation api to find blocked replies"
 msgstr ""
 
@@ -3660,11 +3690,11 @@ msgstr ""
 msgid "Feeds we think you might like."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:299
+#: src/screens/Settings/DeerSettings.tsx:348
 msgid "Fetch records directly from PDS to see contents of blocked and detatched quotes"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:293
+#: src/screens/Settings/DeerSettings.tsx:342
 msgid "Fetch records directly from PDS to see through quote blocks"
 msgstr ""
 
@@ -3899,6 +3929,10 @@ msgstr ""
 msgid "For You"
 msgstr ""
 
+#: src/screens/Settings/DeerSettings.tsx:560
+msgid "Forcefully disables the notifications other people receive when you like/repost a post someone else has reposted for privacy."
+msgstr ""
+
 #: src/components/dialogs/MutedWords.tsx:178
 msgid "Forever"
 msgstr ""
@@ -3942,7 +3976,7 @@ msgctxt "from-feed"
 msgid "From <0/>"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:503
+#: src/screens/Settings/DeerSettings.tsx:649
 msgid "Gates"
 msgstr ""
 
@@ -4239,8 +4273,8 @@ msgctxt "action"
 msgid "Hide"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:487
-#: src/screens/Settings/DeerSettings.tsx:492
+#: src/screens/Settings/DeerSettings.tsx:536
+#: src/screens/Settings/DeerSettings.tsx:541
 msgid "Hide \"Feeds ✨\" tab when only one feed is selected"
 msgstr ""
 
@@ -4261,6 +4295,11 @@ msgstr ""
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:643
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:649
 msgid "Hide reply for me"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:568
+#: src/screens/Settings/DeerSettings.tsx:573
+msgid "Hide similar accounts recommendations"
 msgstr ""
 
 #: src/screens/Search/modules/ExploreInterestsCard.tsx:110
@@ -4452,7 +4491,7 @@ msgstr ""
 msgid "Images cannot be saved unless permission is granted to access your photo library."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:479
+#: src/screens/Settings/DeerSettings.tsx:528
 msgid "Images will be served as PNG instead of JPEG. Images will take longer to load and use more bandwidth."
 msgstr ""
 
@@ -4528,7 +4567,7 @@ msgstr ""
 msgid "Input the code which has been emailed to you"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:130
+#: src/screens/Settings/DeerSettings.tsx:158
 msgid "Input the url of the constellations instance to use"
 msgstr ""
 
@@ -4648,7 +4687,7 @@ msgstr ""
 msgid "Labeled by the author."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:394
+#: src/screens/Settings/DeerSettings.tsx:443
 msgid "Labelers"
 msgstr ""
 
@@ -4805,7 +4844,7 @@ msgid "Like"
 msgstr ""
 
 #. Accessibility label for the like button when the post has not been liked, verb form followed by number of likes and noun form
-#: src/components/PostControls/index.tsx:269
+#: src/components/PostControls/index.tsx:283
 msgid "Like ({0, plural, one {# like} other {# likes}})"
 msgstr ""
 
@@ -4870,7 +4909,7 @@ msgstr ""
 msgid "Likes of your reposts notifications"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:472
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:487
 msgid "Likes on this post"
 msgstr ""
 
@@ -5153,6 +5192,10 @@ msgstr ""
 
 #: src/Navigation.tsx:761
 msgid "Messages"
+msgstr ""
+
+#: src/screens/Settings/DeerSettings.tsx:582
+msgid "Metrics"
 msgstr ""
 
 #: src/Navigation.tsx:492
@@ -5837,7 +5880,7 @@ msgid "OK"
 msgstr ""
 
 #: src/screens/Login/PasswordUpdatedForm.tsx:37
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:693
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:710
 msgid "Okay"
 msgstr ""
 
@@ -5848,8 +5891,8 @@ msgstr ""
 msgid "Oldest replies first"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:454
-#: src/screens/Settings/DeerSettings.tsx:460
+#: src/screens/Settings/DeerSettings.tsx:503
+#: src/screens/Settings/DeerSettings.tsx:509
 msgid "On non-bsky.social handles, show a link to that URL"
 msgstr ""
 
@@ -6286,7 +6329,7 @@ msgstr ""
 msgid "Play {0}"
 msgstr ""
 
-#: src/components/Post/Embed/VideoEmbed/index.tsx:132
+#: src/components/Post/Embed/VideoEmbed/index.tsx:135
 #: src/components/Post/Embed/VideoEmbed/VideoEmbedInner/web-controls/VideoControls.tsx:321
 msgid "Play video"
 msgstr ""
@@ -6487,7 +6530,7 @@ msgstr ""
 msgid "Post failed to upload. Please check your Internet connection and try again."
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:133
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:137
 #: src/screens/PostThread/components/ThreadItemPost.tsx:110
 #: src/screens/PostThread/components/ThreadItemTreePost.tsx:107
 #: src/screens/VideoFeed/index.tsx:532
@@ -6750,7 +6793,7 @@ msgstr ""
 msgid "Quotes"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:456
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:469
 msgid "Quotes of this post"
 msgstr ""
 
@@ -6851,12 +6894,12 @@ msgstr ""
 msgid "Reconnect"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:274
-#: src/screens/Settings/DeerSettings.tsx:279
+#: src/screens/Settings/DeerSettings.tsx:323
+#: src/screens/Settings/DeerSettings.tsx:328
 msgid "Redirect through go.bsky.app"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:270
+#: src/screens/Settings/DeerSettings.tsx:319
 msgid "Redirects"
 msgstr ""
 
@@ -7099,7 +7142,7 @@ msgid "Reply"
 msgstr ""
 
 #. Accessibility label for the reply button, verb form followed by number of replies and noun form
-#: src/components/PostControls/index.tsx:223
+#: src/components/PostControls/index.tsx:231
 msgid "Reply ({0, plural, one {# reply} other {# replies}})"
 msgstr ""
 
@@ -7275,7 +7318,7 @@ msgstr ""
 msgid "Reposts"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:438
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:450
 msgid "Reposts of this post"
 msgstr ""
 
@@ -7337,7 +7380,7 @@ msgstr ""
 msgid "Reset code"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:518
+#: src/screens/Settings/DeerSettings.tsx:664
 msgid "Reset gates"
 msgstr ""
 
@@ -7350,7 +7393,7 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:411
+#: src/screens/Settings/DeerSettings.tsx:460
 msgid "Restart app after changing this setting."
 msgstr ""
 
@@ -7424,8 +7467,8 @@ msgstr ""
 #: src/screens/Profile/Header/EditProfileDialog.tsx:252
 #: src/screens/SavedFeeds.tsx:120
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:267
-#: src/screens/Settings/DeerSettings.tsx:136
-#: src/screens/Settings/DeerSettings.tsx:143
+#: src/screens/Settings/DeerSettings.tsx:164
+#: src/screens/Settings/DeerSettings.tsx:171
 #: src/view/com/composer/GifAltText.tsx:193
 #: src/view/com/composer/GifAltText.tsx:202
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:62
@@ -7638,12 +7681,12 @@ msgstr ""
 msgid "See #{tag} posts by user"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:394
-#: src/components/FeedInterstitials.tsx:445
+#: src/components/FeedInterstitials.tsx:399
+#: src/components/FeedInterstitials.tsx:451
 msgid "See more"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:392
+#: src/components/FeedInterstitials.tsx:397
 msgid "See more suggested profiles on the Explore page"
 msgstr ""
 
@@ -7784,8 +7827,8 @@ msgstr ""
 msgid "Select your interests from the options below"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:332
-#: src/screens/Settings/DeerSettings.tsx:338
+#: src/screens/Settings/DeerSettings.tsx:381
+#: src/screens/Settings/DeerSettings.tsx:387
 msgid "Select your own set of trusted verifiers, and operate as a verifier"
 msgstr ""
 
@@ -8133,7 +8176,7 @@ msgstr ""
 msgid "Show warning and filter from feeds"
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:634
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:651
 msgid "Shows information about when this post was created"
 msgstr ""
 
@@ -8233,7 +8276,7 @@ msgstr ""
 msgid "Signed in as @{0}"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:387
+#: src/components/FeedInterstitials.tsx:392
 msgid "Similar accounts"
 msgstr ""
 
@@ -8272,7 +8315,7 @@ msgstr ""
 msgid "Software Dev"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:416
+#: src/screens/Settings/DeerSettings.tsx:465
 msgid "Some appviews will default to using an app labeler if you have no labelers, so consider subscribing to at least one labeler if you have issues."
 msgstr ""
 
@@ -8280,7 +8323,7 @@ msgstr ""
 msgid "Some of your verifications are invalid."
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:522
+#: src/components/FeedInterstitials.tsx:528
 msgid "Some other feeds you might like"
 msgstr ""
 
@@ -8508,7 +8551,7 @@ msgid "Suggested Accounts"
 msgstr ""
 
 #. Accounts suggested to the user for them to follow
-#: src/components/FeedInterstitials.tsx:385
+#: src/components/FeedInterstitials.tsx:390
 #: src/screens/Onboarding/StepSuggestedAccounts/index.tsx:137
 msgid "Suggested for you"
 msgstr ""
@@ -8910,7 +8953,7 @@ msgstr ""
 msgid "There's been a rush of new users to Bluesky! We'll activate your account as soon as we can."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:528
+#: src/screens/Settings/DeerSettings.tsx:674
 msgid "These settings might summon nasel demons! Restart the app after changing if anything breaks."
 msgstr ""
 
@@ -9068,7 +9111,7 @@ msgstr ""
 msgid "This moderation service is unavailable. See below for more details. If this issue persists, contact us."
 msgstr ""
 
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:674
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:691
 msgid "This post claims to have been created on <0>{0}</0>, but was first seen by Bluesky on <1>{1}</1>."
 msgstr ""
 
@@ -9205,7 +9248,7 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:316
+#: src/screens/Settings/DeerSettings.tsx:365
 msgid "TODO: Fall back to constellation api to find blocked replies"
 msgstr ""
 
@@ -9238,8 +9281,8 @@ msgstr ""
 #: src/components/dms/MessageContextMenu.tsx:139
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:542
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:544
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:596
-#: src/screens/PostThread/components/ThreadItemAnchor.tsx:599
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:613
+#: src/screens/PostThread/components/ThreadItemAnchor.tsx:616
 msgid "Translate"
 msgstr ""
 
@@ -9265,9 +9308,9 @@ msgstr ""
 msgid "Trust verifier"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:165
-#: src/screens/Settings/DeerSettings.tsx:168
-#: src/screens/Settings/DeerSettings.tsx:363
+#: src/screens/Settings/DeerSettings.tsx:193
+#: src/screens/Settings/DeerSettings.tsx:196
+#: src/screens/Settings/DeerSettings.tsx:412
 msgid "Trusted Verifiers"
 msgstr ""
 
@@ -9280,7 +9323,7 @@ msgstr ""
 msgid "TV"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:427
+#: src/screens/Settings/DeerSettings.tsx:476
 msgid "Tweaks"
 msgstr ""
 
@@ -9412,7 +9455,7 @@ msgid "Unlike"
 msgstr ""
 
 #. Accessibility label for the like button when the post has been liked, verb followed by number of likes and noun
-#: src/components/PostControls/index.tsx:259
+#: src/components/PostControls/index.tsx:273
 msgid "Unlike ({0, plural, one {# like} other {# likes}})"
 msgstr ""
 
@@ -9736,7 +9779,7 @@ msgstr ""
 msgid "Value:"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:327
+#: src/screens/Settings/DeerSettings.tsx:376
 msgid "Verification"
 msgstr ""
 
@@ -9841,7 +9884,7 @@ msgstr ""
 msgid "Video is playing"
 msgstr ""
 
-#: src/components/Post/Embed/VideoEmbed/index.web.tsx:225
+#: src/components/Post/Embed/VideoEmbed/index.web.tsx:237
 msgid "Video not found."
 msgstr ""
 
@@ -9865,7 +9908,7 @@ msgstr ""
 msgid "Videos must be less than 3 minutes long."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:366
+#: src/screens/Settings/DeerSettings.tsx:415
 msgid "View"
 msgstr ""
 
@@ -9993,8 +10036,8 @@ msgstr ""
 msgid "View your verifications"
 msgstr ""
 
-#: src/view/com/util/images/AutoSizedImage.tsx:210
-#: src/view/com/util/images/AutoSizedImage.tsx:232
+#: src/view/com/util/images/AutoSizedImage.tsx:212
+#: src/view/com/util/images/AutoSizedImage.tsx:234
 msgid "Views full image"
 msgstr ""
 
@@ -10002,7 +10045,7 @@ msgstr ""
 msgid "Views video in immersive mode"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:288
+#: src/screens/Settings/DeerSettings.tsx:337
 msgid "Visibility"
 msgstr ""
 
@@ -10262,7 +10305,7 @@ msgstr ""
 msgid "Why should this user be reviewed?"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:349
+#: src/screens/Settings/DeerSettings.tsx:398
 msgid "WIP. May slow down the client or fail to find all labels. Revoke and grant trust in the meatball menu on a profile. {0} trust the following verifiers:"
 msgstr ""
 
@@ -10294,7 +10337,7 @@ msgstr ""
 msgid "www.mylivestream.tv"
 msgstr ""
 
-#: src/view/com/composer/select-language/SuggestedLanguage.tsx:95
+#: src/view/com/composer/select-language/SuggestedLanguage.tsx:106
 msgid "Yes"
 msgstr ""
 
@@ -10752,7 +10795,7 @@ msgstr ""
 msgid "Your birth date"
 msgstr ""
 
-#: src/components/Post/Embed/VideoEmbed/index.web.tsx:229
+#: src/components/Post/Embed/VideoEmbed/index.web.tsx:241
 msgid "Your browser does not support the video format. Please try a different browser."
 msgstr ""
 
