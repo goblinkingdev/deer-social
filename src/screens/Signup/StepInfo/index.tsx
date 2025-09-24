@@ -9,7 +9,6 @@ import {DEFAULT_SERVICE} from '#/lib/constants'
 import {isEmailMaybeInvalid} from '#/lib/strings/email'
 import {logger} from '#/logger'
 import {isWeb} from '#/platform/detection'
-import {ScreenTransition} from '#/screens/Login/ScreenTransition'
 import {is13, is18, useSignupContext} from '#/screens/Signup/state'
 import {Policies} from '#/screens/Signup/StepInfo/Policies'
 import {atoms as a, native} from '#/alf'
@@ -26,6 +25,7 @@ import {Ticket_Stroke2_Corner0_Rounded as Ticket} from '#/components/icons/Ticke
 import {InlineLinkText} from '#/components/Link'
 import {Loader} from '#/components/Loader'
 import {usePreemptivelyCompleteActivePolicyUpdate} from '#/components/PolicyUpdateOverlay/usePreemptivelyCompleteActivePolicyUpdate'
+import {ScreenTransition} from '#/components/ScreenTransition'
 import {Text} from '#/components/Typography'
 import {BackNextButtons} from '../BackNextButtons'
 
@@ -164,7 +164,7 @@ export function StepInfo({
   }
 
   return (
-    <ScreenTransition>
+    <ScreenTransition direction={state.screenTransitionDirection}>
       <View style={[a.gap_md]}>
         {state.serviceUrl === DEFAULT_SERVICE && (
           <View style={[a.gap_xl]}>
