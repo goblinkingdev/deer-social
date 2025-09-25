@@ -11,17 +11,13 @@ import {
   type Transport,
 } from '#/logger/types'
 import {enabledLogLevels} from '#/logger/util'
-import {isNative} from '#/platform/detection'
 import {ENV} from '#/env'
-import {bitdriftTransport} from './transports/bitdrift'
 import {sentryTransport} from './transports/sentry'
 
 const TRANSPORTS: Transport[] = (function configureTransports() {
   switch (ENV) {
     case 'production': {
-      return [sentryTransport, isNative && bitdriftTransport].filter(
-        Boolean,
-      ) as Transport[]
+      return [sentryTransport].filter(Boolean) as Transport[]
     }
     case 'test': {
       return []

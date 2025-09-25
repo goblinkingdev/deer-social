@@ -87,12 +87,6 @@ However, if you're a part of the Bluesky team and want to enable Sentry, fill in
 
 If you change `SENTRY_AUTH_TOKEN`, you need to do `yarn prebuild` before running `yarn ios` or `yarn android` again.
 
-### Adding bitdrift
-
-Adding bitdrift is NOT required. You can keep `EXPO_PUBLIC_BITDRIFT_API_KEY=` in `.env` which will avoid initializing bitdrift during startup.
-
-However, if you're a part of the Bluesky team and want to enable bitdrift, fill in `EXPO_PUBLIC_BITDRIFT_API_KEY` in your `.env` to enable bitdrift.
-
 ### Adding and Updating Locales
 
 - `yarn intl:build` -> you will also need to run this anytime `./src/locale/{locale}/messages.po` change
