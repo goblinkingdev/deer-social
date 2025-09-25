@@ -116,7 +116,7 @@ export function GalleryItem({
             ],
           ]}>
           <Text
-            style={[a.font_heavy, largeAltBadge ? a.text_xs : {fontSize: 8}]}>
+            style={[a.font_bold, largeAltBadge ? a.text_xs : {fontSize: 8}]}>
             ALT
           </Text>
         </View>

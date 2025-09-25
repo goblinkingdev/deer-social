@@ -376,30 +376,13 @@ export function ProfileGrid({
           t.atoms.bg_contrast_25,
         ]}
         pointerEvents={isIOS ? 'auto' : 'box-none'}>
-        <View
-          style={[
-            a.px_lg,
-            a.pt_md,
-            a.flex_row,
-            a.align_center,
-            a.justify_between,
-          ]}
-          pointerEvents={isIOS ? 'auto' : 'box-none'}>
-          <Text style={[a.text_sm, a.font_bold, t.atoms.text]}>
-            {isFeedContext ? (
-              <Trans>Suggested for you</Trans>
-            ) : (
-              <Trans>Similar accounts</Trans>
-            )}
-          </Text>
-          {!isProfileHeaderContext && (
-            <InlineLinkText
-              label={_(msg`See more suggested profiles on the Explore page`)}
-              to="/search">
-              <Trans>See more</Trans>
-            </InlineLinkText>
+        <Text style={[a.text_sm, a.font_semi_bold, t.atoms.text]}>
+          {isFeedContext ? (
+            <Trans>Suggested for you</Trans>
+          ) : (
+            <Trans>Similar accounts</Trans>
           )}
-        </View>
+        </Text>
 
         {gtMobile ? (
           <View style={[a.p_lg, a.pt_md]}>
@@ -522,7 +505,7 @@ export function SuggestedFeeds() {
           style={[
             a.flex_1,
             a.text_lg,
-            a.font_bold,
+            a.font_semi_bold,
             t.atoms.text_contrast_medium,
           ]}>
           <Trans>Some other feeds you might like</Trans>

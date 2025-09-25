@@ -1,585 +1,303 @@
-import {atoms} from '#/alf/atoms'
-import {type Palette, type Theme} from '#/alf/types'
 import {
-  BLUE_HUE,
-  defaultScale,
-  dimScale,
-  GREEN_HUE,
-  RED_HUE,
-} from '#/alf/util/colorGeneration'
+  createThemes,
+  // I REJECT NODE MODULE SOCIETY
+  //  DEFAULT_PALETTE,
+  //  DEFAULT_SUBDUED_PALETTE,
+} from '@bsky.app/alf'
 
-const themes = createThemes({
-  hues: {
-    primary: BLUE_HUE,
-    negative: RED_HUE,
-    positive: GREEN_HUE,
-  },
-})
+export type Palette = {
+  white: string
+  black: string
+  like: string
 
-/**
- * @deprecated use ALF and access palette from `useTheme()`
- */
-export const lightPalette = themes.lightPalette
-/**
- * @deprecated use ALF and access palette from `useTheme()`
- */
-export const darkPalette = themes.darkPalette
-/**
- * @deprecated use ALF and access palette from `useTheme()`
- */
-export const dimPalette = themes.dimPalette
-/**
- * @deprecated use ALF and access theme from `useTheme()`
- */
-export const light = themes.light
-/**
- * @deprecated use ALF and access theme from `useTheme()`
- */
-export const dark = themes.dark
-/**
- * @deprecated use ALF and access theme from `useTheme()`
- */
-export const dim = themes.dim
+  contrast_0: string
+  contrast_25: string
+  contrast_50: string
+  contrast_100: string
+  contrast_200: string
+  contrast_300: string
+  contrast_400: string
+  contrast_500: string
+  contrast_600: string
+  contrast_700: string
+  contrast_800: string
+  contrast_900: string
+  contrast_950: string
+  contrast_975: string
+  contrast_1000: string
 
-export const defaultTheme = themes.light
+  primary_25: string
+  primary_50: string
+  primary_100: string
+  primary_200: string
+  primary_300: string
+  primary_400: string
+  primary_500: string
+  primary_600: string
+  primary_700: string
+  primary_800: string
+  primary_900: string
+  primary_950: string
+  primary_975: string
 
-export function createThemes({
-  hues,
-}: {
-  hues: {
-    primary: number
-    negative: number
-    positive: number
-  }
-}): {
-  lightPalette: Palette
-  darkPalette: Palette
-  dimPalette: Palette
-  light: Theme
-  dark: Theme
-  dim: Theme
-} {
-  const color = {
-    like: '#ec4899',
-    trueBlack: '#000000',
+  positive_25: string
+  positive_50: string
+  positive_100: string
+  positive_200: string
+  positive_300: string
+  positive_400: string
+  positive_500: string
+  positive_600: string
+  positive_700: string
+  positive_800: string
+  positive_900: string
+  positive_950: string
+  positive_975: string
 
-    gray_0: `hsl(${hues.primary}, 20%, ${defaultScale[14]}%)`,
-    gray_25: `hsl(${hues.primary}, 20%, ${defaultScale[13]}%)`,
-    gray_50: `hsl(${hues.primary}, 20%, ${defaultScale[12]}%)`,
-    gray_100: `hsl(${hues.primary}, 20%, ${defaultScale[11]}%)`,
-    gray_200: `hsl(${hues.primary}, 20%, ${defaultScale[10]}%)`,
-    gray_300: `hsl(${hues.primary}, 20%, ${defaultScale[9]}%)`,
-    gray_400: `hsl(${hues.primary}, 20%, ${defaultScale[8]}%)`,
-    gray_500: `hsl(${hues.primary}, 20%, ${defaultScale[7]}%)`,
-    gray_600: `hsl(${hues.primary}, 24%, ${defaultScale[6]}%)`,
-    gray_700: `hsl(${hues.primary}, 24%, ${defaultScale[5]}%)`,
-    gray_800: `hsl(${hues.primary}, 28%, ${defaultScale[4]}%)`,
-    gray_900: `hsl(${hues.primary}, 28%, ${defaultScale[3]}%)`,
-    gray_950: `hsl(${hues.primary}, 28%, ${defaultScale[2]}%)`,
-    gray_975: `hsl(${hues.primary}, 28%, ${defaultScale[1]}%)`,
-    gray_1000: `hsl(${hues.primary}, 28%, ${defaultScale[0]}%)`,
+  negative_25: string
+  negative_50: string
+  negative_100: string
+  negative_200: string
+  negative_300: string
+  negative_400: string
+  negative_500: string
+  negative_600: string
+  negative_700: string
+  negative_800: string
+  negative_900: string
+  negative_950: string
+  negative_975: string
+}
 
-    primary_25: `hsl(290, 30%, 97%)`,
-    primary_50: `hsl(290, 30%, 95%)`,
-    primary_100: `hsl(290, 30%, 90%)`,
-    primary_200: `hsl(290, 32%, 80%)`,
-    primary_300: `hsl(290, 34%, 70%)`,
-    primary_400: `hsl(290, 35%, 58%)`,
-    primary_500: `hsl(290, 35%, 45%)`,
-    primary_600: `hsl(290, 38%, 38%)`,
-    primary_700: `hsl(290, 40%, 32%)`,
-    primary_800: `hsl(290, 42%, 25%)`,
-    primary_900: `hsl(290, 45%, 18%)`,
-    primary_950: `hsl(290, 48%, 10%)`,
-    primary_975: `hsl(290, 50%, 7%)`,
+export const DEFAULT_PALETTE: Palette = {
+  white: '#FFFFFF',
+  black: '#000000',
+  like: '#EC4899',
 
-    green_25: `hsl(${hues.positive}, 82%, 97%)`,
-    green_50: `hsl(${hues.positive}, 82%, 95%)`,
-    green_100: `hsl(${hues.positive}, 82%, 90%)`,
-    green_200: `hsl(${hues.positive}, 82%, 80%)`,
-    green_300: `hsl(${hues.positive}, 82%, 70%)`,
-    green_400: `hsl(${hues.positive}, 82%, 60%)`,
-    green_500: `hsl(${hues.positive}, 82%, 50%)`,
-    green_600: `hsl(${hues.positive}, 82%, 42%)`,
-    green_700: `hsl(${hues.positive}, 82%, 34%)`,
-    green_800: `hsl(${hues.positive}, 82%, 26%)`,
-    green_900: `hsl(${hues.positive}, 82%, 18%)`,
-    green_950: `hsl(${hues.positive}, 82%, 10%)`,
-    green_975: `hsl(${hues.positive}, 82%, 7%)`,
+  contrast_0: '#FFFFFF',
+  contrast_25: '#F9FAFB',
+  contrast_50: '#EFF2F6',
+  contrast_100: '#DCE2EA',
+  contrast_200: '#C0CAD8',
+  contrast_300: '#A5B2C5',
+  contrast_400: '#8798B0',
+  contrast_500: '#667B99',
+  contrast_600: '#526580',
+  contrast_700: '#405168',
+  contrast_800: '#313F54',
+  contrast_900: '#232E3E',
+  contrast_950: '#19222E',
+  contrast_975: '#111822',
+  contrast_1000: '#000000',
 
-    red_25: `hsl(${hues.negative}, 91%, 97%)`,
-    red_50: `hsl(${hues.negative}, 91%, 95%)`,
-    red_100: `hsl(${hues.negative}, 91%, 90%)`,
-    red_200: `hsl(${hues.negative}, 91%, 80%)`,
-    red_300: `hsl(${hues.negative}, 91%, 70%)`,
-    red_400: `hsl(${hues.negative}, 91%, 60%)`,
-    red_500: `hsl(${hues.negative}, 91%, 50%)`,
-    red_600: `hsl(${hues.negative}, 91%, 42%)`,
-    red_700: `hsl(${hues.negative}, 91%, 34%)`,
-    red_800: `hsl(${hues.negative}, 91%, 26%)`,
-    red_900: `hsl(${hues.negative}, 91%, 18%)`,
-    red_950: `hsl(${hues.negative}, 91%, 10%)`,
-    red_975: `hsl(${hues.negative}, 91%, 7%)`,
-  } as const
+  primary_25: `hsl(290, 30%, 97%)`,
+  primary_50: `hsl(290, 30%, 95%)`,
+  primary_100: `hsl(290, 30%, 90%)`,
+  primary_200: `hsl(290, 32%, 80%)`,
+  primary_300: `hsl(290, 34%, 70%)`,
+  primary_400: `hsl(290, 35%, 58%)`,
+  primary_500: `hsl(290, 35%, 45%)`,
+  primary_600: `hsl(290, 38%, 38%)`,
+  primary_700: `hsl(290, 40%, 32%)`,
+  primary_800: `hsl(290, 42%, 25%)`,
+  primary_900: `hsl(290, 45%, 18%)`,
+  primary_950: `hsl(290, 48%, 10%)`,
+  primary_975: `hsl(290, 50%, 7%)`,
 
-  const lightPalette = {
-    white: color.gray_0,
-    black: color.gray_1000,
-    like: color.like,
+  positive_25: '#ECFEF5',
+  positive_50: '#D3FDE8',
+  positive_100: '#A3FACF',
+  positive_200: '#6AF6B0',
+  positive_300: '#2CF28F',
+  positive_400: '#0DD370',
+  positive_500: '#09B35E',
+  positive_600: '#04904A',
+  positive_700: '#036D38',
+  positive_800: '#04522B',
+  positive_900: '#033F21',
+  positive_950: '#032A17',
+  positive_975: '#021D0F',
 
-    contrast_25: color.gray_25,
-    contrast_50: color.gray_50,
-    contrast_100: color.gray_100,
-    contrast_200: color.gray_200,
-    contrast_300: color.gray_300,
-    contrast_400: color.gray_400,
-    contrast_500: color.gray_500,
-    contrast_600: color.gray_600,
-    contrast_700: color.gray_700,
-    contrast_800: color.gray_800,
-    contrast_900: color.gray_900,
-    contrast_950: color.gray_950,
-    contrast_975: color.gray_975,
+  negative_25: '#FFF5F7',
+  negative_50: '#FEE7EC',
+  negative_100: '#FDD3DD',
+  negative_200: '#FBBBCA',
+  negative_300: '#F891A9',
+  negative_400: '#F65A7F',
+  negative_500: '#E91646',
+  negative_600: '#CA123D',
+  negative_700: '#A71134',
+  negative_800: '#7F0B26',
+  negative_900: '#5F071C',
+  negative_950: '#430413',
+  negative_975: '#30030D',
+}
 
-    primary_25: color.primary_25,
-    primary_50: color.primary_50,
-    primary_100: color.primary_100,
-    primary_200: color.primary_200,
-    primary_300: color.primary_300,
-    primary_400: color.primary_400,
-    primary_500: color.primary_500,
-    primary_600: color.primary_600,
-    primary_700: color.primary_700,
-    primary_800: color.primary_800,
-    primary_900: color.primary_900,
-    primary_950: color.primary_950,
-    primary_975: color.primary_975,
+export const DEFAULT_SUBDUED_PALETTE: Palette = {
+  white: '#FFFFFF',
+  black: '#000000',
+  like: '#EC4899',
 
-    positive_25: color.green_25,
-    positive_50: color.green_50,
-    positive_100: color.green_100,
-    positive_200: color.green_200,
-    positive_300: color.green_300,
-    positive_400: color.green_400,
-    positive_500: color.green_500,
-    positive_600: color.green_600,
-    positive_700: color.green_700,
-    positive_800: color.green_800,
-    positive_900: color.green_900,
-    positive_950: color.green_950,
-    positive_975: color.green_975,
+  contrast_0: '#FFFFFF',
+  contrast_25: '#F9FAFB',
+  contrast_50: '#F2F4F8',
+  contrast_100: '#E2E7EE',
+  contrast_200: '#C3CDDA',
+  contrast_300: '#ABB8C9',
+  contrast_400: '#8D9DB4',
+  contrast_500: '#6F839F',
+  contrast_600: '#586C89',
+  contrast_700: '#485B75',
+  contrast_800: '#394960',
+  contrast_900: '#2C3A4E',
+  contrast_950: '#222E3F',
+  contrast_975: '#1C2736',
+  contrast_1000: '#151D28',
 
-    negative_25: color.red_25,
-    negative_50: color.red_50,
-    negative_100: color.red_100,
-    negative_200: color.red_200,
-    negative_300: color.red_300,
-    negative_400: color.red_400,
-    negative_500: color.red_500,
-    negative_600: color.red_600,
-    negative_700: color.red_700,
-    negative_800: color.red_800,
-    negative_900: color.red_900,
-    negative_950: color.red_950,
-    negative_975: color.red_975,
-  } as const
+  primary_25: `hsl(290, 30%, 97%)`,
+  primary_50: `hsl(290, 30%, 96%)`,
+  primary_100: `hsl(290, 30%, 92%)`,
+  primary_200: `hsl(290, 32%, 81%)`,
+  primary_300: `hsl(290, 34%, 72%)`,
+  primary_400: `hsl(290, 35%, 60%)`,
+  primary_500: `hsl(290, 35%, 48%)`,
+  primary_600: `hsl(290, 38%, 41%)`,
+  primary_700: `hsl(290, 40%, 36%)`,
+  primary_800: `hsl(290, 42%, 29%)`,
+  primary_900: `hsl(290, 45%, 22%)`,
+  primary_950: `hsl(290, 48%, 10%)`,
+  primary_975: `hsl(290, 50%, 8%)`,
 
-  const darkPalette: Palette = {
-    white: color.gray_0, // this used to be gray_25, set it to 0 for contrast reasons
-    black: color.trueBlack,
-    like: color.like,
+  positive_25: '#ECFEF5',
+  positive_50: '#D8FDEB',
+  positive_100: '#A8FAD1',
+  positive_200: '#6FF6B3',
+  positive_300: '#31F291',
+  positive_400: '#0EDD75',
+  positive_500: '#0AC266',
+  positive_600: '#049F52',
+  positive_700: '#038142',
+  positive_800: '#056636',
+  positive_900: '#04522B',
+  positive_950: '#053D21',
+  positive_975: '#052917',
 
-    contrast_25: color.gray_975,
-    contrast_50: color.gray_950,
-    contrast_100: color.gray_900,
-    contrast_200: color.gray_800,
-    contrast_300: color.gray_700,
-    contrast_400: color.gray_600,
-    contrast_500: color.gray_500,
-    contrast_600: color.gray_400,
-    contrast_700: color.gray_300,
-    contrast_800: color.gray_200,
-    contrast_900: color.gray_100,
-    contrast_950: color.gray_50,
-    contrast_975: color.gray_25,
+  negative_25: '#FFF5F7',
+  negative_50: '#FEEBEF',
+  negative_100: '#FDD8E1',
+  negative_200: '#FCC0CE',
+  negative_300: '#F99AB0',
+  negative_400: '#F76486',
+  negative_500: '#EB2452',
+  negative_600: '#D81341',
+  negative_700: '#BA1239',
+  negative_800: '#910D2C',
+  negative_900: '#6F0B22',
+  negative_950: '#500B1C',
+  negative_975: '#3E0915',
+}
 
-    primary_25: color.primary_975,
-    primary_50: color.primary_950,
-    primary_100: color.primary_900,
-    primary_200: color.primary_800,
-    primary_300: color.primary_700,
-    primary_400: color.primary_600,
-    primary_500: color.primary_500,
-    primary_600: color.primary_400,
-    primary_700: color.primary_300,
-    primary_800: color.primary_200,
-    primary_900: color.primary_100,
-    primary_950: color.primary_50,
-    primary_975: color.primary_25,
-
-    positive_25: color.green_975,
-    positive_50: color.green_950,
-    positive_100: color.green_900,
-    positive_200: color.green_800,
-    positive_300: color.green_700,
-    positive_400: color.green_600,
-    positive_500: color.green_500,
-    positive_600: color.green_400,
-    positive_700: color.green_300,
-    positive_800: color.green_200,
-    positive_900: color.green_100,
-    positive_950: color.green_50,
-    positive_975: color.green_25,
-
-    negative_25: color.red_975,
-    negative_50: color.red_950,
-    negative_100: color.red_900,
-    negative_200: color.red_800,
-    negative_300: color.red_700,
-    negative_400: color.red_600,
-    negative_500: color.red_500,
-    negative_600: color.red_400,
-    negative_700: color.red_300,
-    negative_800: color.red_200,
-    negative_900: color.red_100,
-    negative_950: color.red_50,
-    negative_975: color.red_25,
-  } as const
-
-  const dimPalette: Palette = {
-    ...darkPalette,
-    black: `hsl(${hues.primary}, 28%, ${dimScale[0]}%)`,
-    like: color.like,
-
-    contrast_25: `hsl(${hues.primary}, 28%, ${dimScale[1]}%)`,
-    contrast_50: `hsl(${hues.primary}, 28%, ${dimScale[2]}%)`,
-    contrast_100: `hsl(${hues.primary}, 28%, ${dimScale[3]}%)`,
-    contrast_200: `hsl(${hues.primary}, 28%, ${dimScale[4]}%)`,
-    contrast_300: `hsl(${hues.primary}, 24%, ${dimScale[5]}%)`,
-    contrast_400: `hsl(${hues.primary}, 24%, ${dimScale[6]}%)`,
-    contrast_500: `hsl(${hues.primary}, 20%, ${dimScale[7]}%)`,
-    contrast_600: `hsl(${hues.primary}, 20%, ${dimScale[8]}%)`,
-    contrast_700: `hsl(${hues.primary}, 20%, ${dimScale[9]}%)`,
-    contrast_800: `hsl(${hues.primary}, 20%, ${dimScale[10]}%)`,
-    contrast_900: `hsl(${hues.primary}, 20%, ${dimScale[11]}%)`,
-    contrast_950: `hsl(${hues.primary}, 20%, ${dimScale[12]}%)`,
-    contrast_975: `hsl(${hues.primary}, 20%, ${dimScale[13]}%)`,
-
-    primary_25: `hsl(290, 15%, ${dimScale[1]}%)`,
-    primary_50: `hsl(290, 18%, ${dimScale[2]}%)`,
-    primary_100: `hsl(290, 22%, ${dimScale[3]}%)`,
-    primary_200: `hsl(290, 25%, ${dimScale[4]}%)`,
-    primary_300: `hsl(290, 28%, ${dimScale[5]}%)`,
-    primary_400: `hsl(290, 32%, ${dimScale[6]}%)`,
-    primary_500: `hsl(290, 35%, ${dimScale[7]}%)`,
-    primary_600: `hsl(290, 38%, ${dimScale[8]}%)`,
-    primary_700: `hsl(290, 42%, ${dimScale[9]}%)`,
-    primary_800: `hsl(290, 45%, ${dimScale[10]}%)`,
-    primary_900: `hsl(290, 48%, ${dimScale[11]}%)`,
-    primary_950: `hsl(290, 50%, ${dimScale[12]}%)`,
-    primary_975: `hsl(290, 55%, ${dimScale[13]}%)`,
-
-    positive_25: `hsl(${hues.positive}, 50%, ${dimScale[1]}%)`,
-    positive_50: `hsl(${hues.positive}, 60%, ${dimScale[2]}%)`,
-    positive_100: `hsl(${hues.positive}, 70%, ${dimScale[3]}%)`,
-    positive_200: `hsl(${hues.positive}, 82%, ${dimScale[4]}%)`,
-    positive_300: `hsl(${hues.positive}, 82%, ${dimScale[5]}%)`,
-    positive_400: `hsl(${hues.positive}, 82%, ${dimScale[6]}%)`,
-    positive_500: `hsl(${hues.positive}, 82%, ${dimScale[7]}%)`,
-    positive_600: `hsl(${hues.positive}, 82%, ${dimScale[8]}%)`,
-    positive_700: `hsl(${hues.positive}, 82%, ${dimScale[9]}%)`,
-    positive_800: `hsl(${hues.positive}, 82%, ${dimScale[10]}%)`,
-    positive_900: `hsl(${hues.positive}, 82%, ${dimScale[11]}%)`,
-    positive_950: `hsl(${hues.positive}, 82%, ${dimScale[12]}%)`,
-    positive_975: `hsl(${hues.positive}, 82%, ${dimScale[13]}%)`,
-
-    negative_25: `hsl(${hues.negative}, 70%, ${dimScale[1]}%)`,
-    negative_50: `hsl(${hues.negative}, 80%, ${dimScale[2]}%)`,
-    negative_100: `hsl(${hues.negative}, 84%, ${dimScale[3]}%)`,
-    negative_200: `hsl(${hues.negative}, 88%, ${dimScale[4]}%)`,
-    negative_300: `hsl(${hues.negative}, 91%, ${dimScale[5]}%)`,
-    negative_400: `hsl(${hues.negative}, 91%, ${dimScale[6]}%)`,
-    negative_500: `hsl(${hues.negative}, 91%, ${dimScale[7]}%)`,
-    negative_600: `hsl(${hues.negative}, 91%, ${dimScale[8]}%)`,
-    negative_700: `hsl(${hues.negative}, 91%, ${dimScale[9]}%)`,
-    negative_800: `hsl(${hues.negative}, 91%, ${dimScale[10]}%)`,
-    negative_900: `hsl(${hues.negative}, 91%, ${dimScale[11]}%)`,
-    negative_950: `hsl(${hues.negative}, 91%, ${dimScale[12]}%)`,
-    negative_975: `hsl(${hues.negative}, 91%, ${dimScale[13]}%)`,
-  } as const
-
-  const light: Theme = {
-    scheme: 'light',
-    name: 'light',
-    palette: lightPalette,
-    atoms: {
-      text: {
-        color: lightPalette.black,
-      },
-      text_contrast_low: {
-        color: lightPalette.contrast_400,
-      },
-      text_contrast_medium: {
-        color: lightPalette.contrast_700,
-      },
-      text_contrast_high: {
-        color: lightPalette.contrast_900,
-      },
-      text_inverted: {
-        color: lightPalette.white,
-      },
-      bg: {
-        backgroundColor: lightPalette.white,
-      },
-      bg_contrast_25: {
-        backgroundColor: lightPalette.contrast_25,
-      },
-      bg_contrast_50: {
-        backgroundColor: lightPalette.contrast_50,
-      },
-      bg_contrast_100: {
-        backgroundColor: lightPalette.contrast_100,
-      },
-      bg_contrast_200: {
-        backgroundColor: lightPalette.contrast_200,
-      },
-      bg_contrast_300: {
-        backgroundColor: lightPalette.contrast_300,
-      },
-      bg_contrast_400: {
-        backgroundColor: lightPalette.contrast_400,
-      },
-      bg_contrast_500: {
-        backgroundColor: lightPalette.contrast_500,
-      },
-      bg_contrast_600: {
-        backgroundColor: lightPalette.contrast_600,
-      },
-      bg_contrast_700: {
-        backgroundColor: lightPalette.contrast_700,
-      },
-      bg_contrast_800: {
-        backgroundColor: lightPalette.contrast_800,
-      },
-      bg_contrast_900: {
-        backgroundColor: lightPalette.contrast_900,
-      },
-      bg_contrast_950: {
-        backgroundColor: lightPalette.contrast_950,
-      },
-      bg_contrast_975: {
-        backgroundColor: lightPalette.contrast_975,
-      },
-      border_contrast_low: {
-        borderColor: lightPalette.contrast_100,
-      },
-      border_contrast_medium: {
-        borderColor: lightPalette.contrast_200,
-      },
-      border_contrast_high: {
-        borderColor: lightPalette.contrast_300,
-      },
-      shadow_sm: {
-        ...atoms.shadow_sm,
-        shadowColor: lightPalette.black,
-      },
-      shadow_md: {
-        ...atoms.shadow_md,
-        shadowColor: lightPalette.black,
-      },
-      shadow_lg: {
-        ...atoms.shadow_lg,
-        shadowColor: lightPalette.black,
-      },
-    },
-  }
-
-  const dark: Theme = {
-    scheme: 'dark',
-    name: 'dark',
-    palette: darkPalette,
-    atoms: {
-      text: {
-        color: darkPalette.white,
-      },
-      text_contrast_low: {
-        color: darkPalette.contrast_400,
-      },
-      text_contrast_medium: {
-        color: darkPalette.contrast_600,
-      },
-      text_contrast_high: {
-        color: darkPalette.contrast_900,
-      },
-      text_inverted: {
-        color: darkPalette.black,
-      },
-      bg: {
-        backgroundColor: darkPalette.black,
-      },
-      bg_contrast_25: {
-        backgroundColor: darkPalette.contrast_25,
-      },
-      bg_contrast_50: {
-        backgroundColor: darkPalette.contrast_50,
-      },
-      bg_contrast_100: {
-        backgroundColor: darkPalette.contrast_100,
-      },
-      bg_contrast_200: {
-        backgroundColor: darkPalette.contrast_200,
-      },
-      bg_contrast_300: {
-        backgroundColor: darkPalette.contrast_300,
-      },
-      bg_contrast_400: {
-        backgroundColor: darkPalette.contrast_400,
-      },
-      bg_contrast_500: {
-        backgroundColor: darkPalette.contrast_500,
-      },
-      bg_contrast_600: {
-        backgroundColor: darkPalette.contrast_600,
-      },
-      bg_contrast_700: {
-        backgroundColor: darkPalette.contrast_700,
-      },
-      bg_contrast_800: {
-        backgroundColor: darkPalette.contrast_800,
-      },
-      bg_contrast_900: {
-        backgroundColor: darkPalette.contrast_900,
-      },
-      bg_contrast_950: {
-        backgroundColor: darkPalette.contrast_950,
-      },
-      bg_contrast_975: {
-        backgroundColor: darkPalette.contrast_975,
-      },
-      border_contrast_low: {
-        borderColor: darkPalette.contrast_100,
-      },
-      border_contrast_medium: {
-        borderColor: darkPalette.contrast_200,
-      },
-      border_contrast_high: {
-        borderColor: darkPalette.contrast_300,
-      },
-      shadow_sm: {
-        ...atoms.shadow_sm,
-        shadowOpacity: 0.7,
-        shadowColor: color.trueBlack,
-      },
-      shadow_md: {
-        ...atoms.shadow_md,
-        shadowOpacity: 0.7,
-        shadowColor: color.trueBlack,
-      },
-      shadow_lg: {
-        ...atoms.shadow_lg,
-        shadowOpacity: 0.7,
-        shadowColor: color.trueBlack,
-      },
-    },
-  }
-
-  const dim: Theme = {
-    ...dark,
-    scheme: 'dark',
-    name: 'dim',
-    palette: dimPalette,
-    atoms: {
-      ...dark.atoms,
-      text: {
-        color: dimPalette.white,
-      },
-      text_contrast_low: {
-        color: dimPalette.contrast_400,
-      },
-      text_contrast_medium: {
-        color: dimPalette.contrast_600,
-      },
-      text_contrast_high: {
-        color: dimPalette.contrast_900,
-      },
-      text_inverted: {
-        color: dimPalette.black,
-      },
-      bg: {
-        backgroundColor: dimPalette.black,
-      },
-      bg_contrast_25: {
-        backgroundColor: dimPalette.contrast_25,
-      },
-      bg_contrast_50: {
-        backgroundColor: dimPalette.contrast_50,
-      },
-      bg_contrast_100: {
-        backgroundColor: dimPalette.contrast_100,
-      },
-      bg_contrast_200: {
-        backgroundColor: dimPalette.contrast_200,
-      },
-      bg_contrast_300: {
-        backgroundColor: dimPalette.contrast_300,
-      },
-      bg_contrast_400: {
-        backgroundColor: dimPalette.contrast_400,
-      },
-      bg_contrast_500: {
-        backgroundColor: dimPalette.contrast_500,
-      },
-      bg_contrast_600: {
-        backgroundColor: dimPalette.contrast_600,
-      },
-      bg_contrast_700: {
-        backgroundColor: dimPalette.contrast_700,
-      },
-      bg_contrast_800: {
-        backgroundColor: dimPalette.contrast_800,
-      },
-      bg_contrast_900: {
-        backgroundColor: dimPalette.contrast_900,
-      },
-      bg_contrast_950: {
-        backgroundColor: dimPalette.contrast_950,
-      },
-      bg_contrast_975: {
-        backgroundColor: dimPalette.contrast_975,
-      },
-      border_contrast_low: {
-        borderColor: dimPalette.contrast_100,
-      },
-      border_contrast_medium: {
-        borderColor: dimPalette.contrast_200,
-      },
-      border_contrast_high: {
-        borderColor: dimPalette.contrast_300,
-      },
-      shadow_sm: {
-        ...atoms.shadow_sm,
-        shadowOpacity: 0.7,
-        shadowColor: `hsl(${hues.primary}, 28%, 6%)`,
-      },
-      shadow_md: {
-        ...atoms.shadow_md,
-        shadowOpacity: 0.7,
-        shadowColor: `hsl(${hues.primary}, 28%, 6%)`,
-      },
-      shadow_lg: {
-        ...atoms.shadow_lg,
-        shadowOpacity: 0.7,
-        shadowColor: `hsl(${hues.primary}, 28%, 6%)`,
-      },
-    },
-  }
-
+export function invertPalette(palette: Palette) {
   return {
-    lightPalette,
-    darkPalette,
-    dimPalette,
-    light,
-    dark,
-    dim,
+    white: palette.white,
+    black: palette.black,
+    like: palette.like,
+
+    contrast_0: palette.contrast_1000,
+    contrast_25: palette.contrast_975,
+    contrast_50: palette.contrast_950,
+    contrast_100: palette.contrast_900,
+    contrast_200: palette.contrast_800,
+    contrast_300: palette.contrast_700,
+    contrast_400: palette.contrast_600,
+    contrast_500: palette.contrast_500,
+    contrast_600: palette.contrast_400,
+    contrast_700: palette.contrast_300,
+    contrast_800: palette.contrast_200,
+    contrast_900: palette.contrast_100,
+    contrast_950: palette.contrast_50,
+    contrast_975: palette.contrast_25,
+    contrast_1000: palette.contrast_0,
+
+    primary_25: palette.primary_975,
+    primary_50: palette.primary_950,
+    primary_100: palette.primary_900,
+    primary_200: palette.primary_800,
+    primary_300: palette.primary_700,
+    primary_400: palette.primary_600,
+    primary_500: palette.primary_500,
+    primary_600: palette.primary_400,
+    primary_700: palette.primary_300,
+    primary_800: palette.primary_200,
+    primary_900: palette.primary_100,
+    primary_950: palette.primary_50,
+    primary_975: palette.primary_25,
+
+    positive_25: palette.positive_975,
+    positive_50: palette.positive_950,
+    positive_100: palette.positive_900,
+    positive_200: palette.positive_800,
+    positive_300: palette.positive_700,
+    positive_400: palette.positive_600,
+    positive_500: palette.positive_500,
+    positive_600: palette.positive_400,
+    positive_700: palette.positive_300,
+    positive_800: palette.positive_200,
+    positive_900: palette.positive_100,
+    positive_950: palette.positive_50,
+    positive_975: palette.positive_25,
+
+    negative_25: palette.negative_975,
+    negative_50: palette.negative_950,
+    negative_100: palette.negative_900,
+    negative_200: palette.negative_800,
+    negative_300: palette.negative_700,
+    negative_400: palette.negative_600,
+    negative_500: palette.negative_500,
+    negative_600: palette.negative_400,
+    negative_700: palette.negative_300,
+    negative_800: palette.negative_200,
+    negative_900: palette.negative_100,
+    negative_950: palette.negative_50,
+    negative_975: palette.negative_25,
   }
 }
+
+const DEFAULT_THEMES = createThemes({
+  defaultPalette: DEFAULT_PALETTE,
+  subduedPalette: DEFAULT_SUBDUED_PALETTE,
+})
+
+export const themes = {
+  lightPalette: DEFAULT_THEMES.light.palette,
+  darkPalette: DEFAULT_THEMES.dark.palette,
+  dimPalette: DEFAULT_THEMES.dim.palette,
+  light: DEFAULT_THEMES.light,
+  dark: DEFAULT_THEMES.dark,
+  dim: DEFAULT_THEMES.dim,
+}
+
+/**
+ * @deprecated use ALF and access palette from `useTheme()`
+ */
+export const lightPalette = DEFAULT_THEMES.light.palette
+/**
+ * @deprecated use ALF and access palette from `useTheme()`
+ */
+export const darkPalette = DEFAULT_THEMES.dark.palette
+/**
+ * @deprecated use ALF and access palette from `useTheme()`
+ */
+export const dimPalette = DEFAULT_THEMES.dim.palette
+/**
+ * @deprecated use ALF and access theme from `useTheme()`
+ */
+export const light = DEFAULT_THEMES.light
+/**
+ * @deprecated use ALF and access theme from `useTheme()`
+ */
+export const dark = DEFAULT_THEMES.dark
+/**
+ * @deprecated use ALF and access theme from `useTheme()`
+ */
+export const dim = DEFAULT_THEMES.dim
