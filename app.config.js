@@ -35,7 +35,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'Deer',
+      name: IS_DEV ? 'Deer (dev)' : 'Deer',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -49,7 +49,7 @@ module.exports = function (_config) {
       newArchEnabled: false,
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'top.aylac.deer',
+        bundleIdentifier: IS_DEV ? 'top.aylac.deer.dev' : 'top.aylac.deer',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -153,7 +153,7 @@ module.exports = function (_config) {
           backgroundImage: './assets/icon-android-background.png',
           backgroundColor: '#4b9b6c',
         },
-        package: 'top.aylac.deer',
+        package: IS_DEV ? 'top.aylac.deer.dev' : 'top.aylac.deer',
         intentFilters: [
           {
             action: 'VIEW',
@@ -237,7 +237,6 @@ module.exports = function (_config) {
               compileSdkVersion: 35,
               targetSdkVersion: 35,
               buildToolsVersion: '35.0.0',
-              gradleVersion: '8.10',
             },
           },
         ],
