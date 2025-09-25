@@ -75,7 +75,7 @@
               JAVA_HOME = pinnedJDK;
               ANDROID_HOME = "${androidSdk}/share/android-sdk";
               ANDROID_SDK_ROOT = "${androidSdk}/share/android-sdk";
-              ANDROID_USER_HOME = "/data/android";
+              ANDROID_USER_HOME = "${config.xdg.stateHome}/android";
               ANDROID_AVD_HOME = "${ANDROID_USER_HOME}/avd";
 
               GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/35.0.0/aapt2";
