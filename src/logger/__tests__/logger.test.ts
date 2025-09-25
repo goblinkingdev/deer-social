@@ -1,16 +1,8 @@
 import {beforeAll, describe, expect, jest, test} from '@jest/globals'
-import * as Sentry from '@sentry/react-native'
 import {nanoid} from 'nanoid/non-secure'
 
 import {Logger} from '#/logger'
-import {sentryTransport} from '#/logger/transports/sentry'
 import {LogLevel} from '#/logger/types'
-
-jest.mock('@sentry/react-native', () => ({
-  addBreadcrumb: jest.fn(),
-  captureException: jest.fn(),
-  captureMessage: jest.fn(),
-}))
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -103,138 +95,6 @@ describe('general functionality', () => {
 
     // @ts-expect-error testing the JS case
     logger.warn('message', null)
-  })
-
-  test('sentryTransport', () => {
-    const message = 'message'
-    const timestamp = Date.now()
-    const sentryTimestamp = timestamp / 1000
-
-    /*
-    sentryTransport(
-      LogLevel.Debug,
-      Logger.Context.Default,
-      message,
-      {},
-      timestamp,
-    )
-    expect(Sentry.addBreadcrumb).toHaveBeenCalledWith({
-      category: Logger.Context.Default,
-      message,
-      data: {__context__: 'logger'},
-      type: 'default',
-      level: LogLevel.Debug,
-      timestamp: sentryTimestamp,
-    })
-    */
-
-    sentryTransport(
-      LogLevel.Info,
-      Logger.Context.Default,
-      message,
-      {type: 'info', prop: true},
-      timestamp,
-    )
-    expect(Sentry.addBreadcrumb).toHaveBeenCalledWith({
-      category: Logger.Context.Default,
-      message,
-      data: {prop: true, __context__: 'logger'},
-      type: 'info',
-      level: LogLevel.Info,
-      timestamp: sentryTimestamp,
-    })
-
-    sentryTransport(
-      LogLevel.Log,
-      Logger.Context.Default,
-      message,
-      {},
-      timestamp,
-    )
-    expect(Sentry.addBreadcrumb).toHaveBeenCalledWith({
-      category: Logger.Context.Default,
-      message,
-      data: {__context__: 'logger'},
-      type: 'default',
-      level: 'log',
-      timestamp: sentryTimestamp,
-    })
-    jest.runAllTimers()
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(message, {
-      level: 'log',
-      tags: {category: 'logger'},
-      extra: {__context__: 'logger'},
-    })
-
-    sentryTransport(
-      LogLevel.Warn,
-      Logger.Context.Default,
-      message,
-      {},
-      timestamp,
-    )
-    expect(Sentry.addBreadcrumb).toHaveBeenCalledWith({
-      category: Logger.Context.Default,
-      message,
-      data: {__context__: 'logger'},
-      type: 'default',
-      level: 'warning',
-      timestamp: sentryTimestamp,
-    })
-    jest.runAllTimers()
-    expect(Sentry.captureMessage).toHaveBeenCalledWith(message, {
-      level: 'warning',
-      tags: {category: 'logger'},
-      extra: {__context__: 'logger'},
-    })
-
-    const e = new Error('error')
-    const tags = {
-      prop: 'prop',
-    }
-
-    sentryTransport(
-      LogLevel.Error,
-      Logger.Context.Default,
-      e,
-      {
-        tags,
-        prop: true,
-      },
-      timestamp,
-    )
-
-    expect(Sentry.captureException).toHaveBeenCalledWith(e, {
-      tags: {
-        ...tags,
-        category: 'logger',
-      },
-      extra: {
-        prop: true,
-        __context__: 'logger',
-      },
-    })
-  })
-
-  test('sentryTransport serializes errors', () => {
-    const message = 'message'
-    const timestamp = Date.now()
-    const sentryTimestamp = timestamp / 1000
-
-    sentryTransport(
-      LogLevel.Info,
-      undefined,
-      message,
-      {error: new Error('foo')},
-      timestamp,
-    )
-    expect(Sentry.addBreadcrumb).toHaveBeenCalledWith({
-      message,
-      data: {error: 'Error: foo'},
-      type: 'default',
-      level: LogLevel.Info,
-      timestamp: sentryTimestamp,
-    })
   })
 
   test('add/remove transport', () => {

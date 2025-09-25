@@ -1,4 +1,3 @@
-import '#/logger/sentry/setup'
 import '#/view/icons'
 
 import React, {useEffect, useState} from 'react'
@@ -13,7 +12,6 @@ import * as SplashScreen from 'expo-splash-screen'
 import * as SystemUI from 'expo-system-ui'
 import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import * as Sentry from '@sentry/react-native'
 
 import {KeyboardControllerProvider} from '#/lib/hooks/useEnableKeyboardController'
 import {Provider as HideBottomBarBorderProvider} from '#/lib/hooks/useHideBottomBarBorder'
@@ -235,4 +233,4 @@ function App() {
   )
 }
 
-export default Sentry.wrap(App)
+export default App

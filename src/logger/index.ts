@@ -12,12 +12,11 @@ import {
 } from '#/logger/types'
 import {enabledLogLevels} from '#/logger/util'
 import {ENV} from '#/env'
-import {sentryTransport} from './transports/sentry'
 
 const TRANSPORTS: Transport[] = (function configureTransports() {
   switch (ENV) {
     case 'production': {
-      return [sentryTransport].filter(Boolean) as Transport[]
+      return []
     }
     case 'test': {
       return []
