@@ -71,10 +71,6 @@ import {
   useSetHideSimilarAccountsRecomm,
 } from '#/state/preferences/hide-similar-accounts-recommendations'
 import {
-  useHideSimilarAccountsRecomm,
-  useSetHideSimilarAccountsRecomm,
-} from '#/state/preferences/hide-similar-accounts-recommendations'
-import {
   useLoadAsPngs,
   useSetLoadAsPngs,
 } from '#/state/preferences/load-small-pngs'
