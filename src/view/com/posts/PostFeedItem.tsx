@@ -460,6 +460,7 @@ let FeedItemInner = ({
             moderation={moderation}
             richText={richText}
             postEmbed={post.embed}
+            recordEmbed={record.embed}
             postAuthor={post.author}
             onOpenEmbed={onOpenEmbed}
             post={post}
@@ -491,6 +492,7 @@ let PostContent = ({
   moderation,
   richText,
   postEmbed,
+  recordEmbed,
   postAuthor,
   onOpenEmbed,
   threadgateRecord,
@@ -498,6 +500,7 @@ let PostContent = ({
   moderation: ModerationDecision
   richText: RichTextAPI
   postEmbed: AppBskyFeedDefs.PostView['embed']
+  recordEmbed: AppBskyFeedPost.Record['embed']
   postAuthor: AppBskyFeedDefs.PostView['author']
   onOpenEmbed: () => void
   post: AppBskyFeedDefs.PostView
@@ -566,6 +569,7 @@ let PostContent = ({
         <View style={[a.pb_xs]}>
           <Embed
             embed={postEmbed}
+            recordEmbed={recordEmbed}
             moderation={moderation}
             onOpen={onOpenEmbed}
             viewContext={PostEmbedViewContext.Feed}

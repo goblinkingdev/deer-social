@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {View} from 'react-native'
 import {parseLanguage} from '@atproto/api'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import lande from 'lande'
+import {eldr} from 'eldr'
 
-import {code3ToCode2Strict, codeToLanguageName} from '#/locale/helpers'
+import {code3ToCode2, codeToLanguageName} from '#/locale/helpers'
 import {
   toPostLanguages,
   useLanguagePrefs,
@@ -33,6 +33,12 @@ export function SuggestedLanguage({
   >(text.length === 0 ? replyToLanguage : undefined)
   const langPrefs = useLanguagePrefs()
   const setLangPrefs = useLanguagePrefsApi()
+  const languageHistory = useMemo(
+    () =>
+      new Set(langPrefs.postLanguageHistory.map(lang => code3ToCode2(lang))),
+    [langPrefs.postLanguageHistory],
+  )
+  const postLanguage = code3ToCode2(langPrefs.postLanguage)
   const t = useTheme()
   const {_} = useLingui()
 
@@ -48,17 +54,19 @@ export function SuggestedLanguage({
 
     // Don't run the language model on small posts, the results are likely
     // to be inaccurate anyway.
-    if (textTrimmed.length < 40) {
+    if (textTrimmed.length < 20) {
       setSuggestedLanguage(undefined)
       return
     }
 
     const idle = onIdle(() => {
-      setSuggestedLanguage(guessLanguage(textTrimmed))
+      setSuggestedLanguage(
+        guessLanguage(textTrimmed, languageHistory, postLanguage),
+      )
     })
 
     return () => cancelIdle(idle)
-  }, [text, replyToLanguage])
+  }, [text, replyToLanguage, languageHistory, postLanguage])
 
   if (
     suggestedLanguage &&
@@ -88,7 +96,7 @@ export function SuggestedLanguage({
         <Text style={[a.flex_1]}>
           <Trans>
             Are you writing in{' '}
-            <Text style={[a.font_bold]}>{suggestedLanguageName}</Text>?
+            <Text style={[a.font_semi_bold]}>{suggestedLanguageName}</Text>?
           </Trans>
         </Text>
 
@@ -110,22 +118,33 @@ export function SuggestedLanguage({
 }
 
 /**
- * This function is using the lande language model to attempt to detect the language
+ * This function is using the eldr language model to attempt to detect the language
  * We want to only make suggestions when we feel a high degree of certainty
  * The magic numbers are based on debugging sessions against some test strings
  */
-function guessLanguage(text: string): string | undefined {
-  const scores = lande(text).filter(([_lang, value]) => value >= 0.0002)
-  // if the model has multiple items with a score higher than 0.0002, it isn't certain enough
-  if (scores.length !== 1) {
-    return undefined
+function guessLanguage(
+  text: string,
+  languageHistory: Set<string>,
+  postLanguage: string,
+): string | undefined {
+  const scores = eldr.detect(text).getScoresArray()
+
+  let selected: string | undefined
+  let selectedScore = 0.3
+
+  for (const [lang, score] of scores) {
+    const weightedScore =
+      score *
+      (languageHistory.has(lang) ? 2 : 1) *
+      (postLanguage === lang ? 2 : 1)
+
+    if (weightedScore >= selectedScore) {
+      selected = lang
+      selectedScore = weightedScore
+    }
   }
-  const [lang, value] = scores[0]
-  // if the model doesn't give a score of 0.97 or above, it isn't certain enough
-  if (value < 0.97) {
-    return undefined
-  }
-  return code3ToCode2Strict(lang)
+
+  return selected
 }
 
 function cleanUpLanguage(text: string | undefined): string | undefined {

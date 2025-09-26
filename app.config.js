@@ -18,7 +18,7 @@ module.exports = function (_config) {
   const IS_DEV = !IS_TESTFLIGHT || !IS_PRODUCTION
 
   const ASSOCIATED_DOMAINS = [
-    'applinks:deer-social-7m8.pages.dev',
+    'applinks:pages.dev.deer-social-7m8',
     // When testing local services, enter an ngrok (et al) domain here. It must use a standard HTTP/HTTPS port.
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
@@ -30,8 +30,6 @@ module.exports = function (_config) {
   //   : undefined
   // const UPDATES_ENABLED = !!UPDATES_CHANNEL
   const UPDATES_ENABLED = IS_TESTFLIGHT || IS_PRODUCTION
-
-  const USE_SENTRY = Boolean(process.env.SENTRY_AUTH_TOKEN)
 
   return {
     expo: {
@@ -47,9 +45,10 @@ module.exports = function (_config) {
       icon: './assets/app-icons/ios_icon_default_light.png',
       userInterfaceStyle: 'automatic',
       primaryColor: '#4b9b6c',
+      newArchEnabled: false,
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'dev.pages.deer_social',
+        bundleIdentifier: 'deer-social-7m8.pages.dev',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -106,13 +105,14 @@ module.exports = function (_config) {
             'zh-Hans',
             'zh-Hant',
           ],
+          UIDesignRequiresCompatibility: true,
         },
         associatedDomains: ASSOCIATED_DOMAINS,
         entitlements: {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
           'com.apple.security.application-groups':
-            'group.dev.pages.deer_social',
+            'group.dev.pages.deer-social-7m8',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -170,6 +170,10 @@ module.exports = function (_config) {
               },
               {
                 scheme: 'https',
+                host: 'deer.social',
+              },
+              {
+                scheme: 'https',
                 host: 'bsky.app',
               },
               IS_DEV && {
@@ -223,26 +227,17 @@ module.exports = function (_config) {
           'react-native-edge-to-edge',
           {android: {enforceNavigationBarContrast: false}},
         ],
-        USE_SENTRY && [
-          '@sentry/react-native/expo',
-          {
-            organization: 'blueskyweb',
-            project: 'app',
-            url: 'https://sentry.io',
-          },
-        ],
         [
           'expo-build-properties',
           {
             ios: {
               deploymentTarget: '15.1',
-              newArchEnabled: false,
+              buildReactNativeFromSource: true,
             },
             android: {
               compileSdkVersion: 35,
               targetSdkVersion: 35,
               buildToolsVersion: '35.0.0',
-              newArchEnabled: false,
             },
           },
         ],
@@ -255,16 +250,9 @@ module.exports = function (_config) {
           },
         ],
         'react-native-compressor',
-        [
-          '@bitdrift/react-native',
-          {
-            networkInstrumentation: true,
-          },
-        ],
         './plugins/starterPackAppClipExtension/withStarterPackAppClip.js',
         './plugins/withGradleJVMHeapSizeIncrease.js',
         './plugins/withAndroidManifestLargeHeapPlugin.js',
-        './plugins/withAndroidManifestFCMIconPlugin.js',
         './plugins/withAndroidManifestIntentQueriesPlugin.js',
         './plugins/withAndroidStylesAccentColorPlugin.js',
         './plugins/withAndroidDayNightThemePlugin.js',
@@ -275,6 +263,7 @@ module.exports = function (_config) {
           'expo-font',
           {
             fonts: [
+              './assets/fonts/roboto-flex/Roboto-Flex.ttf',
               './assets/fonts/inter/InterVariable.woff2',
               './assets/fonts/inter/InterVariable-Italic.woff2',
               // Android only
@@ -286,6 +275,86 @@ module.exports = function (_config) {
               './assets/fonts/inter/Inter-SemiBoldItalic.otf',
               './assets/fonts/inter/Inter-Bold.otf',
               './assets/fonts/inter/Inter-BoldItalic.otf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xl-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-2xs-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-3xl-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-4xl-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-5xl-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-lg-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-md-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-sm-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xl-semibold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-bold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-bold.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-medium-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-medium.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-normal-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-normal.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-semibold-italic.ttf',
+              './assets/fonts/roboto-flex/RobotoFlex-xs-semibold.ttf',
             ],
           },
         ],
@@ -330,11 +399,6 @@ module.exports = function (_config) {
             default_dark: {
               ios: './assets/app-icons/ios_icon_default_dark.png',
               android: './assets/app-icons/android_icon_default_dark.png',
-              prerendered: true,
-            },
-            next: {
-              ios: './assets/app-icons/icon_default_next.png',
-              android: './assets/app-icons/icon_default_next.png',
               prerendered: true,
             },
 
@@ -389,7 +453,6 @@ module.exports = function (_config) {
           },
         ],
         ['expo-screen-orientation', {initialOrientation: 'PORTRAIT_UP'}],
-        ['expo-location'],
       ].filter(Boolean),
       extra: {
         eas: {
@@ -423,8 +486,7 @@ module.exports = function (_config) {
               },
             },
           },
-          //projectId: '55bd077a-d905-4184-9c7f-94789ba0f302',
-          projectId: '86ff94e3-dce0-4f7c-99f4-1651a2f1bc2a',
+          projectId: '2be8925e-1389-44f9-89b9-d5159691e8af',
         },
       },
     },

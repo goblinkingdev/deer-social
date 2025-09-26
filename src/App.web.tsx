@@ -1,4 +1,3 @@
-import '#/logger/sentry/setup' // must be near top
 import '#/view/icons'
 import './style.css'
 
@@ -7,7 +6,6 @@ import {RootSiblingParent} from 'react-native-root-siblings'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
 import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import * as Sentry from '@sentry/react-native'
 
 import {QueryProvider} from '#/lib/react-query'
 import {Provider as StatsigProvider} from '#/lib/statsig/statsig'
@@ -20,7 +18,6 @@ import {Provider as DialogStateProvider} from '#/state/dialogs'
 import {Provider as EmailVerificationProvider} from '#/state/email-verification'
 import {listenSessionDropped} from '#/state/events'
 import {Provider as HomeBadgeProvider} from '#/state/home-badge'
-import {Provider as InvitesStateProvider} from '#/state/invites'
 import {Provider as LightboxStateProvider} from '#/state/lightbox'
 import {MessagesProvider} from '#/state/messages'
 import {Provider as ModalStateProvider} from '#/state/modals'
@@ -182,19 +179,17 @@ function App() {
         <PrefsStateProvider>
           <I18nProvider>
             <ShellStateProvider>
-              <InvitesStateProvider>
-                <ModalStateProvider>
-                  <DialogStateProvider>
-                    <LightboxStateProvider>
-                      <PortalProvider>
-                        <StarterPackProvider>
-                          <InnerApp />
-                        </StarterPackProvider>
-                      </PortalProvider>
-                    </LightboxStateProvider>
-                  </DialogStateProvider>
-                </ModalStateProvider>
-              </InvitesStateProvider>
+              <ModalStateProvider>
+                <DialogStateProvider>
+                  <LightboxStateProvider>
+                    <PortalProvider>
+                      <StarterPackProvider>
+                        <InnerApp />
+                      </StarterPackProvider>
+                    </PortalProvider>
+                  </LightboxStateProvider>
+                </DialogStateProvider>
+              </ModalStateProvider>
             </ShellStateProvider>
           </I18nProvider>
         </PrefsStateProvider>
@@ -203,4 +198,4 @@ function App() {
   )
 }
 
-export default Sentry.wrap(App)
+export default App

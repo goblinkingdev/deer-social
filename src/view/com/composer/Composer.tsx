@@ -32,6 +32,7 @@ import Animated, {
   runOnUI,
   scrollTo,
   useAnimatedRef,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -57,7 +58,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import {msg, plural, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
-import {useQueryClient} from '@tanstack/react-query'
+import {useQuery, useQueryClient} from '@tanstack/react-query'
 
 import * as apilib from '#/lib/api/index'
 import {EmbeddingDisabledError} from '#/lib/api/resolve'
@@ -68,7 +69,6 @@ import {
   SUPPORTED_MIME_TYPES,
   type SupportedMimeTypes,
 } from '#/lib/constants'
-import {useAnimatedScrollHandler} from '#/lib/hooks/useAnimatedScrollHandler_FIXED'
 import {useAppState} from '#/lib/hooks/useAppState'
 import {useIsKeyboardVisible} from '#/lib/hooks/useIsKeyboardVisible'
 import {useNonReactiveCallback} from '#/lib/hooks/useNonReactiveCallback'
@@ -78,7 +78,6 @@ import {mimeToExt} from '#/lib/media/video/util'
 import {type NavigationProp} from '#/lib/routes/types'
 import {logEvent} from '#/lib/statsig/statsig'
 import {cleanError} from '#/lib/strings/errors'
-import {sanitizeHandle} from '#/lib/strings/handles'
 import {colors} from '#/lib/styles'
 import {logger} from '#/logger'
 import {isAndroid, isIOS, isNative, isWeb} from '#/platform/detection'
@@ -96,10 +95,11 @@ import {
   useLanguagePrefs,
   useLanguagePrefsApi,
 } from '#/state/preferences/languages'
+import {STALE} from '#/state/queries'
 import {usePreferencesQuery} from '#/state/queries/preferences'
 import {useProfilesQuery} from '#/state/queries/profile'
 import {type Gif} from '#/state/queries/tenor'
-import {type SessionAccount, useAgent, useSession} from '#/state/session'
+import {useAgent, useSession} from '#/state/session'
 import {useComposerControls} from '#/state/shell/composer'
 import {type ComposerOpts, type OnPostSuccessData} from '#/state/shell/composer'
 import {useLoggedOutViewControls} from '#/state/shell/logged-out'
@@ -123,20 +123,18 @@ import {VideoPreview} from '#/view/com/composer/videos/VideoPreview'
 import {VideoTranscodeProgress} from '#/view/com/composer/videos/VideoTranscodeProgress'
 import {Text} from '#/view/com/util/text/Text'
 import * as LegacyToast from '#/view/com/util/Toast'
-import {UserAvatar} from '#/view/com/util/UserAvatar'
 import {atoms as a, native, useTheme, web} from '#/alf'
 import {Button, ButtonIcon, ButtonText} from '#/components/Button'
-import * as Dialog from '#/components/Dialog'
 import {CircleInfo_Stroke2_Corner0_Rounded as CircleInfoIcon} from '#/components/icons/CircleInfo'
 import {EmojiArc_Stroke2_Corner0_Rounded as EmojiSmileIcon} from '#/components/icons/Emoji'
 import {PlusLarge_Stroke2_Corner0_Rounded as PlusIcon} from '#/components/icons/Plus'
 import {TimesLarge_Stroke2_Corner0_Rounded as XIcon} from '#/components/icons/Times'
-import * as Menu from '#/components/Menu'
 import {LazyQuoteEmbed} from '#/components/Post/Embed/LazyQuoteEmbed'
 import * as Prompt from '#/components/Prompt'
 import * as Toast from '#/components/Toast'
 import {Text as NewText} from '#/components/Typography'
 import {BottomSheetPortalProvider} from '../../../../modules/bottom-sheet'
+import {AccountSwitcher} from './account-switcher/AccountSwitcher'
 import {PostLanguageSelect} from './select-language/PostLanguageSelect'
 import {
   type AssetType,
@@ -159,7 +157,6 @@ import {
   processVideo,
   type VideoState,
 } from './state/video'
-import {SwitchAccountDialog} from './SwitchAccount'
 import {type TextInputRef} from './text-input/TextInput.types'
 import {getVideoMetadata} from './videos/pickVideo'
 import {clearThumbnailCache} from './videos/VideoTranscodeBackdrop'
@@ -185,31 +182,66 @@ export const ComposePost = ({
 }) => {
   const {currentAccount, accounts} = useSession()
   const defaultAgent = useAgent()
-  const [selectedAccount, setSelectedAccount] = useState(currentAccount!)
+  const [selectedAccountDid, setSelectedAccountDid] = useState(
+    currentAccount!.did,
+  )
 
-  const agent = useMemo(() => {
-    if (selectedAccount.did === currentAccount!.did) {
-      return defaultAgent
-    }
-    const session = new CredentialSession(new URL(selectedAccount.service))
-    if (
-      selectedAccount.refreshJwt &&
-      selectedAccount.accessJwt &&
-      selectedAccount.active
-    ) {
-      session.resumeSession({
-        ...selectedAccount,
-        accessJwt: selectedAccount.accessJwt,
-        refreshJwt: selectedAccount.refreshJwt,
-        active: selectedAccount.active,
-      })
-    }
-    const newAgent = new AtpAgent(session)
-    return newAgent
-  }, [selectedAccount, currentAccount, defaultAgent])
+  const {data: agent = defaultAgent} = useQuery({
+    queryKey: [
+      'composer-agent',
+      currentAccount?.did,
+      currentAccount?.service,
+      currentAccount?.active,
+      selectedAccountDid,
+      // include account data in the query key to invalidate when tokens change
+      // hmm we don't want a nested array i think so spreading seems like the way to go(?)
+      ...(() => {
+        const selectedAccount = accounts.find(
+          acc => acc.did === selectedAccountDid,
+        )
+        return selectedAccount
+          ? [
+              selectedAccount.service,
+              selectedAccount.accessJwt,
+              selectedAccount.refreshJwt,
+              selectedAccount.active,
+            ]
+          : []
+      })(),
+    ],
+    queryFn: async () => {
+      if (selectedAccountDid === currentAccount!.did) {
+        return defaultAgent
+      }
+
+      // get fresh account data from the session store
+      const selectedAccount = accounts.find(
+        acc => acc.did === selectedAccountDid,
+      )
+      if (!selectedAccount) {
+        throw new Error(`Account with DID ${selectedAccountDid} not found`)
+      }
+
+      const session = new CredentialSession(new URL(selectedAccount.service))
+      if (
+        selectedAccount.refreshJwt &&
+        selectedAccount.accessJwt &&
+        selectedAccount.active
+      ) {
+        await session.resumeSession({
+          ...selectedAccount,
+          accessJwt: selectedAccount.accessJwt,
+          refreshJwt: selectedAccount.refreshJwt,
+          active: selectedAccount.active,
+        })
+      }
+      return new AtpAgent(session)
+    },
+    staleTime: STALE.MINUTES.FIVE,
+  })
 
   const queryClient = useQueryClient()
-  const currentDid = selectedAccount.did
+  const currentDid = selectedAccountDid
   const {closeComposer} = useComposerControls()
   const {requestSwitchToAccount} = useLoggedOutViewControls()
   const {_} = useLingui()
@@ -225,6 +257,13 @@ export const ComposePost = ({
   const {data: profiles} = useProfilesQuery({
     handles: accounts.map(acc => acc.did),
   })
+
+  // if accounts array changes, invalidate agent so we still have fresh tokens
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['composer-agent'],
+    })
+  }, [accounts, queryClient])
 
   const [isKeyboardVisible] = useIsKeyboardVisible({iosUseWillEvents: true})
   const [isPublishing, setIsPublishing] = useState(false)
@@ -244,8 +283,15 @@ export const ComposePost = ({
   )
 
   const onSelectAccount = React.useCallback(
-    async (account: SessionAccount) => {
-      if (account.did === selectedAccount.did) {
+    async (accountDid: string) => {
+      if (accountDid === selectedAccountDid) {
+        return
+      }
+
+      // get fresh account data from session store
+      const account = accounts.find(acc => acc.did === accountDid)
+      if (!account) {
+        setError('Account not found')
         return
       }
 
@@ -264,8 +310,23 @@ export const ComposePost = ({
       try {
         // try a simple request to check if the session is valid
         await tempAgent.getProfile({actor: account.did})
+        // lets cache the agent for this account to avoid double resume
+        queryClient.setQueryData(
+          [
+            'composer-agent',
+            currentAccount?.did,
+            currentAccount?.service,
+            currentAccount?.active,
+            accountDid,
+            account.service,
+            account.accessJwt,
+            account.refreshJwt,
+            account.active,
+          ],
+          tempAgent,
+        )
         // if it succeeds, update the selected account
-        setSelectedAccount(account)
+        setSelectedAccountDid(accountDid)
       } catch (e: any) {
         if (
           String(e.message).toLowerCase().includes('token has expired') ||
@@ -283,11 +344,15 @@ export const ComposePost = ({
       }
     },
     [
-      selectedAccount.did,
+      selectedAccountDid,
+      accounts,
       closeComposer,
       requestSwitchToAccount,
       _,
-      setSelectedAccount,
+      currentAccount?.did,
+      currentAccount?.service,
+      currentAccount?.active,
+      queryClient,
     ],
   )
 
@@ -826,7 +891,7 @@ export const ComposePost = ({
                   onClearVideo={clearVideo}
                   onPublish={onComposerPostPublish}
                   onError={setError}
-                  selectedAccount={selectedAccount}
+                  selectedAccountDid={selectedAccountDid}
                   onSelectAccount={onSelectAccount}
                   profiles={profiles?.profiles}
                 />
@@ -867,7 +932,7 @@ let ComposerPost = React.memo(function ComposerPost({
   onSelectVideo,
   onError,
   onPublish,
-  selectedAccount,
+  selectedAccountDid,
   onSelectAccount,
   profiles,
 }: {
@@ -885,19 +950,11 @@ let ComposerPost = React.memo(function ComposerPost({
   onSelectVideo: (postId: string, asset: ImagePickerAsset) => void
   onError: (error: string) => void
   onPublish: (richtext: RichText) => void
-  selectedAccount: SessionAccount
-  onSelectAccount: (account: SessionAccount) => void
+  selectedAccountDid: string
+  onSelectAccount: (accountDid: string) => void
   profiles: AppBskyActorDefs.ProfileViewDetailed[] | undefined
 }) {
-  const {accounts} = useSession()
   const {_} = useLingui()
-  const currentProfile = profiles?.find(p => p.did === selectedAccount.did)
-  const otherAccounts = accounts
-    .filter(acc => acc.did !== selectedAccount.did)
-    .map(account => ({
-      account,
-      profile: profiles?.find(p => p.did === account.did),
-    }))
   const richtext = post.richtext
   const isTextOnly = !post.embed.link && !post.embed.quote && !post.embed.media
   const forceMinHeight = isWeb && isTextOnly && isActive
@@ -907,7 +964,6 @@ let ComposerPost = React.memo(function ComposerPost({
       : _(msg`Add another post`)
     : _(msg`What's up?`)
   const discardPromptControl = Prompt.usePromptControl()
-  const switchAccountControl = Dialog.useDialogControl()
 
   const dispatchPost = useCallback(
     (action: PostAction) => {
@@ -976,81 +1032,11 @@ let ComposerPost = React.memo(function ComposerPost({
         isTextOnly && isNative && a.flex_grow,
       ]}>
       <View style={[a.flex_row, a.align_start, isNative && a.flex_1]}>
-        {isWeb ? (
-          <Menu.Root>
-            <Menu.Trigger label={_(msg`Switch account`)}>
-              {({props}) => (
-                <Button
-                  {...props}
-                  disabled={otherAccounts.length === 0}
-                  label={_(msg`Switch account`)}
-                  variant="ghost"
-                  color="primary"
-                  shape="round">
-                  <UserAvatar
-                    avatar={currentProfile?.avatar}
-                    size={42}
-                    type={
-                      currentProfile?.associated?.labeler ? 'labeler' : 'user'
-                    }
-                  />
-                </Button>
-              )}
-            </Menu.Trigger>
-            <Menu.Outer>
-              <Menu.LabelText>
-                <Trans>Switch account</Trans>
-              </Menu.LabelText>
-              <Menu.Group>
-                {otherAccounts.map(({account, profile}) => (
-                  <Menu.Item
-                    style={[a.gap_sm, {minWidth: 150}]}
-                    key={account.did}
-                    label={_(
-                      msg`Switch to ${sanitizeHandle(
-                        profile?.handle ?? account.handle,
-                        '@',
-                      )}`,
-                    )}
-                    onPress={() => onSelectAccount(account)}>
-                    <View>
-                      <UserAvatar
-                        avatar={profile?.avatar}
-                        size={20}
-                        type={profile?.associated?.labeler ? 'labeler' : 'user'}
-                        hideLiveBadge
-                      />
-                    </View>
-                    <Menu.ItemText>
-                      {sanitizeHandle(profile?.handle ?? account.handle, '@')}
-                    </Menu.ItemText>
-                  </Menu.Item>
-                ))}
-              </Menu.Group>
-            </Menu.Outer>
-          </Menu.Root>
-        ) : (
-          <>
-            <Button
-              disabled={otherAccounts.length === 0}
-              label={_(msg`Switch account`)}
-              variant="ghost"
-              color="primary"
-              shape="round"
-              onPress={switchAccountControl.open}>
-              <UserAvatar
-                avatar={currentProfile?.avatar}
-                size={42}
-                type={currentProfile?.associated?.labeler ? 'labeler' : 'user'}
-              />
-            </Button>
-            <SwitchAccountDialog
-              control={switchAccountControl}
-              onSelectAccount={onSelectAccount}
-              currentAccountDid={selectedAccount.did}
-            />
-          </>
-        )}
+        <AccountSwitcher
+          selectedAccountDid={selectedAccountDid}
+          onSelectAccount={onSelectAccount}
+          profiles={profiles}
+        />
         <TextInput
           ref={textInput}
           style={[a.pt_xs]}
@@ -1936,7 +1922,7 @@ function ErrorBanner({
             style={[
               {paddingLeft: 28},
               a.text_xs,
-              a.font_bold,
+              a.font_semi_bold,
               a.leading_snug,
               t.atoms.text_contrast_low,
             ]}>
@@ -2029,7 +2015,7 @@ function VideoUploadToolbar({state}: {state: VideoState}) {
           progress={wheelProgress}
         />
       </Animated.View>
-      <NewText style={[a.font_bold, a.ml_sm]}>{text}</NewText>
+      <NewText style={[a.font_semi_bold, a.ml_sm]}>{text}</NewText>
     </ToolbarWrapper>
   )
 }

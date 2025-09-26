@@ -83,10 +83,13 @@ export const STAGING_FEEDS = [
 ]
 
 export const POST_IMG_MAX = {
-  width: 2000,
-  height: 2000,
+  width: 5000,
+  height: 5000,
   size: 1000000,
 }
+
+export const PNG_IMG_MAX_BYTE = 100000
+export const PNG_IMG_MAX_SIZE = 300
 
 export const STAGING_LINK_META_PROXY =
   'https://cardyb.staging.bsky.dev/v1/extract?url='

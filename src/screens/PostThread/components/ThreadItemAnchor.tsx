@@ -133,7 +133,8 @@ function ThreadItemAnchorDeleted({isRoot}: {isRoot: boolean}) {
             ]}>
             <TrashIcon style={[t.atoms.text_contrast_medium]} />
           </View>
-          <Text style={[a.text_md, a.font_bold, t.atoms.text_contrast_medium]}>
+          <Text
+            style={[a.text_md, a.font_semi_bold, t.atoms.text_contrast_medium]}>
             <Trans>Post has been deleted</Trans>
           </Text>
         </View>
@@ -353,7 +354,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                     style={[
                       a.flex_shrink,
                       a.text_lg,
-                      a.font_bold,
+                      a.font_semi_bold,
                       a.leading_snug,
                     ]}
                     numberOfLines={1}>
@@ -413,6 +414,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
               <View style={[a.py_xs]}>
                 <Embed
                   embed={post.embed}
+                  recordEmbed={record.embed}
                   moderation={moderation}
                   viewContext={PostEmbedViewContext.ThreadHighlighted}
                   onOpen={onOpenEmbed}
@@ -451,7 +453,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                   <Text
                     testID="repostCount-expanded"
                     style={[a.text_md, t.atoms.text_contrast_medium]}>
-                    <Text style={[a.text_md, a.font_bold, t.atoms.text]}>
+                    <Text style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
                       {formatPostStatCount(post.repostCount)}
                     </Text>{' '}
                     <Plural
@@ -470,14 +472,21 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                   <Text
                     testID="quoteCount-expanded"
                     style={[a.text_md, t.atoms.text_contrast_medium]}>
-                    <Text style={[a.text_md, a.font_bold, t.atoms.text]}>
-                      {formatPostStatCount(post.quoteCount)}
-                    </Text>{' '}
-                    <Plural
-                      value={post.quoteCount}
-                      one="quote"
-                      other="quotes"
-                    />
+                    {!disableQuotesMetrics ? (
+                      <>
+                        <Text
+                          style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
+                          {formatPostStatCount(post.quoteCount)}
+                        </Text>{' '}
+                        <Plural
+                          value={post.quoteCount}
+                          one="quote"
+                          other="quotes"
+                        />
+                      </>
+                    ) : (
+                      'Quotes'
+                    )}
                   </Text>
                 </Link>
               ) : null}
@@ -488,7 +497,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                   <Text
                     testID="likeCount-expanded"
                     style={[a.text_md, t.atoms.text_contrast_medium]}>
-                    <Text style={[a.text_md, a.font_bold, t.atoms.text]}>
+                    <Text style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
                       {formatPostStatCount(post.likeCount)}
                     </Text>{' '}
                     <Plural value={post.likeCount} one="like" other="likes" />
@@ -501,7 +510,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                 <Text
                   testID="bookmarkCount-expanded"
                   style={[a.text_md, t.atoms.text_contrast_medium]}>
-                  <Text style={[a.text_md, a.font_bold, t.atoms.text]}>
+                  <Text style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
                     {formatPostStatCount(post.bookmarkCount)}
                   </Text>{' '}
                   <Plural
@@ -673,7 +682,7 @@ function BackdatedPostIndicator({post}: {post: AppBskyFeedDefs.PostView}) {
             <Text
               style={[
                 a.text_xs,
-                a.font_bold,
+                a.font_semi_bold,
                 a.leading_tight,
                 t.atoms.text_contrast_medium,
               ]}>
@@ -690,9 +699,14 @@ function BackdatedPostIndicator({post}: {post: AppBskyFeedDefs.PostView}) {
         <Prompt.DescriptionText>
           <Trans>
             This post claims to have been created on{' '}
-            <RNText style={[a.font_bold]}>{niceDate(i18n, createdAt)}</RNText>,
-            but was first seen by Bluesky on{' '}
-            <RNText style={[a.font_bold]}>{niceDate(i18n, indexedAt)}</RNText>.
+            <RNText style={[a.font_semi_bold]}>
+              {niceDate(i18n, createdAt)}
+            </RNText>
+            , but was first seen by Bluesky on{' '}
+            <RNText style={[a.font_semi_bold]}>
+              {niceDate(i18n, indexedAt)}
+            </RNText>
+            .
           </Trans>
         </Prompt.DescriptionText>
         <Text

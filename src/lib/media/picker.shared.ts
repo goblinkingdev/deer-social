@@ -13,6 +13,7 @@ import {getDataUriSize} from './util'
 
 export type PickerImage = ImageMeta & {
   size: number
+  quality: number
 }
 
 export async function openPicker(opts?: ImagePickerOptions) {
@@ -34,7 +35,7 @@ export async function openPicker(opts?: ImagePickerOptions) {
       return false
     })
     .map(image => ({
-      mime: image.mimeType || 'image/jpeg',
+      mime: image.mimeType || 'image/webp',
       height: image.height,
       width: image.width,
       path: image.uri,

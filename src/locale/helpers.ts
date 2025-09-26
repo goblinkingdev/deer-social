@@ -1,6 +1,6 @@
 import {type AppBskyFeedDefs, AppBskyFeedPost} from '@atproto/api'
 import * as bcp47Match from 'bcp-47-match'
-import lande from 'lande'
+import {eldr} from 'eldr'
 
 import {hasProp} from '#/lib/type-guards'
 import {
@@ -99,20 +99,7 @@ export function getPostLanguage(
   }
 
   // run the language model
-  let langsProbabilityMap = lande(postText)
-
-  // filter down using declared languages
-  if (candidates?.length) {
-    langsProbabilityMap = langsProbabilityMap.filter(
-      ([lang, _probability]: [string, number]) => {
-        return candidates.includes(code3ToCode2(lang))
-      },
-    )
-  }
-
-  if (langsProbabilityMap[0]) {
-    return code3ToCode2(langsProbabilityMap[0][0])
-  }
+  return eldr.detect(postText).iso639_1
 }
 
 export function isPostInLanguage(

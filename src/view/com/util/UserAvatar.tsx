@@ -24,6 +24,7 @@ import {
 import {compressIfNeeded} from '#/lib/media/manip'
 import {openCamera, openCropper, openPicker} from '#/lib/media/picker'
 import {type PickerImage} from '#/lib/media/picker.shared'
+import {modifyImageFormat} from '#/lib/media/util'
 import {makeProfileLink} from '#/lib/routes/links'
 import {sanitizeDisplayName} from '#/lib/strings/display-names'
 import {sanitizeHandle} from '#/lib/strings/handles'
@@ -34,10 +35,7 @@ import {
   compressImage,
   createComposerImage,
 } from '#/state/gallery'
-import {
-  maybeModifyHighQualityImage,
-  useHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+import {useThumbnailFormat} from '#/state/preferences/thumbnail-format'
 import {unstableCacheProfileView} from '#/state/queries/unstable-profile-cache'
 import {EditImageDialog} from '#/view/com/composer/photos/EditImageDialog'
 import {HighPriorityImage} from '#/view/com/util/images/Image'
@@ -228,7 +226,7 @@ let UserAvatar = ({
 }: UserAvatarProps): React.ReactNode => {
   const t = useTheme()
   const finalShape = overrideShape ?? (type === 'user' ? 'circle' : 'square')
-  const highQualityImages = useHighQualityImages()
+  const thumbnailFormat = useThumbnailFormat()
 
   const aviStyle = useMemo(() => {
     let borderRadius
@@ -299,9 +297,9 @@ let UserAvatar = ({
           style={aviStyle}
           resizeMode="cover"
           source={{
-            uri: maybeModifyHighQualityImage(
+            uri: modifyImageFormat(
               hackModifyThumbnailPath(avatar, size < 90),
-              highQualityImages,
+              thumbnailFormat,
             ),
           }}
           blurRadius={moderation?.blur ? BLUR_AMOUNT : 0}
@@ -313,9 +311,9 @@ let UserAvatar = ({
           style={aviStyle}
           contentFit="cover"
           source={{
-            uri: maybeModifyHighQualityImage(
+            uri: modifyImageFormat(
               hackModifyThumbnailPath(avatar, size < 90),
-              highQualityImages,
+              thumbnailFormat,
             ),
           }}
           blurRadius={moderation?.blur ? BLUR_AMOUNT : 0}
@@ -356,7 +354,7 @@ let EditableUserAvatar = ({
   const editImageDialogControl = useDialogControl()
 
   const sheetWrapper = useSheetWrapper()
-  const highQualityImages = useHighQualityImages()
+  const thumbnailFormat = useThumbnailFormat()
 
   const circular = type !== 'algo' && type !== 'list'
 
@@ -456,7 +454,7 @@ let EditableUserAvatar = ({
                   testID="userAvatarImage"
                   style={aviStyle}
                   source={{
-                    uri: maybeModifyHighQualityImage(avatar, highQualityImages),
+                    uri: modifyImageFormat(avatar, thumbnailFormat),
                   }}
                   accessibilityRole="image"
                 />

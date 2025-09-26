@@ -33,7 +33,7 @@ jest.mock('react-native-safe-area-context', () => {
   }
 })
 
-jest.mock('expo-file-system', () => ({
+jest.mock('expo-file-system/legacy', () => ({
   getInfoAsync: jest.fn().mockResolvedValue({exists: true, size: 100}),
   deleteAsync: jest.fn(),
   createDownloadResumable: jest.fn(),
@@ -58,11 +58,6 @@ jest.mock('expo-media-library', () => ({
   __esModule: true, // this property makes it work
   default: jest.fn(),
   usePermissions: jest.fn(() => [true]),
-}))
-
-jest.mock('lande', () => ({
-  __esModule: true, // this property makes it work
-  default: jest.fn().mockReturnValue([['eng']]),
 }))
 
 jest.mock('sentry-expo', () => ({
@@ -114,5 +109,4 @@ jest.mock('statsig-react-native-expo', () => ({
   },
 }))
 
-jest.mock('../src/logger/bitdrift/lib', () => ({}))
 jest.mock('../src/lib/statsig/statsig', () => ({}))

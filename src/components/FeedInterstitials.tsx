@@ -416,7 +416,29 @@ export function ProfileGrid({
               snapToInterval={MOBILE_CARD_WIDTH + a.gap_md.gap}
               decelerationRate="fast">
               {content}
+        {gtMobile ? (
+          <View style={[a.p_lg, a.pt_md]}>
+            <View style={[a.flex_1, a.flex_row, a.flex_wrap, a.gap_md]}>
+              {content}
+            </View>
+          </View>
+        ) : (
+          <BlockDrawerGesture>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[a.p_lg, a.pt_md, a.flex_row, a.gap_md]}
+              snapToInterval={MOBILE_CARD_WIDTH + a.gap_md.gap}
+              decelerationRate="fast">
+              {content}
 
+              {!isProfileHeaderContext && <SeeMoreSuggestedProfilesCard />}
+            </ScrollView>
+          </BlockDrawerGesture>
+        )}
+      </View>
+    )
+  }
               {!isProfileHeaderContext && <SeeMoreSuggestedProfilesCard />}
             </ScrollView>
           </BlockDrawerGesture>
@@ -522,7 +544,7 @@ export function SuggestedFeeds() {
           style={[
             a.flex_1,
             a.text_lg,
-            a.font_bold,
+            a.font_semi_bold,
             t.atoms.text_contrast_medium,
           ]}>
           <Trans>Some other feeds you might like</Trans>

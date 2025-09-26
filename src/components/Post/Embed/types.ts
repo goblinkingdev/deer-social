@@ -1,5 +1,9 @@
 import {type StyleProp, type ViewStyle} from 'react-native'
-import {type AppBskyFeedDefs, type ModerationDecision} from '@atproto/api'
+import {
+  type AppBskyFeedDefs,
+  type AppBskyFeedPost,
+  type ModerationDecision,
+} from '@atproto/api'
 
 export enum PostEmbedViewContext {
   ThreadHighlighted = 'ThreadHighlighted',
@@ -22,4 +26,5 @@ export type CommonProps = {
 
 export type EmbedProps = CommonProps & {
   embed?: AppBskyFeedDefs.PostView['embed']
+  recordEmbed?: AppBskyFeedPost.Record['embed']
 }

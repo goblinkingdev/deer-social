@@ -29,6 +29,7 @@ import {Embed as StarterPackCard} from '#/components/StarterPack/StarterPackCard
 import {SubtleWebHover} from '#/components/SubtleWebHover'
 import * as bsky from '#/types/bsky'
 import {
+  type BetterImages,
   type Embed as TEmbed,
   type EmbedType,
   parseEmbed,
@@ -48,14 +49,14 @@ import {VideoEmbed} from './VideoEmbed'
 
 export {PostEmbedViewContext, QuoteEmbedViewContext} from './types'
 
-export function Embed({embed: rawEmbed, ...rest}: EmbedProps) {
+export function Embed({embed: rawEmbed, recordEmbed, ...rest}: EmbedProps) {
   const embed = parseEmbed(rawEmbed)
 
   switch (embed.type) {
     case 'images':
     case 'link':
     case 'video': {
-      return <MediaEmbed embed={embed} {...rest} />
+      return <MediaEmbed embed={embed} recordEmbed={recordEmbed} {...rest} />
     }
     case 'feed':
     case 'list':
@@ -70,7 +71,7 @@ export function Embed({embed: rawEmbed, ...rest}: EmbedProps) {
     case 'post_with_media': {
       return (
         <View style={rest.style}>
-          <MediaEmbed embed={embed.media} {...rest} />
+          <MediaEmbed embed={embed.media} recordEmbed={recordEmbed} {...rest} />
           <RecordEmbed embed={embed.view} {...rest} />
         </View>
       )
@@ -83,9 +84,11 @@ export function Embed({embed: rawEmbed, ...rest}: EmbedProps) {
 
 function MediaEmbed({
   embed,
+  recordEmbed,
   ...rest
 }: CommonProps & {
   embed: TEmbed
+  recordEmbed?: AppBskyFeedPost.Record['embed']
 }) {
   switch (embed.type) {
     case 'images': {
@@ -93,7 +96,11 @@ function MediaEmbed({
         <ContentHider
           modui={rest.moderation?.ui('contentMedia')}
           activeStyle={[a.mt_sm]}>
-          <ImageEmbed embed={embed} {...rest} />
+          <ImageEmbed
+            embed={embed}
+            recordEmbed={recordEmbed as BetterImages}
+            {...rest}
+          />
         </ContentHider>
       )
     }
@@ -115,7 +122,7 @@ function MediaEmbed({
         <ContentHider
           modui={rest.moderation?.ui('contentMedia')}
           activeStyle={[a.mt_sm]}>
-          <VideoEmbed embed={embed.view} />
+          <VideoEmbed embed={embed.view} crop="constrained" />
         </ContentHider>
       )
     }

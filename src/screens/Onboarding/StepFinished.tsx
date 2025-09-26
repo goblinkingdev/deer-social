@@ -428,7 +428,7 @@ function ValueProposition({
             </View>
 
             <View style={[a.gap_sm]}>
-              <Text style={[a.font_heavy, a.text_3xl, a.text_center]}>
+              <Text style={[a.font_bold, a.text_3xl, a.text_center]}>
                 {title}
               </Text>
               <Text
@@ -533,7 +533,7 @@ function LegacyFinalStep({
         <View style={[a.flex_row, a.align_center, a.w_full, a.gap_lg]}>
           <IconCircle icon={Growth} size="lg" style={{width: 48, height: 48}} />
           <View style={[a.flex_1, a.gap_xs]}>
-            <Text style={[a.font_bold, a.text_lg]}>
+            <Text style={[a.font_semi_bold, a.text_lg]}>
               <Trans>Public</Trans>
             </Text>
             <Text
@@ -547,7 +547,7 @@ function LegacyFinalStep({
         <View style={[a.flex_row, a.align_center, a.w_full, a.gap_lg]}>
           <IconCircle icon={News} size="lg" style={{width: 48, height: 48}} />
           <View style={[a.flex_1, a.gap_xs]}>
-            <Text style={[a.font_bold, a.text_lg]}>
+            <Text style={[a.font_semi_bold, a.text_lg]}>
               <Trans>Open</Trans>
             </Text>
             <Text
@@ -563,7 +563,7 @@ function LegacyFinalStep({
             style={{width: 48, height: 48}}
           />
           <View style={[a.flex_1, a.gap_xs]}>
-            <Text style={[a.font_bold, a.text_lg]}>
+            <Text style={[a.font_semi_bold, a.text_lg]}>
               <Trans>Flexible</Trans>
             </Text>
             <Text

@@ -61,16 +61,17 @@ export function Component({
           ],
       {
         base64: true,
-        format: SaveFormat.JPEG,
+        format: SaveFormat.WEBP,
       },
     )
 
     onSelect({
       path: result.uri,
-      mime: 'image/jpeg',
+      mime: 'image/png',
       size: result.base64 !== undefined ? getDataUriSize(result.base64) : 0,
       width: result.width,
       height: result.height,
+      quality: 100,
     })
 
     closeModal()

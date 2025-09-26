@@ -216,7 +216,7 @@ let NotificationFeedItem = ({
     <ProfileHoverCard did={firstAuthor.profile.did} inline>
       <InlineLinkText
         key={firstAuthor.href}
-        style={[t.atoms.text, a.font_bold, a.text_md, a.leading_tight]}
+        style={[t.atoms.text, a.font_semi_bold, a.text_md, a.leading_tight]}
         to={firstAuthor.href}
         disableMismatchWarning
         emoji
@@ -273,7 +273,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -297,7 +297,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -354,7 +354,7 @@ let NotificationFeedItem = ({
       notificationContent = hasMultipleAuthors ? (
         <Trans>
           {firstAuthorLink} and{' '}
-          <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+          <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
             <Plural
               value={additionalAuthorsCount}
               one={`${formattedAuthorsCount} other`}
@@ -380,7 +380,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -404,7 +404,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -485,7 +485,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -510,7 +510,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -546,7 +546,7 @@ let NotificationFeedItem = ({
     notificationContent = hasMultipleAuthors ? (
       <Trans>
         New posts from {firstAuthorLink} and{' '}
-        <Text style={[a.text_md, a.font_bold, a.leading_snug]}>
+        <Text style={[a.text_md, a.font_semi_bold, a.leading_snug]}>
           <Plural
             value={additionalAuthorsCount}
             one={`${formattedAuthorsCount} other`}
@@ -851,7 +851,7 @@ function CondensedAuthorsList({
         {authors.length > MAX_AUTHORS ? (
           <Text
             style={[
-              a.font_bold,
+              a.font_semi_bold,
               {paddingLeft: 6},
               t.atoms.text_contrast_medium,
             ]}>
@@ -931,7 +931,7 @@ function ExpandedAuthorCard({author}: {author: Author}) {
             emoji
             style={[
               a.text_md,
-              a.font_bold,
+              a.font_semi_bold,
               a.leading_tight,
               {maxWidth: '70%'},
             ]}>

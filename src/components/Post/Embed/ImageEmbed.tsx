@@ -8,36 +8,85 @@ import {
 } from 'react-native-reanimated'
 import {Image} from 'expo-image'
 
+import {PNG_IMG_MAX_BYTE, PNG_IMG_MAX_SIZE} from '#/lib/constants'
+import {modifyImageFormat} from '#/lib/media/util'
 import {useLightboxControls} from '#/state/lightbox'
-import {
-  maybeModifyHighQualityImage,
-  useHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+import {useFullsizeFormat} from '#/state/preferences/fullsize-format'
+import {useLoadAsPngs} from '#/state/preferences/load-small-pngs'
+import {useThumbnailFormat} from '#/state/preferences/thumbnail-format'
 import {type Dimensions} from '#/view/com/lightbox/ImageViewing/@types'
 import {AutoSizedImage} from '#/view/com/util/images/AutoSizedImage'
 import {ImageLayoutGrid} from '#/view/com/util/images/ImageLayoutGrid'
 import {atoms as a} from '#/alf'
 import {PostEmbedViewContext} from '#/components/Post/Embed/types'
-import {type EmbedType} from '#/types/bsky/post'
+import {
+  type BetterImage,
+  type BetterImages,
+  type EmbedType,
+} from '#/types/bsky/post'
 import {type CommonProps} from './types'
 
 export function ImageEmbed({
   embed,
+  recordEmbed,
   ...rest
 }: CommonProps & {
   embed: EmbedType<'images'>
+  recordEmbed?: BetterImages | {media?: BetterImages}
 }) {
   const {openLightbox} = useLightboxControls()
-  const highQualityImages = useHighQualityImages()
+  const fullsizeFormat = useFullsizeFormat()
+  const thumbnailFormat = useThumbnailFormat()
+  const loadAsPngs = useLoadAsPngs()
   const {images} = embed.view
+  const recordImages = (recordEmbed &&
+    (('media' in recordEmbed && recordEmbed?.media?.images) ||
+      ('images' in recordEmbed && recordEmbed?.images))) || [{} as BetterImage]
 
   if (images.length > 0) {
-    const items = images.map(img => ({
-      uri: maybeModifyHighQualityImage(img.fullsize, highQualityImages),
-      thumbUri: maybeModifyHighQualityImage(img.thumb, highQualityImages),
-      alt: img.alt,
-      dimensions: img.aspectRatio ?? null,
-    }))
+    const items = images.map((img, index) => {
+      const recordImage = recordImages[index] ?? []
+
+      const lowRes =
+        img.aspectRatio &&
+        img.aspectRatio.width <= 1000 &&
+        img.aspectRatio.height <= 1000
+
+      const pngSized =
+        (loadAsPngs
+          ? (recordImage.size &&
+              recordImage.quality === 100 &&
+              recordImage.size <= PNG_IMG_MAX_BYTE) ||
+            (img.aspectRatio &&
+              img.aspectRatio.width <= PNG_IMG_MAX_SIZE &&
+              img.aspectRatio.height <= PNG_IMG_MAX_SIZE)
+          : false) || false
+
+      // i'm aware of how ridiculous this looks
+      // but i think this is the easiest way of doing this
+      // and it doesn't look thaaaat bad but yeah
+      img.fullsize = modifyImageFormat(
+        img.fullsize,
+        pngSized ||
+          (loadAsPngs &&
+            recordImage.quality === 100 &&
+            recordImage.mime !== 'image/jpeg')
+          ? 'png'
+          : fullsizeFormat,
+      )
+
+      img.thumb =
+        pngSized && lowRes
+          ? img.fullsize
+          : modifyImageFormat(img.thumb, thumbnailFormat)
+
+      return {
+        uri: img.fullsize,
+        thumbUri: img.thumb,
+        alt: img.alt,
+        dimensions: img.aspectRatio ?? null,
+      }
+    })
     const _openLightbox = (
       index: number,
       thumbRects: (MeasuredDimensions | null)[],

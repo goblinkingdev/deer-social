@@ -53,7 +53,7 @@ export function MessagesSettingsScreen({}: Props) {
       </Layout.Header.Outer>
       <Layout.Content>
         <View style={[a.p_lg, a.gap_md]}>
-          <Text style={[a.text_lg, a.font_bold]}>
+          <Text style={[a.text_lg, a.font_semi_bold]}>
             <Trans>Allow new messages from</Trans>
           </Text>
           <Toggle.Group

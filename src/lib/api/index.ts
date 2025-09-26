@@ -39,6 +39,7 @@ import {
   type PostDraft,
   type ThreadDraft,
 } from '#/view/com/composer/state/composer'
+import {type BetterImage} from '#/types/bsky/post'
 import {createGIFDescription} from '../gif-alt-text'
 import {uploadBlob} from './upload-blob'
 
@@ -300,16 +301,20 @@ async function resolveMedia(
       count: imagesDraft.length,
     })
     onStateChange?.(t`Uploading images...`)
-    const images: AppBskyEmbedImages.Image[] = await Promise.all(
+    const images: BetterImage[] = await Promise.all(
       imagesDraft.map(async (image, i) => {
         logger.debug(`Compressing image #${i}`)
-        const {path, width, height, mime} = await compressImage(image)
+        const {path, width, height, mime, size, quality} =
+          await compressImage(image)
         logger.debug(`Uploading image #${i}`)
         const res = await uploadBlob(agent, path, mime)
         return {
           image: res.data.blob,
           alt: image.alt,
           aspectRatio: {width, height},
+          mime: mime,
+          quality,
+          size,
         }
       }),
     )

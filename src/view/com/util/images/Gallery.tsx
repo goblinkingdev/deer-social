@@ -6,11 +6,9 @@ import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
 import {type Dimensions} from '#/lib/media/types'
-import {
-  maybeModifyHighQualityImage,
-  useHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+import {modifyImageFormat} from '#/lib/media/util'
 import {useLargeAltBadgeEnabled} from '#/state/preferences/large-alt-badge'
+import {useThumbnailFormat} from '#/state/preferences/thumbnail-format'
 import {atoms as a, useTheme} from '#/alf'
 import {MediaInsetBorder} from '#/components/MediaInsetBorder'
 import {PostEmbedViewContext} from '#/components/Post/Embed/types'
@@ -50,7 +48,7 @@ export function GalleryItem({
   const t = useTheme()
   const {_} = useLingui()
   const largeAltBadge = useLargeAltBadgeEnabled()
-  const highQualityImages = useHighQualityImages()
+  const thumbnailFormat = useThumbnailFormat()
   const image = images[index]
   const hasAlt = !!image.alt
   const hideBadges =
@@ -76,7 +74,7 @@ export function GalleryItem({
         accessibilityHint="">
         <Image
           source={{
-            uri: maybeModifyHighQualityImage(image.thumb, highQualityImages),
+            uri: modifyImageFormat(image.thumb, thumbnailFormat),
           }}
           style={[a.flex_1]}
           accessible={true}
@@ -116,7 +114,7 @@ export function GalleryItem({
             ],
           ]}>
           <Text
-            style={[a.font_heavy, largeAltBadge ? a.text_xs : {fontSize: 8}]}>
+            style={[a.font_bold, largeAltBadge ? a.text_xs : {fontSize: 8}]}>
             ALT
           </Text>
         </View>

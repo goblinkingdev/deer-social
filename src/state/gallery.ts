@@ -1,15 +1,20 @@
+import * as WebP from 'react-native-webp-converter'
 import {
   cacheDirectory,
   deleteAsync,
   makeDirectoryAsync,
   moveAsync,
-} from 'expo-file-system'
+} from 'expo-file-system/legacy'
 import {
   type Action,
   type ActionCrop,
   manipulateAsync,
   SaveFormat,
 } from 'expo-image-manipulator'
+import {
+  type ImageResult,
+  type SaveOptions,
+} from 'expo-image-manipulator/src/ImageManipulator.types'
 import {nanoid} from 'nanoid/non-secure'
 
 import {POST_IMG_MAX} from '#/lib/constants'
@@ -17,7 +22,6 @@ import {getImageDim} from '#/lib/media/manip'
 import {openCropper} from '#/lib/media/picker'
 import {type PickerImage} from '#/lib/media/picker.shared'
 import {getDataUriSize} from '#/lib/media/util'
-import {isNative} from '#/platform/detection'
 
 export type ImageTransformation = {
   crop?: ActionCrop['crop']
@@ -54,11 +58,7 @@ export type ComposerImage =
 let _imageCacheDirectory: string
 
 function getImageCacheDirectory(): string | null {
-  if (isNative) {
-    return (_imageCacheDirectory ??= joinPath(cacheDirectory!, 'bsky-composer'))
-  }
-
-  return null
+  return (_imageCacheDirectory ??= joinPath(cacheDirectory!, 'bsky-composer'))
 }
 
 export async function createComposerImage(
@@ -94,7 +94,7 @@ export function createInitialImages(
         path: uri,
         width: width,
         height: height,
-        mime: 'image/jpeg',
+        mime: 'image/png',
       },
     }
   })
@@ -113,16 +113,12 @@ export async function pasteImage(
       path: uri,
       width: width,
       height: height,
-      mime: match ? match[1] : 'image/jpeg',
+      mime: match ? match[1] : 'image/png',
     },
   }
 }
 
 export async function cropImage(img: ComposerImage): Promise<ComposerImage> {
-  if (!isNative) {
-    return img
-  }
-
   const source = img.source
 
   // @todo: we're always passing the original image here, does image-cropper
@@ -197,39 +193,36 @@ export function resetImageManipulation(
 
 export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   const source = img.transformed || img.source
+  const originalSize = getDataUriSize(img.source.path)
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
-  let minQualityPercentage = 0
-  let maxQualityPercentage = 101 // exclusive
+  let maxQualityPercentage =
+    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0) // exclusive
   let newDataUri
 
-  while (maxQualityPercentage - minQualityPercentage > 1) {
-    const qualityPercentage = Math.round(
-      (maxQualityPercentage + minQualityPercentage) / 2,
-    )
+  while (maxQualityPercentage > 1) {
+    const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
-    const res = await manipulateAsync(
+    const res = await manipulateWebp(
       source.path,
-      [{resize: {width: w, height: h}}],
+      {resize: {width: w, height: h}},
       {
-        compress: qualityPercentage / 100,
-        format: SaveFormat.JPEG,
-        base64: true,
+        compress: qualityPercentage,
+        format: SaveFormat.WEBP,
       },
     )
 
-    const base64 = res.base64
-    const size = base64 ? getDataUriSize(base64) : 0
-    if (base64 && size <= POST_IMG_MAX.size) {
-      minQualityPercentage = qualityPercentage
+    if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {
       newDataUri = {
         path: await moveIfNecessary(res.uri),
         width: res.width,
         height: res.height,
-        mime: 'image/jpeg',
-        size,
+        mime: 'image/webp',
+        size: res.size,
+        quality: qualityPercentage,
       }
+      break
     } else {
       maxQualityPercentage = qualityPercentage
     }
@@ -242,8 +235,35 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   throw new Error(`Unable to compress image`)
 }
 
+export const manipulateWebp = async (
+  uri: string,
+  resize: {resize: {width: number; height: number}} = {
+    resize: {width: 128, height: 128},
+  },
+  saveOptions: SaveOptions = {},
+): Promise<ImageResult & {size: number}> => {
+  const resized = await manipulateAsync(uri, [resize], {
+    format: SaveFormat.PNG,
+  })
+  const tempOut = (await getTemporaryImageFile()) as string
+
+  const resultUri = await WebP.convertImage(resized.uri, tempOut, {
+    type: saveOptions.compress === 100 ? WebP.Type.LOSSLESS : WebP.Type.LOSSY,
+    quality: saveOptions.compress || 100,
+  })
+
+  const blob = await (await fetch(resultUri)).blob()
+
+  return {
+    uri: resultUri,
+    width: resize.resize.width,
+    height: resize.resize.height,
+    size: blob.size,
+  }
+}
+
 async function moveIfNecessary(from: string) {
-  const cacheDir = isNative && getImageCacheDirectory()
+  const cacheDir = getImageCacheDirectory()
 
   if (cacheDir && from.startsWith(cacheDir)) {
     const to = joinPath(cacheDir, nanoid(36))
@@ -257,9 +277,21 @@ async function moveIfNecessary(from: string) {
   return from
 }
 
+async function getTemporaryImageFile() {
+  const cacheDir = getImageCacheDirectory()
+
+  if (cacheDir) {
+    const path = joinPath(cacheDir, nanoid(36))
+
+    await makeDirectoryAsync(cacheDir, {intermediates: true})
+
+    return path
+  }
+}
+
 /** Purge files that were created to accomodate image manipulation */
 export async function purgeTemporaryImageFiles() {
-  const cacheDir = isNative && getImageCacheDirectory()
+  const cacheDir = getImageCacheDirectory()
 
   if (cacheDir) {
     await deleteAsync(cacheDir, {idempotent: true})

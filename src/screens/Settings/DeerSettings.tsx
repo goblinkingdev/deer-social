@@ -6,6 +6,7 @@ import {useLingui} from '@lingui/react'
 import {type NativeStackScreenProps} from '@react-navigation/native-stack'
 
 import {usePalette} from '#/lib/hooks/usePalette'
+import {IMAGE_FORMATS} from '#/lib/media/image-formats'
 import {type CommonNavigatorParams} from '#/lib/routes/types'
 import {type Gate} from '#/lib/statsig/gates'
 import {
@@ -58,6 +59,10 @@ import {
   useSetDisableViaRepostNotification,
 } from '#/state/preferences/disable-via-repost-notification'
 import {
+  useFullsizeFormat,
+  useSetFullsizeFormat,
+} from '#/state/preferences/fullsize-format'
+import {
   useHideFeedsPromoTab,
   useSetHideFeedsPromoTab,
 } from '#/state/preferences/hide-feeds-promo-tab'
@@ -66,9 +71,13 @@ import {
   useSetHideSimilarAccountsRecomm,
 } from '#/state/preferences/hide-similar-accounts-recommendations'
 import {
-  useHighQualityImages,
-  useSetHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+  useHideSimilarAccountsRecomm,
+  useSetHideSimilarAccountsRecomm,
+} from '#/state/preferences/hide-similar-accounts-recommendations'
+import {
+  useLoadAsPngs,
+  useSetLoadAsPngs,
+} from '#/state/preferences/load-small-pngs'
 import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {
   useNoAppLabelers,
@@ -85,7 +94,11 @@ import {
 import {
   useSetShowLinkInHandle,
   useShowLinkInHandle,
-} from '#/state/preferences/show-link-in-handle.tsx'
+} from '#/state/preferences/show-link-in-handle'
+import {
+  useSetThumbnailFormat,
+  useThumbnailFormat,
+} from '#/state/preferences/thumbnail-format'
 import {useProfilesQuery} from '#/state/queries/profile'
 import * as SettingsList from '#/screens/Settings/components/SettingsList'
 import {atoms as a, useBreakpoints} from '#/alf'
@@ -101,6 +114,7 @@ import {RaisingHand4Finger_Stroke2_Corner0_Rounded as RaisingHandIcon} from '#/c
 import {Star_Stroke2_Corner0_Rounded as StarIcon} from '#/components/icons/Star'
 import {Verified_Stroke2_Corner2_Rounded as VerifiedIcon} from '#/components/icons/Verified'
 import * as Layout from '#/components/Layout'
+import * as Select from '#/components/Select'
 import {Text} from '#/components/Typography'
 import {SearchProfileCard} from '../Search/components/SearchProfileCard'
 
@@ -249,9 +263,6 @@ export function DeerSettingsScreen({}: Props) {
   const noDiscoverFallback = useNoDiscoverFallback()
   const setNoDiscoverFallback = useSetNoDiscoverFallback()
 
-  const highQualityImages = useHighQualityImages()
-  const setHighQualityImages = useSetHighQualityImages()
-
   const hideFeedsPromoTab = useHideFeedsPromoTab()
   const setHideFeedsPromoTab = useSetHideFeedsPromoTab()
 
@@ -280,6 +291,15 @@ export function DeerSettingsScreen({}: Props) {
   const setConstellationInstanceControl = Dialog.useDialogControl()
 
   const setTrustedVerifiersDialogControl = Dialog.useDialogControl()
+
+  const fullsizeFormat = useFullsizeFormat()
+  const setFullsizeFormat = useSetFullsizeFormat()
+
+  const thumbnailFormat = useThumbnailFormat()
+  const setThumbnailFormat = useSetThumbnailFormat()
+
+  const loadAsPngs = useLoadAsPngs()
+  const setLoadAsPngs = useSetLoadAsPngs()
 
   const deerVerificationEnabled = useDeerVerificationEnabled()
   const setDeerVerificationEnabled = useSetDeerVerificationEnabled()
@@ -514,24 +534,6 @@ export function DeerSettingsScreen({}: Props) {
             </Toggle.Item>
 
             <Toggle.Item
-              name="high_quality_images"
-              label={_(msg`Display images in higher quality`)}
-              value={highQualityImages}
-              onChange={value => setHighQualityImages(value)}
-              style={[a.w_full]}>
-              <Toggle.LabelText style={[a.flex_1]}>
-                <Trans>Display images in higher quality</Trans>
-              </Toggle.LabelText>
-              <Toggle.Platform />
-            </Toggle.Item>
-            <Admonition type="info" style={[a.flex_1]}>
-              <Trans>
-                Images will be served as PNG instead of JPEG. Images will take
-                longer to load and use more bandwidth.
-              </Trans>
-            </Admonition>
-
-            <Toggle.Item
               name="hide_feeds_promo_tab"
               label={_(msg`Hide "Feeds ✨" tab when only one feed is selected`)}
               value={hideFeedsPromoTab}
@@ -571,6 +573,169 @@ export function DeerSettingsScreen({}: Props) {
               style={[a.w_full]}>
               <Toggle.LabelText style={[a.flex_1]}>
                 <Trans>Hide similar accounts recommendations</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+          </SettingsList.Group>
+
+          <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
+            <SettingsList.ItemIcon icon={VisibilityIcon} />
+            <SettingsList.ItemText>
+              <Trans>Metrics</Trans>
+            </SettingsList.ItemText>
+
+            <Toggle.Item
+              name="disable_likes_metrics"
+              label={_(msg`Disable Likes Metrics`)}
+              value={disableLikesMetrics}
+              onChange={value => setDisableLikesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Likes Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_reposts_metrics"
+              label={_(msg`Disable Reposts Metrics`)}
+              value={disableRepostsMetrics}
+              onChange={value => setDisableRepostsMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Reposts Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_quotes_metrics"
+              label={_(msg`Disable Quotes Metrics`)}
+              value={disableQuotesMetrics}
+              onChange={value => setDisableQuotesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Quotes Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_saves_metrics"
+              label={_(msg`Disable Saves Metrics`)}
+              value={disableSavesMetrics}
+              onChange={value => setDisableSavesMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Saves Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_reply_metrics"
+              label={_(msg`Disable Reply Metrics`)}
+              value={disableReplyMetrics}
+              onChange={value => setDisableReplyMetrics(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable Reply Metrics</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="disable_via_repost_notification"
+              label={_(msg`Disable via repost notifications`)}
+              value={disableViaRepostNotification}
+              onChange={value => setDisableViaRepostNotification(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Disable via repost notifications</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+            <Admonition type="info" style={[a.flex_1]}>
+              <Trans>
+                Forcefully disables the notifications other people receive when
+                you like/repost a post someone else has reposted for privacy.
+              </Trans>
+            </Admonition>
+
+            <Toggle.Item
+              name="hide_similar_accounts_recommendations"
+              label={_(msg`Hide similar accounts recommendations`)}
+              value={hideSimilarAccountsRecomm}
+              onChange={value => setHideSimilarAccountsRecomm(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Hide similar accounts recommendations</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+          </SettingsList.Group>
+
+          <SettingsList.Group contentContainerStyle={[a.gap_sm]}>
+            <SettingsList.ItemIcon icon={PaintRollerIcon} />
+            <SettingsList.ItemText>
+              <Trans>Images</Trans>
+            </SettingsList.ItemText>
+
+            <View style={[a.gap_md, a.w_full]}>
+              <Text style={[a.flex_1, a.font_bold]}>
+                <Trans>Thumbnail format</Trans>
+              </Text>
+              <Select.Root
+                value={thumbnailFormat}
+                onValueChange={value => setThumbnailFormat(value)}>
+                <Select.Trigger label={_(msg`Select thumbnail format`)}>
+                  <Select.ValueText />
+                  <Select.Icon />
+                </Select.Trigger>
+                <Select.Content
+                  renderItem={({label, value}) => (
+                    <Select.Item value={value} label={label}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>{label}</Select.ItemText>
+                    </Select.Item>
+                  )}
+                  items={IMAGE_FORMATS}
+                />
+              </Select.Root>
+            </View>
+
+            <View style={[a.gap_md, a.w_full]}>
+              <Text style={[a.flex_1, a.font_bold]}>
+                <Trans>Fullsize format</Trans>
+              </Text>
+              <Select.Root
+                value={fullsizeFormat}
+                onValueChange={value => setFullsizeFormat(value)}>
+                <Select.Trigger label={_(msg`Select fullsize format`)}>
+                  <Select.ValueText />
+                  <Select.Icon />
+                </Select.Trigger>
+                <Select.Content
+                  renderItem={({label, value}) => (
+                    <Select.Item value={value} label={label}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>{label}</Select.ItemText>
+                    </Select.Item>
+                  )}
+                  items={IMAGE_FORMATS}
+                />
+              </Select.Root>
+            </View>
+
+            <Toggle.Item
+              name="load_as_pngs"
+              label={_(msg`Load both small and 100% quality images as Pngs instead of the
+              set image format`)}
+              value={loadAsPngs}
+              onChange={value => setLoadAsPngs(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Load both small and 100% quality images as Pngs</Trans>
               </Toggle.LabelText>
               <Toggle.Platform />
             </Toggle.Item>

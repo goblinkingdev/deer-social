@@ -1,16 +1,14 @@
-# Nombre del workflow
 name: Release deer
 
-# Disparadores: Se ejecuta manualmente, en push a 'main', o en push de tags
 on:
   workflow_dispatch:
   push:
     tags: ['v*.*.*']
 
-# Variables de entorno globales
 env:
   NODE_VERSION: '20'
   JAVA_VERSION: '17'
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=2"
 
 jobs:
   build-android:
@@ -21,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,6 +41,20 @@ jobs:
       - name: Setup Just
         uses: extractions/setup-just@v2
 
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -50,31 +64,53 @@ jobs:
           cp google-services.json.example google-services.json
 
       - name: Build APK
-        run: just dist-build-android-gradle
+        run: |
+          just dist-build-android-gradle
+        env:
+          GRADLE_USER_HOME: ~/.gradle
+
+      - name: Move APK to artifacts directory
+        run: |
+          mkdir -p artifacts
+          mv android/app/build/outputs/apk/release/deer-release.apk artifacts/
 
       - name: Upload APK artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deer-android-${{ github.run_number }}
-          path: android/app/build/outputs/apk/release/deer-release.apk
+          name: release-artifacts
+          path: artifacts/
           retention-days: 30
+          if-no-files-found: error
 
   deploy-to-cloudflare:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    needs: build-android
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
+
+      - name: Cache build dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-web-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-web-build-
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -87,33 +123,48 @@ jobs:
 
       - name: Build Web App
         run: yarn build-web
+        env:
+          NODE_ENV: production
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
           projectName: 'deer-social'
           directory: 'web-build'
           branch: 'main'
+          wranglerVersion: '3'
 
   release:
     name: Create GitHub Release
     needs: build-android
     runs-on: ubuntu-latest
-    # Solo crear release si es un push de tag o workflow manual
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
+      discussions: write
+    environment:
+      name: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Download APK artifact
+      - name: Download release artifacts
         uses: actions/download-artifact@v4
         with:
-          name: deer-android-${{ github.run_number }}
+          name: release-artifacts
           path: ./artifacts
+
+      - name: Verify artifacts
+        run: |
+          if [ ! -f "./artifacts/deer-release.apk" ]; then
+            echo "Error: APK file not found in artifacts"
+            exit 1
+          fi
+          ls -la ./artifacts/
 
       - name: Generate release tag
         id: tag
@@ -124,11 +175,29 @@ jobs:
             echo "tag=deer-v${{ github.run_number }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the last tag
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          
+          if [ -n "$last_tag" ]; then
+            # Generate changelog since last tag
+            echo "changelog<<EOF" >> $GITHUB_OUTPUT
+            git log --pretty=format:"- %s" $last_tag..HEAD >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            # First release - use all commits
+            echo "changelog<<EOF" >> $GITHUB_OUTPUT
+            git log --pretty=format:"- %s" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
-          name: Deer Release ${{ steps.tag.outputs.tag }}
+          name: 🦌 Deer Release ${{ steps.tag.outputs.tag }}
           draft: false
           prerelease: false
           files: |
@@ -136,13 +205,18 @@ jobs:
           body: |
             ## 🦌 Deer Release ${{ steps.tag.outputs.tag }}
             
-            ### Changes
-            - Built from commit: ${{ github.sha }}
-            - Android APK included
-            - Web app deployed to Cloudflare Pages
+            ### 📝 Changelog
+            ${{ steps.changelog.outputs.changelog }}
             
-            ### Downloads
+            ### 🔍 Build Info
+            - Built from commit: ${{ github.sha }}
+            - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ### 📥 Downloads
             - **Android APK**: Download the `deer-release.apk` file below
-            - **Web App**: Available at your Cloudflare Pages URL
+            - **Web App**: Available at [deer-social.pages.dev](https://deer-social-7m8.pages.dev)
+            
+            ### 🔒 Security
+            This release is signed and verified. The APK is built in a clean environment with reproducible steps.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

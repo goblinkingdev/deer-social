@@ -4,11 +4,9 @@ import {type AppBskyFeedDefs} from '@atproto/api'
 import {Trans} from '@lingui/macro'
 import type React from 'react'
 
+import {modifyImageFormat} from '#/lib/media/util'
 import {isTenorGifUri} from '#/lib/strings/embed-player'
-import {
-  maybeModifyHighQualityImage,
-  useHighQualityImages,
-} from '#/state/preferences/high-quality-images'
+import {useThumbnailFormat} from '#/state/preferences/thumbnail-format'
 import {atoms as a, useTheme} from '#/alf'
 import {MediaInsetBorder} from '#/components/MediaInsetBorder'
 import {Text} from '#/components/Typography'
@@ -25,7 +23,7 @@ export function Embed({
   embed: AppBskyFeedDefs.PostView['embed']
   style?: StyleProp<ViewStyle>
 }) {
-  const highQualityImages = useHighQualityImages()
+  const imageFormat = useThumbnailFormat()
   const e = bsky.post.parseEmbed(embed)
 
   if (!e) return null
@@ -36,10 +34,7 @@ export function Embed({
         {e.view.images.map(image => (
           <ImageItem
             key={image.thumb}
-            thumbnail={maybeModifyHighQualityImage(
-              image.thumb,
-              highQualityImages,
-            )}
+            thumbnail={modifyImageFormat(image.thumb, imageFormat)}
             alt={image.alt}
           />
         ))}

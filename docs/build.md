@@ -62,8 +62,8 @@ After you do `yarn ios` and `yarn android` once, you can later just run `yarn we
 
 ### Tips
 
-- Copy the `.env.example` to `.env` and fill in any necessary tokens. (The Sentry token is NOT required; see instructions below if you want to enable Sentry.)
-- To run on the device, add `--device` to the command (e.g. `yarn android --device`). To build in production mode (slower build, faster app), also add `--variant release`.
+- Copy the `.env.example` to `.env` and fill in any necessary tokens.
+- To run on the device, add `--device` to the command (e.g. `yarn android --device`). To build in production mode (slower build, faster app), also add `--variant release` on Android or `--configuration Release` on iOS.
 - If you want to use Expo EAS on your own builds without ejecting from Expo, make sure to change the `owner` and `extra.eas.projectId` properties. If you do not have an Expo account, you may remove these properties.
 - `npx react-native info` Checks what has been installed.
 - If the Android simulator frequently hangs or is very sluggish, [bump its memory limit](https://stackoverflow.com/a/40068396)
@@ -78,20 +78,6 @@ After you do `yarn ios` and `yarn android` once, you can later just run `yarn we
   - `yarn e2e:metro`
 - Run once: `yarn e2e:build`
 - Each test run: `yarn e2e:run`
-
-### Adding Sentry
-
-Adding Sentry is NOT required. You can keep `SENTRY_AUTH_TOKEN=` in `.env` which will build the app without Sentry.
-
-However, if you're a part of the Bluesky team and want to enable Sentry, fill in `SENTRY_AUTH_TOKEN` in your `.env`. It can be created on the Sentry dashboard using [these instructions](https://docs.expo.dev/guides/using-sentry/#sign-up-for-a-sentry-account-and-create-a-project).
-
-If you change `SENTRY_AUTH_TOKEN`, you need to do `yarn prebuild` before running `yarn ios` or `yarn android` again.
-
-### Adding bitdrift
-
-Adding bitdrift is NOT required. You can keep `EXPO_PUBLIC_BITDRIFT_API_KEY=` in `.env` which will avoid initializing bitdrift during startup.
-
-However, if you're a part of the Bluesky team and want to enable bitdrift, fill in `EXPO_PUBLIC_BITDRIFT_API_KEY` in your `.env` to enable bitdrift.
 
 ### Adding and Updating Locales
 
@@ -164,7 +150,6 @@ See [testing.md](./testing.md).
 - TextEncoder / TextDecoder
 - react-native-url-polyfill
 - Array#findLast (on web)
-- atob (on native)
 
 ### Sentry sourcemaps
 

@@ -1,5 +1,3 @@
-import '#/logger/sentry/setup'
-import '#/logger/bitdrift/setup'
 import '#/view/icons'
 
 import React, {useEffect, useState} from 'react'
@@ -14,7 +12,6 @@ import * as SplashScreen from 'expo-splash-screen'
 import * as SystemUI from 'expo-system-ui'
 import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import * as Sentry from '@sentry/react-native'
 
 import {KeyboardControllerProvider} from '#/lib/hooks/useEnableKeyboardController'
 import {Provider as HideBottomBarBorderProvider} from '#/lib/hooks/useHideBottomBarBorder'
@@ -32,7 +29,6 @@ import {Provider as EmailVerificationProvider} from '#/state/email-verification'
 import {listenSessionDropped} from '#/state/events'
 import {GlobalGestureEventsProvider} from '#/state/global-gesture-events'
 import {Provider as HomeBadgeProvider} from '#/state/home-badge'
-import {Provider as InvitesStateProvider} from '#/state/invites'
 import {Provider as LightboxStateProvider} from '#/state/lightbox'
 import {MessagesProvider} from '#/state/messages'
 import {Provider as ModalStateProvider} from '#/state/modals'
@@ -209,24 +205,22 @@ function App() {
           <PrefsStateProvider>
             <I18nProvider>
               <ShellStateProvider>
-                <InvitesStateProvider>
-                  <ModalStateProvider>
-                    <DialogStateProvider>
-                      <LightboxStateProvider>
-                        <PortalProvider>
-                          <BottomSheetProvider>
-                            <StarterPackProvider>
-                              <SafeAreaProvider
-                                initialMetrics={initialWindowMetrics}>
-                                <InnerApp />
-                              </SafeAreaProvider>
-                            </StarterPackProvider>
-                          </BottomSheetProvider>
-                        </PortalProvider>
-                      </LightboxStateProvider>
-                    </DialogStateProvider>
-                  </ModalStateProvider>
-                </InvitesStateProvider>
+                <ModalStateProvider>
+                  <DialogStateProvider>
+                    <LightboxStateProvider>
+                      <PortalProvider>
+                        <BottomSheetProvider>
+                          <StarterPackProvider>
+                            <SafeAreaProvider
+                              initialMetrics={initialWindowMetrics}>
+                              <InnerApp />
+                            </SafeAreaProvider>
+                          </StarterPackProvider>
+                        </BottomSheetProvider>
+                      </PortalProvider>
+                    </LightboxStateProvider>
+                  </DialogStateProvider>
+                </ModalStateProvider>
               </ShellStateProvider>
             </I18nProvider>
           </PrefsStateProvider>
@@ -236,4 +230,4 @@ function App() {
   )
 }
 
-export default Sentry.wrap(App)
+export default App

@@ -1,8 +1,8 @@
 import React from 'react'
 import {Pressable, useWindowDimensions, View} from 'react-native'
-import Picker from '@emoji-mart/react'
 import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
+import Picker from '@slidoapp/emoji-mart-react'
 import {DismissableLayer, FocusScope} from 'radix-ui/internal'
 
 import {textInputWebEmitter} from '#/view/com/composer/text-input/textInputWebEmitter'

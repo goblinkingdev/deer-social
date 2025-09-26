@@ -14,6 +14,7 @@ import {Provider as DisableRepostsMetricsProvider} from './disable-reposts-metri
 import {Provider as DisableSavesMetricsProvider} from './disable-saves-metrics'
 import {Provider as DisableViaRepostNotificationProvider} from './disable-via-repost-notification'
 import {Provider as ExternalEmbedsProvider} from './external-embeds-prefs'
+import {Provider as FullsizeFormatProvider} from './fullsize-format'
 import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
 import {Provider as HideFeedsPromoTabProvider} from './hide-feeds-promo-tab'
@@ -28,6 +29,7 @@ import {Provider as NoDiscoverProvider} from './no-discover-fallback'
 import {Provider as RepostCarouselProvider} from './repost-carousel-enabled'
 import {Provider as ShowLinkInHandleProvider} from './show-link-in-handle'
 import {Provider as SubtitlesProvider} from './subtitles'
+import {Provider as ThumbnailFormatProvider} from './thumbnail-format'
 import {Provider as TrendingSettingsProvider} from './trending'
 import {Provider as UsedStarterPacksProvider} from './used-starter-packs'
 
@@ -65,17 +67,18 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                       <ShowLinkInHandleProvider>
                         <LargeAltBadgeProvider>
                           <ExternalEmbedsProvider>
-                            <HiddenPostsProvider>
-                              <HighQualityImagesProvider>
+                            <FullsizeFormatProvider>
+                              <HiddenPostsProvider>
                                 <InAppBrowserProvider>
                                   <DisableHapticsProvider>
                                     <AutoplayProvider>
                                       <UsedStarterPacksProvider>
                                         <SubtitlesProvider>
-                                          <TrendingSettingsProvider>
-                                            <RepostCarouselProvider>
-                                              <KawaiiProvider>
-                                                <HideFeedsPromoTabProvider>
+                                          <ThumbnailFormatProvider>
+                                            <TrendingSettingsProvider>
+                                              <RepostCarouselProvider>
+                                                <KawaiiProvider>
+                                                  <HideFeedsPromoTabProvider>
                                                   <DisableViaRepostNotificationProvider>
                                                     <DisableLikesMetricsProvider>
                                                       <DisableRepostsMetricsProvider>
@@ -83,25 +86,40 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                                                           <DisableSavesMetricsProvider>
                                                             <DisableReplyMetricsProvider>
                                                               <HideSimilarAccountsRecommProvider>
-                                                                {children}
-                                                              </HideSimilarAccountsRecommProvider>
-                                                            </DisableReplyMetricsProvider>
-                                                          </DisableSavesMetricsProvider>
-                                                        </DisableQuotesMetricsProvider>
-                                                      </DisableRepostsMetricsProvider>
-                                                    </DisableLikesMetricsProvider>
-                                                  </DisableViaRepostNotificationProvider>
-                                                </HideFeedsPromoTabProvider>
-                                              </KawaiiProvider>
-                                            </RepostCarouselProvider>
-                                          </TrendingSettingsProvider>
+                                                                  <DisableViaRepostNotificationProvider>
+                                                                    <DisableLikesMetricsProvider>
+                                                                      <DisableRepostsMetricsProvider>
+                                                                        <DisableQuotesMetricsProvider>
+                                                                          <DisableSavesMetricsProvider>
+                                                                            <DisableReplyMetricsProvider>
+                                                                              <HideSimilarAccountsRecommProvider>
+                                                                                {children}
+                                                                            </HideSimilarAccountsRecommProvider>
+                                                                          </DisableReplyMetricsProvider>
+                                                                        </DisableSavesMetricsProvider>
+                                                                      </DisableQuotesMetricsProvider>
+                                                                    </DisableRepostsMetricsProvider>
+                                                                  </DisableLikesMetricsProvider>
+                                                                </DisableViaRepostNotificationProvider>
+                                                                </HideSimilarAccountsRecommProvider>
+                                                              </DisableReplyMetricsProvider>
+                                                            </DisableSavesMetricsProvider>
+                                                          </DisableQuotesMetricsProvider>
+                                                        </DisableRepostsMetricsProvider>
+                                                      </DisableLikesMetricsProvider>
+                                                    </DisableViaRepostNotificationProvider>
+                                                  </HideFeedsPromoTabProvider>
+                                                </KawaiiProvider>
+                                              </RepostCarouselProvider>
+                                            </TrendingSettingsProvider>
+                                          </ThumbnailFormatProvider>
                                         </SubtitlesProvider>
                                       </UsedStarterPacksProvider>
                                     </AutoplayProvider>
                                   </DisableHapticsProvider>
                                 </InAppBrowserProvider>
-                              </HighQualityImagesProvider>
-                            </HiddenPostsProvider>
+                              </HiddenPostsProvider>
+                            </FullsizeFormatProvider>
                           </ExternalEmbedsProvider>
                         </LargeAltBadgeProvider>
                       </ShowLinkInHandleProvider>
