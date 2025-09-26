@@ -42,7 +42,42 @@ export function applyFonts(
   fontFamily: 'roboto-flex' | 'system' | 'inter',
 ) {
   if (fontFamily === 'roboto-flex') {
-    style.fontFamily = 'Roboto Flex'
+    if (isAndroid) {
+      style.fontFamily =
+        {
+          9.4: 'Roboto Flex 2xs',
+          11.3: 'Roboto Flex xs',
+          13.1: 'Roboto Flex sm',
+          15: 'Roboto Flex md',
+          16.9: 'Roboto Flex lg',
+          18.8: 'Roboto Flex xl',
+          20.6: 'Roboto Flex 2xl',
+          24.3: 'Roboto Flex 3xl',
+          30: 'Roboto Flex 4xl',
+          37.5: 'Roboto Flex 5xl',
+        }[String(style.fontSize || 15)] || 'Roboto Flex sm'
+
+      style.fontFamily +=
+        ' ' +
+        ({
+          400: 'Normal',
+          500: 'Medium',
+          600: 'SemiBold',
+          700: 'Bold',
+        }[String(style.fontWeight || 400)] || 'Normal')
+
+      if (style.fontStyle === 'italic') {
+        style.fontFamily += 'Italic'
+      }
+
+      /*
+       * These are not supported on Android and actually break the styling.
+       */
+      delete style.fontWeight
+      delete style.fontStyle
+    } else {
+      style.fontFamily = 'Roboto Flex'
+    }
 
     if (isWeb) {
       // fallback families only supported on web
