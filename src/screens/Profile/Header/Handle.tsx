@@ -1,6 +1,6 @@
 import {View} from 'react-native'
 import {type AppBskyActorDefs} from '@atproto/api'
-import {msg, Trans} from '@lingui/macro'
+import {Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
 import {isInvalidHandle, sanitizeHandle} from '#/lib/strings/handles'
@@ -67,9 +67,11 @@ export function ProfileHeaderHandle({
               unicodeBidi: 'isolate',
             }),
           ]}>
-          {invalidHandle ? (
-            _(msg`⚠Invalid Handle`)
-          ) : showProfileInHandle && !isBskySocialHandle ? (
+          {!invalidHandle &&
+          !disableTaps &&
+          showProfileInHandle &&
+          !profile.website &&
+          !isBskySocialHandle ? (
             <InlineLinkText
               to={`https://${profile.handle}`}
               label={profile.handle}>
@@ -82,13 +84,7 @@ export function ProfileHeaderHandle({
           )}
         </Text>
         {pronouns && (
-          <Text
-            style={[
-              t.atoms.text_contrast_low,
-              a.text_md,
-              a.leading_snug,
-              a.pb_sm,
-            ]}>
+          <Text style={[t.atoms.text_contrast_low, a.text_md, a.leading_snug]}>
             {sanitizePronouns(pronouns, isNative)}
           </Text>
         )}
