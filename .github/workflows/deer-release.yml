@@ -52,25 +52,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: android
-          path: .
+          path: ./release/
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1, pinned commit hash
         with:
+          name: deer v${{ github.run_number }}
           tag_name: deer-v${{ github.run_number }}
-          release_name: deer v${{ github.run_number }}
-          draft: false
-          prerelease: false
-
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app-release.apk
-          asset_name: app-release.apk
-          asset_content_type: application/vnd.android.package-archive
+          prerelease: true
+          fail_on_unmatched_files: true
+          files: |
+            ./release/app-release.apk
