@@ -37,8 +37,18 @@ export function setFontFamily(fontFamily: Device['fontFamily']) {
 /*
  * Unused fonts are commented out, but the files are there if we need them.
  */
-export function applyFonts(style: TextStyle, fontFamily: 'system' | 'theme') {
-  if (fontFamily === 'theme') {
+export function applyFonts(
+  style: TextStyle,
+  fontFamily: 'roboto-flex' | 'system' | 'inter',
+) {
+  if (fontFamily === 'roboto-flex') {
+    style.fontFamily = 'Roboto Flex'
+
+    if (isWeb) {
+      // fallback families only supported on web
+      style.fontFamily += `, ${WEB_FONT_FAMILIES}`
+    }
+  } else if (fontFamily === 'inter') {
     if (isAndroid) {
       style.fontFamily =
         {

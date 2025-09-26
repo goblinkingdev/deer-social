@@ -11,5 +11,6 @@ export function DO_NOT_USE() {
   return useFonts({
     InterVariable: require('../../../assets/fonts/inter/InterVariable.woff2'),
     'InterVariable-Italic': require('../../../assets/fonts/inter/InterVariable-Italic.woff2'),
+    'Roboto Flex': require('../../../assets/fonts/roboto-flex/Roboto-Flex.ttf'),
   })
 }

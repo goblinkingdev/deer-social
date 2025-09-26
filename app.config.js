@@ -262,6 +262,7 @@ module.exports = function (_config) {
           'expo-font',
           {
             fonts: [
+              './assets/fonts/roboto-flex/Roboto-Flex.ttf',
               './assets/fonts/inter/InterVariable.woff2',
               './assets/fonts/inter/InterVariable-Italic.woff2',
               // Android only

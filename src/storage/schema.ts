@@ -5,7 +5,7 @@ import {type ID as PolicyUpdate202508} from '#/components/PolicyUpdateOverlay/up
  */
 export type Device = {
   fontScale: '-2' | '-1' | '0' | '1' | '2'
-  fontFamily: 'system' | 'theme'
+  fontFamily: 'roboto-flex' | 'system' | 'inter'
   lastNuxDialog: string | undefined
 
   trendingBetaEnabled: boolean

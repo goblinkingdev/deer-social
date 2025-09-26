@@ -62,8 +62,8 @@ export function AppearanceSettingsScreen({}: Props) {
 
   const onChangeFontFamily = useCallback(
     (values: string[]) => {
-      const next = values[0] === 'system' ? 'system' : 'theme'
-      fonts.setFontFamily(next)
+      const next = values[0]
+      fonts.setFontFamily(next as 'system' | 'roboto-flex' | 'inter')
     },
     [fonts],
   )
@@ -139,9 +139,6 @@ export function AppearanceSettingsScreen({}: Props) {
 
               <AppearanceToggleButtonGroup
                 title={_(msg`Font`)}
-                description={_(
-                  msg`For the best experience, we recommend using the theme font.`,
-                )}
                 icon={Aa}
                 items={[
                   {
@@ -149,8 +146,12 @@ export function AppearanceSettingsScreen({}: Props) {
                     name: 'system',
                   },
                   {
-                    label: _(msg`Theme`),
-                    name: 'theme',
+                    label: _(msg`Roboto Flex`),
+                    name: 'roboto-flex',
+                  },
+                  {
+                    label: _(msg`Inter`),
+                    name: 'inter',
                   },
                 ]}
                 values={[fonts.family]}

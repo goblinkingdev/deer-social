@@ -17,5 +17,6 @@ export function DO_NOT_USE() {
     'Inter-SemiBoldItalic': require('../../../assets/fonts/inter/Inter-SemiBoldItalic.otf'),
     'Inter-Bold': require('../../../assets/fonts/inter/Inter-Bold.otf'),
     'Inter-BoldItalic': require('../../../assets/fonts/inter/Inter-BoldItalic.otf'),
+    'Roboto Flex': require('../../../assets/fonts/roboto-flex/Roboto-Flex.ttf'),
   })
 }
