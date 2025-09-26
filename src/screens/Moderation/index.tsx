@@ -135,7 +135,7 @@ function SubItem({
       ]}>
       <View style={[a.flex_row, a.align_center, a.gap_md]}>
         <Icon size="md" style={[t.atoms.text_contrast_medium]} />
-        <Text style={[a.text_sm, a.font_bold]}>{title}</Text>
+        <Text style={[a.text_sm, a.font_semi_bold]}>{title}</Text>
       </View>
       <ChevronRight
         size="sm"
@@ -194,7 +194,12 @@ export function ModerationScreenInner({
   return (
     <View style={[a.pt_2xl, a.px_lg, gtMobile && a.px_2xl]}>
       <Text
-        style={[a.text_md, a.font_bold, a.pb_md, t.atoms.text_contrast_high]}>
+        style={[
+          a.text_md,
+          a.font_semi_bold,
+          a.pb_md,
+          t.atoms.text_contrast_high,
+        ]}>
         <Trans>Moderation tools</Trans>
       </Text>
 
@@ -389,7 +394,7 @@ export function ModerationScreenInner({
       <Text
         style={[
           a.text_md,
-          a.font_bold,
+          a.font_semi_bold,
           a.pt_2xl,
           a.pb_md,
           t.atoms.text_contrast_high,

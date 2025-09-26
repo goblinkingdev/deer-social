@@ -9,7 +9,6 @@ import {DEFAULT_SERVICE} from '#/lib/constants'
 import {isEmailMaybeInvalid} from '#/lib/strings/email'
 import {logger} from '#/logger'
 import {isWeb} from '#/platform/detection'
-import {ScreenTransition} from '#/screens/Login/ScreenTransition'
 import {is13, is18, useSignupContext} from '#/screens/Signup/state'
 import {Policies} from '#/screens/Signup/StepInfo/Policies'
 import {atoms as a, native} from '#/alf'
@@ -164,8 +163,8 @@ export function StepInfo({
   }
 
   return (
-    <ScreenTransition>
-      <View style={[a.gap_md]}>
+    <>
+      <View style={[a.gap_md, a.pt_lg]}>
         {state.serviceUrl === DEFAULT_SERVICE && (
           <View style={[a.gap_xl]}>
             <Text style={[a.gap_md, a.leading_normal]}>
@@ -365,6 +364,6 @@ export function StepInfo({
         onRetryPress={refetchServer}
         overrideNextText={hasWarnedEmail ? _(msg`It's correct`) : undefined}
       />
-    </ScreenTransition>
+    </>
   )
 }
