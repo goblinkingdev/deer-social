@@ -15,6 +15,8 @@
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
+        xdgStateHome = builtins.getEnv "XDG_STATE_HOME";
+
         android-arch =
           if system == "aarch64-darwin"
           then "arm64-v8a"
@@ -27,7 +29,7 @@
         state-home =
           if pkgs.lib.last (pkgs.lib.splitString "-" system) == "darwin"
           then "${homedir}/." # ~/.android
-          else "${pkgs.config.xdg.stateHome}/";
+          else "${xdgStateHome}/";
 
         pkgs = import nixpkgs {
           inherit system;
