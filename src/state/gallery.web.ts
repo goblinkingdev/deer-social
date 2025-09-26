@@ -159,7 +159,7 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
   let maxQualityPercentage =
-    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0) // exclusive
+    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0)
   let newDataUri
 
   while (maxQualityPercentage > 1) {
@@ -169,6 +169,7 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
       compress: qualityPercentage,
       format: SaveFormat.WEBP,
       resize: {width: w, height: h},
+      method: originalSize <= POST_IMG_MAX.size / 2 ? 6 : 4,
     })
 
     if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {
@@ -195,7 +196,10 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
 
 export const manipulateWebp = async (
   uri: string,
-  saveOptions: SaveOptions & {resize?: {width: number; height: number}} = {},
+  saveOptions: SaveOptions & {
+    resize?: {width: number; height: number}
+    method?: number
+  } = {},
 ): Promise<ImageResult & {size: number}> => {
   const img = document.createElement('img')
   img.src = uri
@@ -216,7 +220,7 @@ export const manipulateWebp = async (
   const webpBuffer = await encode(rawImageData, {
     lossless: saveOptions.compress === 100 ? 1 : 0,
     quality: saveOptions.compress || 100,
-    method: 6,
+    method: saveOptions.method || 4,
   })
 
   const blob = new Blob([webpBuffer], {type: 'image/webp'})
