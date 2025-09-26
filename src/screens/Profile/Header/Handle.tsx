@@ -4,6 +4,7 @@ import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
 import {isInvalidHandle, sanitizeHandle} from '#/lib/strings/handles'
+import {sanitizePronouns} from '#/lib/strings/pronouns'
 import {isIOS, isNative} from '#/platform/detection'
 import {type Shadow} from '#/state/cache/types'
 import {useShowLinkInHandle} from '#/state/preferences/show-link-in-handle.tsx'
@@ -22,6 +23,7 @@ export function ProfileHeaderHandle({
   const t = useTheme()
   const {_} = useLingui()
   const invalidHandle = isInvalidHandle(profile.handle)
+  const pronouns = profile.pronouns
   const blockHide = profile.viewer?.blocking || profile.viewer?.blockedBy
   const isBskySocialHandle = profile.handle.endsWith('.bsky.social')
   const showProfileInHandle = useShowLinkInHandle()
@@ -33,7 +35,7 @@ export function ProfileHeaderHandle({
   )
   return (
     <View
-      style={[a.flex_row, a.gap_sm, a.align_center, {maxWidth: '100%'}]}
+      style={[a.flex_col, a.gap_sm, a.align_start, {maxWidth: '100%'}]}
       pointerEvents={disableTaps ? 'none' : isIOS ? 'auto' : 'box-none'}>
       <NewskieDialog profile={profile} disabled={disableTaps} />
       {profile.viewer?.followedBy && !blockHide ? (
@@ -43,40 +45,54 @@ export function ProfileHeaderHandle({
           </Text>
         </View>
       ) : undefined}
-      <Text
-        emoji
-        numberOfLines={1}
-        style={[
-          invalidHandle
-            ? [
-                a.border,
-                a.text_xs,
-                a.px_sm,
-                a.py_xs,
-                a.rounded_xs,
-                {borderColor: t.palette.contrast_200},
-              ]
-            : [a.text_md, a.leading_snug, t.atoms.text_contrast_medium],
-          web({
-            wordBreak: 'break-all',
-            direction: 'ltr',
-            unicodeBidi: 'isolate',
-          }),
-        ]}>
-        {invalidHandle ? (
-          _(msg`⚠Invalid Handle`)
-        ) : showProfileInHandle && !isBskySocialHandle ? (
-          <InlineLinkText
-            to={`https://${profile.handle}`}
-            label={profile.handle}>
-            <Text style={[a.text_md, {color: t.palette.primary_500}]}>
-              {sanitized}
-            </Text>
-          </InlineLinkText>
-        ) : (
-          sanitized
+
+      <View style={[a.flex_row, a.flex_wrap, {gap: 6}]}>
+        <Text
+          emoji
+          numberOfLines={1}
+          style={[
+            invalidHandle
+              ? [
+                  a.border,
+                  a.text_xs,
+                  a.px_sm,
+                  a.py_xs,
+                  a.rounded_xs,
+                  {borderColor: t.palette.contrast_200},
+                ]
+              : [a.text_md, a.leading_snug, t.atoms.text_contrast_medium],
+            web({
+              wordBreak: 'break-all',
+              direction: 'ltr',
+              unicodeBidi: 'isolate',
+            }),
+          ]}>
+          {invalidHandle ? (
+            _(msg`⚠Invalid Handle`)
+          ) : showProfileInHandle && !isBskySocialHandle ? (
+            <InlineLinkText
+              to={`https://${profile.handle}`}
+              label={profile.handle}>
+              <Text style={[a.text_md, {color: t.palette.primary_500}]}>
+                {sanitized}
+              </Text>
+            </InlineLinkText>
+          ) : (
+            sanitized
+          )}
+        </Text>
+        {pronouns && (
+          <Text
+            style={[
+              t.atoms.text_contrast_low,
+              a.text_md,
+              a.leading_snug,
+              a.pb_sm,
+            ]}>
+            {sanitizePronouns(pronouns, isNative)}
+          </Text>
         )}
-      </Text>
+      </View>
     </View>
   )
 }
