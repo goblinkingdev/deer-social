@@ -86,7 +86,6 @@ jobs:
   deploy-to-cloudflare:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
-    needs: build-android
     permissions:
       contents: read
       deployments: write
