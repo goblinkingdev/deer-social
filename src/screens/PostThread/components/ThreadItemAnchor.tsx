@@ -428,7 +428,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
           />
           {(post.repostCount !== 0 && !disableRepostsMetrics) ||
           (post.likeCount !== 0 && !disableLikesMetrics) ||
-          (post.quoteCount !== 0 && !disableQuotesMetrics) ||
+          post.quoteCount !== 0 ||
           (post.bookmarkCount !== 0 && !disableSavesMetrics) ? (
             // Show this section unless we're *sure* it has no engagement.
             <View
@@ -466,20 +466,26 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
               ) : null}
               {post.quoteCount != null &&
               post.quoteCount !== 0 &&
-              !post.viewer?.embeddingDisabled &&
-              !disableQuotesMetrics ? (
+              !post.viewer?.embeddingDisabled ? (
                 <Link to={quotesHref} label={_(msg`Quotes of this post`)}>
                   <Text
                     testID="quoteCount-expanded"
                     style={[a.text_md, t.atoms.text_contrast_medium]}>
-                    <Text style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
-                      {formatPostStatCount(post.quoteCount)}
-                    </Text>{' '}
-                    <Plural
-                      value={post.quoteCount}
-                      one="quote"
-                      other="quotes"
-                    />
+                    {!disableQuotesMetrics ? (
+                      <>
+                        <Text
+                          style={[a.text_md, a.font_semi_bold, t.atoms.text]}>
+                          {formatPostStatCount(post.quoteCount)}
+                        </Text>{' '}
+                        <Plural
+                          value={post.quoteCount}
+                          one="quote"
+                          other="quotes"
+                        />
+                      </>
+                    ) : (
+                      'Quotes'
+                    )}
                   </Text>
                 </Link>
               ) : null}
