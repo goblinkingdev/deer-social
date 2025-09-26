@@ -318,9 +318,36 @@ let ProfileHeaderStandard = ({
                   />
                 </View>
               ) : undefined}
+            </View>
+          )}
+
+          {!isPlaceholderProfile && !isBlockedUser && (
+            <View style={[a.flex_row, a.flex_wrap, {gap: 10}, a.pt_md]}>
+              {websiteFormatted && (
+                <Link
+                  to={sanitizeWebsiteForLink(websiteFormatted)}
+                  label={_(msg({message: `Visit ${websiteFormatted}`}))}
+                  style={[a.flex_row, a.align_center, a.gap_xs]}>
+                  <Globe
+                    width={tokens.space.lg}
+                    style={{color: t.palette.primary_500}}
+                  />
+                  <Text style={[{color: t.palette.primary_500}]}>
+                    {websiteFormatted}
+                  </Text>
+                </Link>
+              )}
+              <View style={[a.flex_row, a.align_center, a.gap_xs]}>
+                <CalendarDays
+                  width={tokens.space.lg}
+                  style={{color: t.atoms.text_contrast_medium.color}}
+                />
+                <Text style={[t.atoms.text_contrast_medium]}>
+                  <Trans>Joined {dateJoined}</Trans>
+                </Text>
+              </View>
 
               {!isMe &&
-                !isBlockedUser &&
                 shouldShowKnownFollowers(profile.viewer?.knownFollowers) && (
                   <View style={[a.flex_row, a.align_center, a.gap_sm]}>
                     <KnownFollowers
@@ -331,32 +358,6 @@ let ProfileHeaderStandard = ({
                 )}
             </View>
           )}
-
-          <View style={[a.flex_row, a.flex_wrap, {gap: 10}, a.pt_md]}>
-            {websiteFormatted && (
-              <Link
-                to={sanitizeWebsiteForLink(websiteFormatted)}
-                label={_(msg({message: `Visit ${websiteFormatted}`}))}
-                style={[a.flex_row, a.align_center, a.gap_xs]}>
-                <Globe
-                  width={tokens.space.lg}
-                  style={{color: t.palette.primary_500}}
-                />
-                <Text style={[{color: t.palette.primary_500}]}>
-                  {websiteFormatted}
-                </Text>
-              </Link>
-            )}
-            <View style={[a.flex_row, a.align_center, a.gap_xs]}>
-              <CalendarDays
-                width={tokens.space.lg}
-                style={{color: t.atoms.text_contrast_medium.color}}
-              />
-              <Text style={[t.atoms.text_contrast_medium]}>
-                <Trans>Joined {dateJoined}</Trans>
-              </Text>
-            </View>
-          </View>
         </View>
 
         <Prompt.Basic
