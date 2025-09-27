@@ -1,6 +1,6 @@
 {
   "name": "deer.social",
-  "version": "v4.3.0",
+  "version": "v4.3.1",
   "private": true,
   "engines": {
     "node": ">=18"
@@ -125,6 +125,7 @@
     "bcp-47": "^2.1.0",
     "bcp-47-match": "^2.0.3",
     "date-fns": "^2.30.0",
+    "eldr": "https://github.com/bkw/eldr",
     "email-validator": "^2.0.4",
     "emoji-regex": "^10.4.0",
     "eventemitter3": "^5.0.1",
