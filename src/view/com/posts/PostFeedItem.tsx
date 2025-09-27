@@ -324,14 +324,14 @@ let FeedItemInner = ({
           {isReasonFeedSource(reason) ? (
             <Link href={reason.href}>
               <Text
-                type="sm-bold"
+                type="xs-bold"
                 style={pal.textLight}
                 lineHeight={1.2}
                 numberOfLines={1}>
                 <Trans context="from-feed">
                   From{' '}
                   <FeedNameText
-                    type="sm-bold"
+                    type="xs-bold"
                     uri={reason.uri}
                     href={reason.href}
                     lineHeight={1.2}
@@ -361,7 +361,7 @@ let FeedItemInner = ({
                 height={13}
               />
               <Text
-                type="sm-bold"
+                type="xs-bold"
                 style={pal.textLight}
                 lineHeight={1.2}
                 numberOfLines={1}>
@@ -372,14 +372,14 @@ let FeedItemInner = ({
                     Reposted by{' '}
                     <ProfileHoverCard did={reason.by.did}>
                       <TextLinkOnWebOnly
-                        type="sm-bold"
+                        type="xs-bold"
                         style={pal.textLight}
                         lineHeight={1.2}
                         numberOfLines={1}
                         text={
                           <Text
                             emoji
-                            type="sm-bold"
+                            type="xs-bold"
                             style={pal.textLight}
                             lineHeight={1.2}>
                             {sanitizeDisplayName(
@@ -405,7 +405,7 @@ let FeedItemInner = ({
                 height={13}
               />
               <Text
-                type="sm-bold"
+                type="xs-bold"
                 style={pal.textLight}
                 lineHeight={1.2}
                 numberOfLines={1}>

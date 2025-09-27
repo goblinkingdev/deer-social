@@ -554,12 +554,15 @@ export function DeerSettingsScreen({}: Props) {
               </Toggle.LabelText>
               <Toggle.Platform />
             </Toggle.Item>
-            <Admonition type="info" style={[a.flex_1]}>
-              <Trans>
-                Forcefully disables the notifications other people receive when
-                you like/repost a post someone else has reposted for privacy.
-              </Trans>
-            </Admonition>
+            <SettingsList.Item>
+              <Admonition type="tip" style={[a.flex_1]}>
+                <Trans>
+                  Forcefully disables the notifications other people receive
+                  when you like/repost a post someone else has reposted for
+                  privacy.
+                </Trans>
+              </Admonition>
+            </SettingsList.Item>
 
             <Toggle.Item
               name="hide_similar_accounts_recommendations"

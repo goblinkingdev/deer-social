@@ -22,6 +22,7 @@ export type CommonProps = {
   viewContext?: PostEmbedViewContext
   isWithinQuote?: boolean
   allowNestedQuotes?: boolean
+  showPronouns?: boolean
 }
 
 export type EmbedProps = CommonProps & {

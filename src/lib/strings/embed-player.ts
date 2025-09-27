@@ -46,7 +46,7 @@ export type EmbedPlayerType =
   | 'giphy_gif'
   | 'tenor_gif'
   | 'flickr_album'
-  | 'streamplace_stream'
+  | 'streamplace_video'
 
 export const externalEmbedLabels: Record<EmbedPlayerSource, string> = {
   youtube: 'YouTube',
@@ -456,11 +456,20 @@ export function parseEmbedPlayerFromUrl(
   }
 
   if (urlp.hostname === 'stream.place') {
-    return {
-      type: 'streamplace_stream',
-      source: 'streamplace',
-      playerUri: `https://stream.place/embed${urlp.pathname}`,
+    const [_, page] = urlp.pathname.split('/')
+
+    if (
+      (page === 'Stream' && (urlp.searchParams.get('user') as string)) ||
+      page.includes('.')
+    ) {
+      return {
+        type: 'streamplace_video',
+        source: 'streamplace',
+        playerUri: `https://stream.place/embed${urlp.pathname}`,
+      }
     }
+
+    return undefined
   }
 }
 
@@ -479,6 +488,7 @@ export function getPlayerAspect({
     case 'youtube_video':
     case 'twitch_video':
     case 'vimeo_video':
+    case 'streamplace_video':
       return {aspectRatio: 16 / 9}
     case 'youtube_short':
       if (SCREEN_HEIGHT < 600) {

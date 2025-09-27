@@ -77,6 +77,7 @@ let ProfileMenu = ({
   const queryClient = useQueryClient()
   const navigation = useNavigation<NavigationProp>()
   const isSelf = currentAccount?.did === profile.did
+  const isFollowedBy = profile.viewer?.followedBy
   const isFollowing = profile.viewer?.following
   const isBlocked = profile.viewer?.blocking || profile.viewer?.blockedBy
   const isFollowingBlockedAccount = isFollowing && isBlocked
@@ -276,11 +277,7 @@ let ProfileMenu = ({
             </Menu.Item>
             <Menu.Item
               testID="profileHeaderDropdownShareBtn"
-              label={
-                isWeb
-                  ? _(msg`Copy via Deer`)
-                  : _(msg`Share via Deer...`)
-              }
+              label={isWeb ? _(msg`Copy via Deer`) : _(msg`Share via Deer...`)}
               onPress={() => {
                 if (showLoggedOutWarning) {
                   loggedOutWarningPromptControl.open()
@@ -319,7 +316,9 @@ let ProfileMenu = ({
                         testID="profileHeaderDropdownFollowBtn"
                         label={
                           isFollowing
-                            ? _(msg`Unfollow account`)
+                            ? isFollowedBy
+                              ? _(msg`Divorce mutual`)
+                              : _(msg`Unfollow account`)
                             : _(msg`Follow account`)
                         }
                         onPress={
@@ -329,7 +328,11 @@ let ProfileMenu = ({
                         }>
                         <Menu.ItemText>
                           {isFollowing ? (
-                            <Trans>Unfollow account</Trans>
+                            isFollowedBy ? (
+                              <Trans>Divorce mutual</Trans>
+                            ) : (
+                              <Trans>Unfollow account</Trans>
+                            )
                           ) : (
                             <Trans>Follow account</Trans>
                           )}

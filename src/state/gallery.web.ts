@@ -169,7 +169,6 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
       compress: qualityPercentage,
       format: SaveFormat.WEBP,
       resize: {width: w, height: h},
-      method: originalSize <= POST_IMG_MAX.size / 2 ? 6 : 4,
     })
 
     if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {

@@ -319,6 +319,7 @@ export function QuoteEmbed({
   style,
   isWithinQuote: parentIsWithinQuote,
   allowNestedQuotes: parentAllowNestedQuotes,
+  showPronouns,
 }: Omit<CommonProps, 'viewContext'> & {
   embed: EmbedType<'post'>
   viewContext?: QuoteEmbedViewContext
@@ -389,6 +390,7 @@ export function QuoteEmbed({
                   author={quote.author}
                   moderation={moderation}
                   showAvatar
+                  showPronouns={showPronouns}
                   postHref={itemHref}
                   timestamp={quote.indexedAt}
                 />
