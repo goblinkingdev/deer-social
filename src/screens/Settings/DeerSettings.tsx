@@ -71,6 +71,10 @@ import {
   useSetHideSimilarAccountsRecomm,
 } from '#/state/preferences/hide-similar-accounts-recommendations'
 import {
+  useHideStarterPackStuff,
+  useSetHideStarterPackStuff,
+} from '#/state/preferences/hide-starter-pack-stuff'
+import {
   useLoadAsPngs,
   useSetLoadAsPngs,
 } from '#/state/preferences/load-small-pngs'
@@ -282,6 +286,9 @@ export function DeerSettingsScreen({}: Props) {
 
   const hideSimilarAccountsRecomm = useHideSimilarAccountsRecomm()
   const setHideSimilarAccountsRecomm = useSetHideSimilarAccountsRecomm()
+
+  const hideStarterPackStuff = useHideStarterPackStuff()
+  const setHideStarterPackStuff = useSetHideStarterPackStuff()
 
   const constellationInstance = useConstellationInstance()
   const setConstellationInstanceControl = Dialog.useDialogControl()
@@ -572,6 +579,18 @@ export function DeerSettingsScreen({}: Props) {
               style={[a.w_full]}>
               <Toggle.LabelText style={[a.flex_1]}>
                 <Trans>Hide similar accounts recommendations</Trans>
+              </Toggle.LabelText>
+              <Toggle.Platform />
+            </Toggle.Item>
+
+            <Toggle.Item
+              name="hide_starter_pack_stuff"
+              label={_(msg`Hide starter pack stuff`)}
+              value={hideStarterPackStuff}
+              onChange={value => setHideStarterPackStuff(value)}
+              style={[a.w_full]}>
+              <Toggle.LabelText style={[a.flex_1]}>
+                <Trans>Hide things that encourage starter pack usage</Trans>
               </Toggle.LabelText>
               <Toggle.Platform />
             </Toggle.Item>

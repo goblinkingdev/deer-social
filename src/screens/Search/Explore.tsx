@@ -15,6 +15,7 @@ import {sanitizeHandle} from '#/lib/strings/handles'
 import {logger} from '#/logger'
 import {type MetricEvents} from '#/logger/metrics'
 import {isNative} from '#/platform/detection'
+import {useHideStarterPackStuff} from '#/state/preferences/hide-starter-pack-stuff'
 import {useLanguagePrefs} from '#/state/preferences/languages'
 import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {RQKEY_ROOT_PAGINATED as useActorSearchPaginatedQueryKeyRoot} from '#/state/queries/actor-search'
@@ -217,6 +218,8 @@ export function Explore({
   const {data: preferences, error: preferencesError} = usePreferencesQuery()
   const moderationOpts = useModerationOpts()
   const [selectedInterest, setSelectedInterest] = useState<string | null>(null)
+
+  const hideStarterPackStuff = useHideStarterPackStuff()
 
   /*
    * Begin special language handling
@@ -692,7 +695,7 @@ export function Explore({
       i.push(trendingTopicsModule)
       i.push(...suggestedFeedsModule)
       i.push(...suggestedFollowsModule)
-      i.push(...suggestedStarterPacksModule)
+      !hideStarterPackStuff && i.push(...suggestedStarterPacksModule)
       i.push(...feedPreviewsModule)
     } else {
       i.push(...suggestedFollowsModule)
@@ -708,6 +711,7 @@ export function Explore({
     feedPreviewsModule,
     interestsNuxModule,
     useFullExperience,
+    hideStarterPackStuff,
   ])
 
   const renderItem = useCallback(

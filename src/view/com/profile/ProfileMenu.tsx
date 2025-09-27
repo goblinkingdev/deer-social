@@ -20,6 +20,7 @@ import {
   useDeerVerificationTrusted,
   useSetDeerVerificationTrust,
 } from '#/state/preferences/deer-verification'
+import {useHideStarterPackStuff} from '#/state/preferences/hide-starter-pack-stuff'
 import {
   RQKEY as profileQueryKey,
   useProfileBlockMutationQueue,
@@ -96,6 +97,8 @@ let ProfileMenu = ({
     profile,
     'ProfileMenu',
   )
+
+  const hideStarterPackStuff = useHideStarterPackStuff()
 
   const blockPromptControl = Prompt.usePromptControl()
   const loggedOutWarningPromptControl = Prompt.usePromptControl()
@@ -342,15 +345,17 @@ let ProfileMenu = ({
                     )}
                   </>
                 )}
-                <Menu.Item
-                  testID="profileHeaderDropdownStarterPackAddRemoveBtn"
-                  label={_(msg`Add to starter packs`)}
-                  onPress={addToStarterPacksDialogControl.open}>
-                  <Menu.ItemText>
-                    <Trans>Add to starter packs</Trans>
-                  </Menu.ItemText>
-                  <Menu.ItemIcon icon={StarterPack} />
-                </Menu.Item>
+                {!hideStarterPackStuff && (
+                  <Menu.Item
+                    testID="profileHeaderDropdownStarterPackAddRemoveBtn"
+                    label={_(msg`Add to starter packs`)}
+                    onPress={addToStarterPacksDialogControl.open}>
+                    <Menu.ItemText>
+                      <Trans>Add to starter packs</Trans>
+                    </Menu.ItemText>
+                    <Menu.ItemIcon icon={StarterPack} />
+                  </Menu.Item>
+                )}
                 <Menu.Item
                   testID="profileHeaderDropdownListAddRemoveBtn"
                   label={_(msg`Add to lists`)}

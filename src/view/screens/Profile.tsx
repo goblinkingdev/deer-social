@@ -25,6 +25,7 @@ import {isInvalidHandle} from '#/lib/strings/handles'
 import {colors, s} from '#/lib/styles'
 import {useProfileShadow} from '#/state/cache/profile-shadow'
 import {listenSoftReset} from '#/state/events'
+import {useHideStarterPackStuff} from '#/state/preferences/hide-starter-pack-stuff'
 import {useModerationOpts} from '#/state/preferences/moderation-opts'
 import {useLabelerInfoQuery} from '#/state/queries/labeler'
 import {resetProfilePostsQueries} from '#/state/queries/post-feed'
@@ -180,6 +181,8 @@ function ProfileScreenLoaded({
   const [currentPage, setCurrentPage] = React.useState(0)
   const {_} = useLingui()
 
+  const hideStarterPackStuff = useHideStarterPackStuff()
+
   const [scrollViewTag, setScrollViewTag] = React.useState<number | null>(null)
 
   const postsSectionRef = React.useRef<SectionRef>(null)
@@ -214,7 +217,8 @@ function ProfileScreenLoaded({
   const feedGenCount = profile.associated?.feedgens || 0
   const showFeedsTab = isMe || feedGenCount > 0
   const starterPackCount = profile.associated?.starterPacks || 0
-  const showStarterPacksTab = isMe || starterPackCount > 0
+  const showStarterPacksTab =
+    (!hideStarterPackStuff && isMe) || starterPackCount > 0
   // subtract starterpack count from list count, since starterpacks are a type of list
   const listCount = (profile.associated?.lists || 0) - starterPackCount
   const showListsTab = true && (isMe || listCount > 0)
