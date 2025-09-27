@@ -1,6 +1,5 @@
 import {View} from 'react-native'
 import {type AppBskyActorDefs} from '@atproto/api'
-import {Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
 import {isInvalidHandle, sanitizeHandle} from '#/lib/strings/handles'
@@ -24,7 +23,6 @@ export function ProfileHeaderHandle({
   const {_} = useLingui()
   const invalidHandle = isInvalidHandle(profile.handle)
   const pronouns = profile.pronouns
-  const blockHide = profile.viewer?.blocking || profile.viewer?.blockedBy
   const isBskySocialHandle = profile.handle.endsWith('.bsky.social')
   const showProfileInHandle = useShowLinkInHandle()
   const sanitized = sanitizeHandle(
@@ -38,14 +36,6 @@ export function ProfileHeaderHandle({
       style={[a.flex_row, {gap: 6}, a.align_center, {maxWidth: '100%'}]}
       pointerEvents={disableTaps ? 'none' : isIOS ? 'auto' : 'box-none'}>
       <NewskieDialog profile={profile} disabled={disableTaps} />
-
-      {profile.viewer?.followedBy && !blockHide ? (
-        <View style={[t.atoms.bg_contrast_25, a.rounded_xs, a.px_sm, a.py_xs]}>
-          <Text style={[t.atoms.text, a.text_sm]}>
-            <Trans>Follows you</Trans>
-          </Text>
-        </View>
-      ) : undefined}
 
       <Text
         emoji

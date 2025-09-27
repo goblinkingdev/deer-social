@@ -261,7 +261,11 @@ let ProfileHeaderStandard = ({
                   )}
                   <ButtonText>
                     {profile.viewer?.following ? (
-                      <Trans>Following</Trans>
+                      profile.viewer?.followedBy ? (
+                        <Trans>Mutuals</Trans>
+                      ) : (
+                        <Trans>Following</Trans>
+                      )
                     ) : profile.viewer?.followedBy ? (
                       <Trans>Follow back</Trans>
                     ) : (
