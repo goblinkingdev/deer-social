@@ -13,7 +13,7 @@ env:
 jobs:
   build-android:
     name: Build deer for Android
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       apk-path: ${{ steps.upload-artifact.outputs.artifact-url }}
     steps:
@@ -85,31 +85,19 @@ jobs:
 
   deploy-to-cloudflare:
     name: Deploy to Cloudflare Pages
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
-
-      - name: Cache build dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/node_modules
-            ~/.npm
-          key: ${{ runner.os }}-web-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-web-build-
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -122,23 +110,19 @@ jobs:
 
       - name: Build Web App
         run: yarn build-web
-        env:
-          NODE_ENV: production
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'deer-social'
           directory: 'web-build'
-          branch: 'main'
-          wranglerVersion: '3'
 
   release:
     name: Create GitHub Release
     needs: build-android
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
