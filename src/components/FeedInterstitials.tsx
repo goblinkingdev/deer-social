@@ -376,13 +376,30 @@ export function ProfileGrid({
           t.atoms.bg_contrast_25,
         ]}
         pointerEvents={isIOS ? 'auto' : 'box-none'}>
-        <Text style={[a.text_sm, a.font_semi_bold, t.atoms.text]}>
-          {isFeedContext ? (
-            <Trans>Suggested for you</Trans>
-          ) : (
-            <Trans>Similar accounts</Trans>
+        <View
+          style={[
+            a.px_lg,
+            a.pt_md,
+            a.flex_row,
+            a.align_center,
+            a.justify_between,
+          ]}
+          pointerEvents={isIOS ? 'auto' : 'box-none'}>
+          <Text style={[a.text_sm, a.font_semi_bold, t.atoms.text]}>
+            {isFeedContext ? (
+              <Trans>Suggested for you</Trans>
+            ) : (
+              <Trans>Similar accounts</Trans>
+            )}
+          </Text>
+          {!isProfileHeaderContext && (
+            <InlineLinkText
+              label={_(msg`See more suggested profiles on the Explore page`)}
+              to="/search">
+              <Trans>See more</Trans>
+            </InlineLinkText>
           )}
-        </Text>
+        </View>
 
         {gtMobile ? (
           <View style={[a.p_lg, a.pt_md]}>
