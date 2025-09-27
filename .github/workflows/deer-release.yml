@@ -65,6 +65,7 @@ jobs:
 
       - name: Build APK
         run: |
+          export NODE_OPTIONS=--max-old-space-size=10240
           just dist-build-android-gradle
         env:
           GRADLE_USER_HOME: ~/.gradle
