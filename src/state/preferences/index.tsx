@@ -19,10 +19,12 @@ import {Provider as GoLinksProvider} from './go-links-enabled'
 import {Provider as HiddenPostsProvider} from './hidden-posts'
 import {Provider as HideFeedsPromoTabProvider} from './hide-feeds-promo-tab'
 import {Provider as HideSimilarAccountsRecommProvider} from './hide-similar-accounts-recommendations'
+import {Provider as HideStarterPackStuffProvider} from './hide-starter-pack-stuff'
 import {Provider as InAppBrowserProvider} from './in-app-browser'
 import {Provider as KawaiiProvider} from './kawaii'
 import {Provider as LanguagesProvider} from './languages'
 import {Provider as LargeAltBadgeProvider} from './large-alt-badge'
+import {Provider as LoadSmallPNGsProvider} from './load-small-pngs'
 import {Provider as NoAppLabelersProvider} from './no-app-labelers'
 import {Provider as NoDiscoverProvider} from './no-discover-fallback'
 import {Provider as RepostCarouselProvider} from './repost-carousel-enabled'
@@ -85,7 +87,11 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
                                                             <DisableSavesMetricsProvider>
                                                               <DisableReplyMetricsProvider>
                                                                 <HideSimilarAccountsRecommProvider>
-                                                                  {children}
+                                                                  <LoadSmallPNGsProvider>
+                                                                    <HideStarterPackStuffProvider>
+                                                                      {children}
+                                                                    </HideStarterPackStuffProvider>
+                                                                  </LoadSmallPNGsProvider>
                                                                 </HideSimilarAccountsRecommProvider>
                                                               </DisableReplyMetricsProvider>
                                                             </DisableSavesMetricsProvider>
