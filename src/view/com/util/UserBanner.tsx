@@ -81,6 +81,8 @@ export function UserBanner({
         await openCamera({
           aspect: [3, 1],
         }),
+        undefined,
+        false,
       ),
     )
   }, [onSelectNewBanner, requestCameraAccessIfNeeded])
@@ -102,6 +104,8 @@ export function UserBanner({
               imageUri: items[0].path,
               aspectRatio: 3 / 1,
             }),
+            undefined,
+            false,
           ),
         )
       } else {
@@ -155,7 +159,7 @@ export function UserBanner({
 
   const onChangeEditImage = useCallback(
     async (image: ComposerImage) => {
-      const compressed = await compressImage(image)
+      const compressed = await compressImage(image, false)
       onSelectNewBanner?.(compressed)
     },
     [onSelectNewBanner],

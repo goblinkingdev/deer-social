@@ -10,6 +10,7 @@ import {mimeToExt} from './video/util'
 export async function compressIfNeeded(
   img: PickerImage,
   maxSize: number,
+  webp: boolean = true,
 ): Promise<PickerImage> {
   if (img.size < maxSize) {
     return img
@@ -18,6 +19,7 @@ export async function compressIfNeeded(
     width: img.width,
     height: img.height,
     maxSize,
+    webp,
   })
 }
 
@@ -27,6 +29,7 @@ export interface DownloadAndResizeOpts {
   height: number
   maxSize: number
   timeout: number
+  webp: boolean
 }
 
 export async function downloadAndResize(opts: DownloadAndResizeOpts) {
@@ -84,6 +87,7 @@ interface DoResizeOpts {
   width: number
   height: number
   maxSize: number
+  webp: boolean
 }
 
 async function doResize(
@@ -97,7 +101,7 @@ async function doResize(
   let maxQualityPercentage = 110 //exclusive
   let finalCompressionPercentage: number = 100
 
-  const imageData = await createResizedImage(dataUri, {
+  const [imageData, canvas] = await createResizedImage(dataUri, {
     width: opts.width,
     height: opts.height,
   })
@@ -105,10 +109,15 @@ async function doResize(
   while (maxQualityPercentage > 1) {
     const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
-    const [tempDataUri, size] = await createCompressedImage(
-      imageData,
-      qualityPercentage,
-    )
+    const [tempDataUri, size] = opts.webp
+      ? await createCompressedWebp(imageData, qualityPercentage)
+      : (() => {
+          const dataUrl = canvas.toDataURL(
+            qualityPercentage === 100 ? 'image/png' : 'image/jpeg',
+            qualityPercentage / 100,
+          )
+          return [dataUrl, getDataUriSize(dataUrl)]
+        })()
 
     console.log(size, qualityPercentage, originalSize)
     if (size <= opts.maxSize && size <= originalSize) {
@@ -142,7 +151,7 @@ function createResizedImage(
     width: number
     height: number
   },
-): Promise<ImageData> {
+): Promise<[ImageData, HTMLCanvasElement]> {
   return new Promise((resolve, reject) => {
     const img = document.createElement('img')
     img.addEventListener('load', async () => {
@@ -165,7 +174,7 @@ function createResizedImage(
 
       const imageData = ctx.getImageData(0, 0, img.width, img.height)
 
-      resolve(imageData)
+      resolve([imageData, canvas])
     })
     img.addEventListener('error', ev => {
       reject(ev.error)
@@ -174,7 +183,7 @@ function createResizedImage(
   })
 }
 
-async function createCompressedImage(
+async function createCompressedWebp(
   imageData: ImageData,
   quality: number,
 ): Promise<[string, number]> {

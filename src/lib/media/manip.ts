@@ -28,6 +28,7 @@ import {mimeToExt} from './video/util'
 export async function compressIfNeeded(
   img: PickerImage,
   maxSize: number = POST_IMG_MAX.size,
+  webp: boolean = true,
 ): Promise<PickerImage> {
   if (img.size < maxSize) {
     return img
@@ -36,6 +37,7 @@ export async function compressIfNeeded(
     width: img.width,
     height: img.height,
     maxSize,
+    webp,
   })
   const finalImageMovedPath = await moveToPermanentPath(
     resizedImage.path,
@@ -54,6 +56,7 @@ export interface DownloadAndResizeOpts {
   height: number
   maxSize: number
   timeout: number
+  webp: boolean
 }
 
 export async function downloadAndResize(opts: DownloadAndResizeOpts) {
@@ -63,8 +66,6 @@ export async function downloadAndResize(opts: DownloadAndResizeOpts) {
     const ext = urip.pathname.split('.').pop()
     if (ext === 'png') {
       appendExt = 'png'
-    } else if (ext === 'webp') {
-      appendExt = 'webp'
     }
   } catch (e: any) {
     console.error('Invalid URI', opts.uri, e)
@@ -180,6 +181,7 @@ interface DoResizeOpts {
   width: number
   height: number
   maxSize: number
+  webp: boolean
 }
 
 async function doResize(
