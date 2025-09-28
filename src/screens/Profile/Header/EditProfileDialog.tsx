@@ -194,6 +194,9 @@ function DialogInner({
   }, [setWebsite])
 
   const onPressSave = useCallback(async () => {
+    const pronounsTrimmed = pronouns.trimEnd().toLowerCase()
+    const websiteTrimmed = website.trimEnd().toLowerCase()
+
     setImageError('')
     try {
       await updateProfileMutation({
@@ -201,8 +204,8 @@ function DialogInner({
         updates: {
           displayName: displayName.trimEnd(),
           description: description.trimEnd(),
-          pronouns: pronouns.trimEnd().toLowerCase(),
-          website: website !== '' ? website.trimEnd().toLowerCase() : undefined,
+          pronouns: pronounsTrimmed !== '' ? pronounsTrimmed : undefined,
+          website: websiteTrimmed !== '' ? websiteTrimmed : undefined,
         },
         newUserAvatar,
         newUserBanner,
