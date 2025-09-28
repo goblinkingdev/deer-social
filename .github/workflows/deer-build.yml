@@ -4,7 +4,7 @@ on: workflow_dispatch
 jobs:
   deer-build-android:
     name: Build deer for Android
-    runs-on: self-hosted
+    runs-on: high-end
     steps:
       - name: Checkout
         uses: actions/checkout@v4
