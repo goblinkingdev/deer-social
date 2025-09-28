@@ -61,7 +61,7 @@ export function Component({
           ],
       {
         base64: true,
-        format: SaveFormat.WEBP,
+        format: SaveFormat.PNG,
       },
     )
 
