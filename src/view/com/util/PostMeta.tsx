@@ -13,7 +13,6 @@ import {sanitizeDisplayName} from '#/lib/strings/display-names'
 import {sanitizeHandle} from '#/lib/strings/handles'
 import {sanitizePronouns} from '#/lib/strings/pronouns'
 import {niceDate} from '#/lib/strings/time'
-import {isAndroid} from '#/platform/detection'
 import {useProfileShadow} from '#/state/cache/profile-shadow'
 import {precacheProfile} from '#/state/queries/profile'
 import {atoms as a, platform, useTheme, web} from '#/alf'
@@ -64,7 +63,7 @@ let PostMeta = (opts: PostMetaOpts): React.ReactNode => {
   return (
     <View
       style={[
-        isAndroid ? a.flex_1 : a.flex_shrink,
+        a.flex_shrink,
         a.flex_row,
         a.align_center,
         a.pb_xs,
@@ -174,7 +173,6 @@ let PostMeta = (opts: PostMetaOpts): React.ReactNode => {
                 a.pl_xs,
                 a.text_md,
                 a.leading_tight,
-                isAndroid && a.flex_grow,
                 a.text_right,
                 t.atoms.text_contrast_medium,
                 web({
@@ -183,17 +181,15 @@ let PostMeta = (opts: PostMetaOpts): React.ReactNode => {
               ]}>
               {!opts.showPronouns && (
                 <>
-                  {!isAndroid && (
-                    <Text
-                      style={[
-                        a.text_md,
-                        a.leading_tight,
-                        t.atoms.text_contrast_medium,
-                      ]}
-                      accessible={false}>
-                      &middot;{' '}
-                    </Text>
-                  )}
+                  <Text
+                    style={[
+                      a.text_md,
+                      a.leading_tight,
+                      t.atoms.text_contrast_medium,
+                    ]}
+                    accessible={false}>
+                    &middot;{' '}
+                  </Text>
                   {timeElapsed}
                 </>
               )}
