@@ -1477,20 +1477,20 @@ msgstr ""
 msgid "Books"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:420
+#: src/components/FeedInterstitials.tsx:437
 msgid "Browse more accounts on the Explore page"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:548
+#: src/components/FeedInterstitials.tsx:565
 msgid "Browse more feeds on the Explore page"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:529
-#: src/components/FeedInterstitials.tsx:532
+#: src/components/FeedInterstitials.tsx:546
+#: src/components/FeedInterstitials.tsx:549
 msgid "Browse more suggestions"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:557
+#: src/components/FeedInterstitials.tsx:574
 msgid "Browse more suggestions on the Explore page"
 msgstr ""
 
@@ -2695,28 +2695,28 @@ msgstr ""
 msgid "Disable haptic feedback"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:651
-#: src/screens/Settings/DeerSettings.tsx:656
+#: src/screens/Settings/DeerSettings.tsx:654
+#: src/screens/Settings/DeerSettings.tsx:659
 msgid "Disable Likes Metrics"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:675
-#: src/screens/Settings/DeerSettings.tsx:680
+#: src/screens/Settings/DeerSettings.tsx:678
+#: src/screens/Settings/DeerSettings.tsx:683
 msgid "Disable Quotes Metrics"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:699
-#: src/screens/Settings/DeerSettings.tsx:704
+#: src/screens/Settings/DeerSettings.tsx:702
+#: src/screens/Settings/DeerSettings.tsx:707
 msgid "Disable Reply Metrics"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:663
-#: src/screens/Settings/DeerSettings.tsx:668
+#: src/screens/Settings/DeerSettings.tsx:666
+#: src/screens/Settings/DeerSettings.tsx:671
 msgid "Disable Reposts Metrics"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:687
-#: src/screens/Settings/DeerSettings.tsx:692
+#: src/screens/Settings/DeerSettings.tsx:690
+#: src/screens/Settings/DeerSettings.tsx:695
 msgid "Disable Saves Metrics"
 msgstr ""
 
@@ -3914,7 +3914,7 @@ msgstr ""
 msgid "For You"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:558
+#: src/screens/Settings/DeerSettings.tsx:559
 msgid "Forcefully disables the notifications other people receive when you like/repost a post someone else has reposted for privacy."
 msgstr ""
 
@@ -3961,11 +3961,11 @@ msgctxt "from-feed"
 msgid "From <0/>"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:608
+#: src/screens/Settings/DeerSettings.tsx:611
 msgid "Fullsize format"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:713
+#: src/screens/Settings/DeerSettings.tsx:716
 msgid "Gates"
 msgstr ""
 
@@ -4286,8 +4286,8 @@ msgstr ""
 msgid "Hide reply for me"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:566
-#: src/screens/Settings/DeerSettings.tsx:571
+#: src/screens/Settings/DeerSettings.tsx:569
+#: src/screens/Settings/DeerSettings.tsx:574
 msgid "Hide similar accounts recommendations"
 msgstr ""
 
@@ -4476,7 +4476,7 @@ msgstr ""
 msgid "Image saved"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:580
+#: src/screens/Settings/DeerSettings.tsx:583
 msgid "Images"
 msgstr ""
 
@@ -5014,11 +5014,11 @@ msgstr ""
 msgid "Live link"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:637
+#: src/screens/Settings/DeerSettings.tsx:640
 msgid "Load both small and 100% quality images as Pngs"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:631
+#: src/screens/Settings/DeerSettings.tsx:634
 msgid ""
 "Load both small and 100% quality images as Pngs instead of the\n"
 "set image format"
@@ -5201,7 +5201,7 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:646
+#: src/screens/Settings/DeerSettings.tsx:649
 msgid "Metrics"
 msgstr ""
 
@@ -7390,7 +7390,7 @@ msgstr ""
 msgid "Reset code"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:728
+#: src/screens/Settings/DeerSettings.tsx:731
 msgid "Reset gates"
 msgstr ""
 
@@ -7691,8 +7691,13 @@ msgstr ""
 msgid "See #{tag} posts by user"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:434
+#: src/components/FeedInterstitials.tsx:399
+#: src/components/FeedInterstitials.tsx:451
 msgid "See more"
+msgstr ""
+
+#: src/components/FeedInterstitials.tsx:397
+msgid "See more suggested profiles on the Explore page"
 msgstr ""
 
 #: src/screens/SavedFeeds.tsx:220
@@ -7757,7 +7762,7 @@ msgstr ""
 msgid "Select from an existing account"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:613
+#: src/screens/Settings/DeerSettings.tsx:616
 msgid "Select fullsize format"
 msgstr ""
 
@@ -7811,7 +7816,7 @@ msgstr ""
 msgid "Select the moderation service(s) to report to"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:590
+#: src/screens/Settings/DeerSettings.tsx:593
 msgid "Select thumbnail format"
 msgstr ""
 
@@ -8289,7 +8294,7 @@ msgstr ""
 msgid "Signed in as @{0}"
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:383
+#: src/components/FeedInterstitials.tsx:392
 msgid "Similar accounts"
 msgstr ""
 
@@ -8336,7 +8341,7 @@ msgstr ""
 msgid "Some of your verifications are invalid."
 msgstr ""
 
-#: src/components/FeedInterstitials.tsx:511
+#: src/components/FeedInterstitials.tsx:528
 msgid "Some other feeds you might like"
 msgstr ""
 
@@ -8564,7 +8569,7 @@ msgid "Suggested Accounts"
 msgstr ""
 
 #. Accounts suggested to the user for them to follow
-#: src/components/FeedInterstitials.tsx:381
+#: src/components/FeedInterstitials.tsx:390
 #: src/screens/Onboarding/StepSuggestedAccounts/index.tsx:137
 msgid "Suggested for you"
 msgstr ""
@@ -8966,7 +8971,7 @@ msgstr ""
 msgid "There's been a rush of new users to Bluesky! We'll activate your account as soon as we can."
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:738
+#: src/screens/Settings/DeerSettings.tsx:741
 msgid "These settings might summon nasel demons! Restart the app after changing if anything breaks."
 msgstr ""
 
@@ -9236,7 +9241,7 @@ msgstr ""
 msgid "Threads Preferences"
 msgstr ""
 
-#: src/screens/Settings/DeerSettings.tsx:585
+#: src/screens/Settings/DeerSettings.tsx:588
 msgid "Thumbnail format"
 msgstr ""
 
