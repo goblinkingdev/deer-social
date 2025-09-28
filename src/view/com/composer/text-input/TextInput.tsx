@@ -96,7 +96,6 @@ export function TextInput({
                   uri: feature.uri,
                   width: POST_IMG_MAX.width,
                   height: POST_IMG_MAX.height,
-                  mode: 'contain',
                   maxSize: POST_IMG_MAX.size,
                   timeout: 15e3,
                 })

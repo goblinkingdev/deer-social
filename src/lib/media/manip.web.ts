@@ -1,5 +1,7 @@
 /// <reference lib="dom" />
 
+import {encode} from '@jsquash/webp'
+
 import {type PickerImage} from './picker.shared'
 import {type Dimensions} from './types'
 import {blobToDataUri, getDataUriSize} from './util'
@@ -15,7 +17,6 @@ export async function compressIfNeeded(
   return await doResize(img.path, {
     width: img.width,
     height: img.height,
-    mode: 'stretch',
     maxSize,
   })
 }
@@ -24,7 +25,6 @@ export interface DownloadAndResizeOpts {
   uri: string
   width: number
   height: number
-  mode: 'contain' | 'cover' | 'stretch'
   maxSize: number
   timeout: number
 }
@@ -83,7 +83,6 @@ export async function getImageDim(path: string): Promise<Dimensions> {
 interface DoResizeOpts {
   width: number
   height: number
-  mode: 'contain' | 'cover' | 'stretch'
   maxSize: number
 }
 
@@ -91,24 +90,28 @@ async function doResize(
   dataUri: string,
   opts: DoResizeOpts,
 ): Promise<PickerImage> {
-  const originalSize = getDataUriSize(dataUri) + 1024
+  const originalSize = getDataUriSize(dataUri)
 
   let newDataUri
 
   let maxQualityPercentage = 110 //exclusive
   let finalCompressionPercentage: number = 100
 
+  const imageData = await createResizedImage(dataUri, {
+    width: opts.width,
+    height: opts.height,
+  })
+
   while (maxQualityPercentage > 1) {
     const qualityPercentage = Math.round(maxQualityPercentage - 10)
-    const tempDataUri = await createResizedImage(dataUri, {
-      width: opts.width,
-      height: opts.height,
-      quality: qualityPercentage / 100,
-      mode: opts.mode,
-    })
 
-    const size = getDataUriSize(tempDataUri)
-    if (size < opts.maxSize && size < originalSize) {
+    const [tempDataUri, size] = await createCompressedImage(
+      imageData,
+      qualityPercentage,
+    )
+
+    console.log(size, qualityPercentage, originalSize)
+    if (size <= opts.maxSize && size <= originalSize) {
       newDataUri = tempDataUri
       finalCompressionPercentage = qualityPercentage
       break
@@ -135,29 +138,22 @@ function createResizedImage(
   {
     width,
     height,
-    quality,
-    mode,
   }: {
     width: number
     height: number
-    quality: number
-    mode: 'contain' | 'cover' | 'stretch'
   },
-): Promise<string> {
+): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = document.createElement('img')
-    img.addEventListener('load', () => {
+    img.addEventListener('load', async () => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
       if (!ctx) {
         return reject(new Error('Failed to resize image'))
       }
-
       let scale = 1
-      if (mode === 'cover') {
+      if (img.width > width || img.height > height) {
         scale = img.width < img.height ? width / img.width : height / img.height
-      } else if (mode === 'contain') {
-        scale = img.width > img.height ? width / img.width : height / img.height
       }
       let w = img.width * scale
       let h = img.height * scale
@@ -166,13 +162,32 @@ function createResizedImage(
       canvas.height = h
 
       ctx.drawImage(img, 0, 0, w, h)
-      resolve(canvas.toDataURL('image/webp', quality))
+
+      const imageData = ctx.getImageData(0, 0, img.width, img.height)
+
+      resolve(imageData)
     })
     img.addEventListener('error', ev => {
       reject(ev.error)
     })
     img.src = dataUri
   })
+}
+
+async function createCompressedImage(
+  imageData: ImageData,
+  quality: number,
+): Promise<[string, number]> {
+  const webpBuffer = await encode(imageData, {
+    lossless: quality === 100 ? 1 : 0,
+    quality: quality || 100,
+    method: 4,
+  })
+
+  const size = webpBuffer.byteLength
+
+  const blob = new Blob([webpBuffer], {type: 'image/webp'})
+  return [URL.createObjectURL(blob), size]
 }
 
 export async function saveBytesToDisk(
