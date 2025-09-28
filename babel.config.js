@@ -12,6 +12,7 @@ module.exports = function (api) {
             // However, we need it in Jest tests since those run without Metro.
             disableImportExportTransform: !isTestEnv,
           },
+          unstable_transformImportMeta: true,
         },
       ],
     ],
