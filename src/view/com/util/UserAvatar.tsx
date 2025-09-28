@@ -383,6 +383,8 @@ let EditableUserAvatar = ({
         await openCamera({
           aspect: [1, 1],
         }),
+        undefined,
+        false,
       ),
     )
   }, [onSelectNewAvatar, requestCameraAccessIfNeeded])
@@ -411,6 +413,8 @@ let EditableUserAvatar = ({
               shape: circular ? 'circle' : 'rectangle',
               aspectRatio: 1,
             }),
+            undefined,
+            false,
           ),
         )
       } else {
@@ -437,7 +441,7 @@ let EditableUserAvatar = ({
 
   const onChangeEditImage = useCallback(
     async (image: ComposerImage) => {
-      const compressed = await compressImage(image)
+      const compressed = await compressImage(image, false)
       onSelectNewAvatar(compressed)
     },
     [onSelectNewAvatar],

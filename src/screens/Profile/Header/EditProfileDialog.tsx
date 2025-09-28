@@ -202,7 +202,7 @@ function DialogInner({
           displayName: displayName.trimEnd(),
           description: description.trimEnd(),
           pronouns: pronouns.trimEnd().toLowerCase(),
-          website: website.trimEnd().toLowerCase(),
+          website: website !== '' ? website.trimEnd().toLowerCase() : undefined,
         },
         newUserAvatar,
         newUserBanner,

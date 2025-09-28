@@ -25,7 +25,7 @@ import {
   linkRequiresWarning,
 } from '#/lib/strings/url-helpers'
 import {type TypographyVariant} from '#/lib/ThemeContext'
-import {isAndroid, isNative, isWeb} from '#/platform/detection'
+import {isAndroid, isWeb} from '#/platform/detection'
 import {emitSoftReset} from '#/state/events'
 import {useModalControls} from '#/state/modals'
 import {WebAuxClickWrapper} from '#/view/com/util/WebAuxClickWrapper'
@@ -427,7 +427,7 @@ function onPressInner(
           // note: 'navigate' actually acts the same as 'push' nowadays
           // therefore we need to add 'pop' -sfn
           // @ts-ignore we're not able to type check on this one -prf
-          navigation.navigate(routeName, params, {pop: isNative})
+          navigation.navigate(routeName, params, {pop: true})
         }
       } else {
         throw Error('Unsupported navigator action.')

@@ -15,6 +15,7 @@ import {manipulateAsync, SaveFormat} from 'expo-image-manipulator'
 import * as MediaLibrary from 'expo-media-library'
 import * as Sharing from 'expo-sharing'
 import {Buffer} from 'buffer'
+import {RNFetchBlob} from 'rn-fetch-blob'
 
 import {POST_IMG_MAX} from '#/lib/constants'
 import {logger} from '#/logger'
@@ -27,6 +28,7 @@ import {mimeToExt} from './video/util'
 export async function compressIfNeeded(
   img: PickerImage,
   maxSize: number = POST_IMG_MAX.size,
+  webp: boolean = true,
 ): Promise<PickerImage> {
   if (img.size < maxSize) {
     return img
@@ -34,12 +36,12 @@ export async function compressIfNeeded(
   const resizedImage = await doResize(normalizePath(img.path), {
     width: img.width,
     height: img.height,
-    mode: 'stretch',
     maxSize,
+    webp,
   })
   const finalImageMovedPath = await moveToPermanentPath(
     resizedImage.path,
-    '.webp',
+    '.jpeg',
   )
   const finalImg = {
     ...resizedImage,
@@ -52,9 +54,9 @@ export interface DownloadAndResizeOpts {
   uri: string
   width: number
   height: number
-  mode: 'contain' | 'cover' | 'stretch'
   maxSize: number
   timeout: number
+  webp: boolean
 }
 
 export async function downloadAndResize(opts: DownloadAndResizeOpts) {
@@ -64,8 +66,6 @@ export async function downloadAndResize(opts: DownloadAndResizeOpts) {
     const ext = urip.pathname.split('.').pop()
     if (ext === 'png') {
       appendExt = 'png'
-    } else if (ext === 'webp') {
-      appendExt = 'webp'
     }
   } catch (e: any) {
     console.error('Invalid URI', opts.uri, e)
@@ -180,8 +180,8 @@ export function getImageDim(path: string): Promise<Dimensions> {
 interface DoResizeOpts {
   width: number
   height: number
-  mode: 'contain' | 'cover' | 'stretch'
   maxSize: number
+  webp: boolean
 }
 
 async function doResize(
@@ -198,7 +198,7 @@ async function doResize(
     width: imageRes.width,
     height: imageRes.height,
   })
-  const originalSize = getDataUriSize(localUri) + 1024
+  const originalSize = getDataUriSize(localUri)
 
   let maxQualityPercentage = 110 // exclusive
   let newDataUri
@@ -210,7 +210,7 @@ async function doResize(
       localUri,
       [{resize: newDimensions}],
       {
-        format: SaveFormat.WEBP,
+        format: SaveFormat.JPEG,
         compress: qualityPercentage / 100,
       },
     )
@@ -227,7 +227,7 @@ async function doResize(
     if (fileInfo.size < opts.maxSize && fileInfo.size < originalSize) {
       newDataUri = {
         path: normalizePath(resizeRes.uri),
-        mime: 'image/webp',
+        mime: 'image/jpeg',
         size: fileInfo.size,
         width: resizeRes.width,
         height: resizeRes.height,

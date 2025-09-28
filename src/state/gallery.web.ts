@@ -13,7 +13,6 @@ import {POST_IMG_MAX} from '#/lib/constants'
 import {getImageDim} from '#/lib/media/manip'
 import {type PickerImage} from '#/lib/media/picker.shared'
 import {getDataUriSize} from '#/lib/media/util'
-import {resize} from '../../node_modules/expo-image-manipulator/src/web/actions/index.web'
 
 export type ImageTransformation = {
   crop?: ActionCrop['crop']
@@ -152,9 +151,15 @@ export function resetImageManipulation(
   return img
 }
 
-export async function compressImage(img: ComposerImage): Promise<PickerImage> {
+export async function compressImage(
+  img: ComposerImage,
+  webp: boolean = true,
+): Promise<PickerImage> {
   const source = img.transformed || img.source
-  const originalSize = getDataUriSize(img.source.path)
+  // i should probably go and turn it into base64 and whatever but nah who cares
+  const originalSize = img.source.path.startsWith('blob:')
+    ? POST_IMG_MAX.size
+    : getDataUriSize(img.source.path)
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
@@ -162,22 +167,41 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
     110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0)
   let newDataUri
 
+  const resizedImage = await loadAndResizeImage(source.path, {
+    width: w,
+    height: h,
+  })
+
   while (maxQualityPercentage > 1) {
     const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
-    const res = await manipulateWebp(source.path, {
-      compress: qualityPercentage,
-      format: SaveFormat.WEBP,
-      resize: {width: w, height: h},
-    })
+    const format = webp
+      ? SaveFormat.WEBP
+      : qualityPercentage
+        ? SaveFormat.PNG
+        : SaveFormat.JPEG
 
-    if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {
+    const res = webp
+      ? await manipulateWebp(resizedImage, {
+          compress: qualityPercentage,
+          format: SaveFormat.WEBP,
+        })
+      : await manipulateAsync(source.path, [], {
+          compress: qualityPercentage / 100,
+          format,
+          base64: true,
+        })
+
+    const size =
+      'size' in res ? (res.size as number) : getDataUriSize(res.base64!)
+
+    if (size <= POST_IMG_MAX.size && size <= originalSize) {
       newDataUri = {
         path: res.uri,
-        width: res.width,
-        height: res.height,
-        mime: 'image/webp',
-        size: res.size,
+        width: w,
+        height: h,
+        mime: `image/${format}`,
+        size: size,
         quality: qualityPercentage,
       }
       break
@@ -193,42 +217,47 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
   throw new Error(`Unable to compress image`)
 }
 
-export const manipulateWebp = async (
+const loadAndResizeImage = async (
   uri: string,
-  saveOptions: SaveOptions & {
-    resize?: {width: number; height: number}
-    method?: number
-  } = {},
-): Promise<ImageResult & {size: number}> => {
+  size: {width: number; height: number},
+) => {
   const img = document.createElement('img')
   img.src = uri
   await new Promise(resolve => {
     img.onload = resolve
   })
   const canvas = document.createElement('canvas')
-  ;[canvas.width, canvas.height] = [img.width, img.height]
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-  ctx.drawImage(img, 0, 0)
 
-  if (saveOptions.resize) {
-    resize(canvas, saveOptions.resize)
-  }
+  let scale =
+    img.width < img.height ? size.width / img.width : size.height / img.height
+  let w = img.width * scale
+  let h = img.height * scale
 
-  const rawImageData = ctx.getImageData(0, 0, img.width, img.height)
+  canvas.width = w
+  canvas.height = h
 
-  const webpBuffer = await encode(rawImageData, {
+  ctx.drawImage(img, 0, 0, w, h)
+
+  return ctx.getImageData(0, 0, img.width, img.height)
+}
+
+export const manipulateWebp = async (
+  imageData: ImageData,
+  saveOptions: SaveOptions = {},
+): Promise<ImageResult & {size: number}> => {
+  const webpBuffer = await encode(imageData, {
     lossless: saveOptions.compress === 100 ? 1 : 0,
     quality: saveOptions.compress || 100,
-    method: saveOptions.method || 4,
+    method: 4,
   })
 
   const blob = new Blob([webpBuffer], {type: 'image/webp'})
   const resultUri = URL.createObjectURL(blob)
-
   return {
     uri: resultUri,
-    width: rawImageData.width,
-    height: rawImageData.height,
+    width: imageData.width,
+    height: imageData.height,
     size: blob.size,
   }
 }

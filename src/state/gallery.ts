@@ -11,10 +11,7 @@ import {
   manipulateAsync,
   SaveFormat,
 } from 'expo-image-manipulator'
-import {
-  type ImageResult,
-  type SaveOptions,
-} from 'expo-image-manipulator/src/ImageManipulator.types'
+import {type SaveOptions} from 'expo-image-manipulator/src/ImageManipulator.types'
 import {nanoid} from 'nanoid/non-secure'
 
 import {POST_IMG_MAX} from '#/lib/constants'
@@ -191,35 +188,54 @@ export function resetImageManipulation(
   return img
 }
 
-export async function compressImage(img: ComposerImage): Promise<PickerImage> {
+export async function compressImage(
+  img: ComposerImage,
+  webp: boolean = true,
+): Promise<PickerImage> {
   const source = img.transformed || img.source
   const originalSize = getDataUriSize(img.source.path)
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
   let maxQualityPercentage =
-    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0) // exclusive
+    110 - (originalSize >= POST_IMG_MAX.size * 2 ? 10 : 0)
   let newDataUri
+
+  const resizedImage = await manipulateAsync(
+    source.path,
+    [{resize: {width: w, height: h}}],
+    {format: SaveFormat.PNG},
+  )
 
   while (maxQualityPercentage > 1) {
     const qualityPercentage = Math.round(maxQualityPercentage - 10)
 
-    const res = await manipulateWebp(
-      source.path,
-      {resize: {width: w, height: h}},
-      {
-        compress: qualityPercentage,
-        format: SaveFormat.WEBP,
-      },
-    )
+    const format = webp
+      ? SaveFormat.WEBP
+      : qualityPercentage
+        ? SaveFormat.PNG
+        : SaveFormat.JPEG
 
-    if (res.size <= POST_IMG_MAX.size && res.size <= originalSize) {
+    const res = webp
+      ? await manipulateWebp(resizedImage.uri, {
+          compress: qualityPercentage,
+          format: SaveFormat.WEBP,
+        })
+      : await manipulateAsync(source.path, [], {
+          compress: qualityPercentage / 100,
+          format,
+          base64: true,
+        })
+
+    const size = 'size' in res ? res.size : getDataUriSize(res.base64!)
+
+    if (size <= POST_IMG_MAX.size && size <= originalSize) {
       newDataUri = {
         path: await moveIfNecessary(res.uri),
-        width: res.width,
-        height: res.height,
-        mime: 'image/webp',
-        size: res.size,
+        width: w,
+        height: h,
+        mime: `image/${format}`,
+        size: size,
         quality: qualityPercentage,
       }
       break
@@ -237,17 +253,11 @@ export async function compressImage(img: ComposerImage): Promise<PickerImage> {
 
 export const manipulateWebp = async (
   uri: string,
-  resize: {resize: {width: number; height: number}} = {
-    resize: {width: 128, height: 128},
-  },
   saveOptions: SaveOptions = {},
-): Promise<ImageResult & {size: number}> => {
-  const resized = await manipulateAsync(uri, [resize], {
-    format: SaveFormat.PNG,
-  })
+): Promise<{uri: string; size: number}> => {
   const tempOut = (await getTemporaryImageFile()) as string
 
-  const resultUri = await WebP.convertImage(resized.uri, tempOut, {
+  const resultUri = await WebP.convertImage(uri, tempOut, {
     type: saveOptions.compress === 100 ? WebP.Type.LOSSLESS : WebP.Type.LOSSY,
     quality: saveOptions.compress || 100,
   })
@@ -256,8 +266,6 @@ export const manipulateWebp = async (
 
   return {
     uri: resultUri,
-    width: resize.resize.width,
-    height: resize.resize.height,
     size: blob.size,
   }
 }

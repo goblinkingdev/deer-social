@@ -4,7 +4,7 @@ import {
   type ComAtprotoRepoStrongRef,
 } from '@atproto/api'
 import {AtUri} from '@atproto/api'
-import {type BskyAgent} from '@atproto/api'
+import {type AtpAgent} from '@atproto/api'
 
 import {POST_IMG_MAX} from '#/lib/constants'
 import {getLinkMeta} from '#/lib/link-meta/link-meta'
@@ -78,7 +78,7 @@ export class EmbeddingDisabledError extends Error {
 }
 
 export async function resolveLink(
-  agent: BskyAgent,
+  agent: AtpAgent,
   uri: string,
 ): Promise<ResolvedLink> {
   if (isShortLink(uri)) {
@@ -88,7 +88,7 @@ export async function resolveLink(
     uri = convertBskyAppUrlIfNeeded(uri)
     const [_0, user, _1, rkey] = uri.split('/').filter(Boolean)
     const recordUri = makeRecordUri(user, 'app.bsky.feed.post', rkey)
-    const post = await getPost({uri: recordUri})
+    const post = await getPost({postUri: recordUri})
     if (post.viewer?.embeddingDisabled) {
       throw new EmbeddingDisabledError()
     }
@@ -157,8 +157,8 @@ export async function resolveLink(
   return resolveExternal(agent, uri)
 
   // Forked from useGetPost. TODO: move into RQ.
-  async function getPost({uri}: {uri: string}) {
-    const urip = new AtUri(uri)
+  async function getPost({postUri}: {postUri: string}) {
+    const urip = new AtUri(postUri)
     if (!urip.host.startsWith('did:')) {
       const res = await agent.resolveHandle({
         handle: urip.host,
@@ -186,7 +186,7 @@ export async function resolveLink(
 }
 
 export async function resolveGif(
-  agent: BskyAgent,
+  agent: AtpAgent,
   gif: Gif,
 ): Promise<ResolvedExternalLink> {
   const uri = `${gif.media_formats.gif.url}?hh=${gif.media_formats.gif.dims[1]}&ww=${gif.media_formats.gif.dims[0]}`
@@ -200,7 +200,7 @@ export async function resolveGif(
 }
 
 async function resolveExternal(
-  agent: BskyAgent,
+  agent: AtpAgent,
   uri: string,
 ): Promise<ResolvedExternalLink> {
   const result = await getLinkMeta(agent, uri)
@@ -221,7 +221,6 @@ export async function imageToThumb(
       uri: imageUri,
       width: POST_IMG_MAX.width,
       height: POST_IMG_MAX.height,
-      mode: 'contain',
       maxSize: POST_IMG_MAX.size,
       timeout: 15e3,
     })
