@@ -1,64 +1,41 @@
-
 name: Deer Release
 on:
   workflow_dispatch:
   push:
     tags: ['v*.*.*']
 
-env:
-  NODE_VERSION: '20'
-  JAVA_VERSION: '17'
-
 jobs:
   build-android:
-    name: Build deer for Android
+    name: Build Deer For Android
     runs-on: high-end
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4.3.0
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v5.0.0
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Install Yarn
-        run: |
-          corepack enable
-          corepack prepare yarn@stable --activate
-          yarn --version
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: gradle
-
+          node-version: 20
+      - name: Yarn Setup
+        uses: DerYeger/yarn-setup-action@v1.0.1
+        with: 
+          node-version: 20
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5.0.0
+        with: 
+          distribution: jdk
+          java-version: 17
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
       - name: Setup Just
         uses: extractions/setup-just@v2
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
       - name: Copy example build settings
         run: |
           cp .env.example .env
           cp google-services.json.example google-services.json
-
       - name: Build APK
-        run: |
-          export NODE_OPTIONS=--max-old-space-size=10240
-          just dist-build-android-gradle
-        env:
-          GRADLE_USER_HOME: ~/.gradle
-
+        run: just dist-build-android-gradle
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
@@ -66,51 +43,10 @@ jobs:
           path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 30
           if-no-files-found: error
-
-  build-cloudflare:
-    name: Build Web for Cloudflare
-    runs-on: low-end
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Install Yarn
-        run: |
-          corepack enable
-          corepack prepare yarn@stable --activate
-          yarn --version
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Update browserslist database
-        run: npx update-browserslist-db@latest
-
-      - name: Compile locale files
-        run: yarn intl:compile
-
-      - name: Build Web App
-        run: yarn build-web
-
-      - name: Upload Web artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: deer-web-build
-          path: web-build/
-          retention-days: 30
-          if-no-files-found: error
-
-  release:
+  release: 
     name: Create GitHub Release
-    needs: [build-android, build-cloudflare]
+    needs: build-android
     runs-on: high-end
-    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
       discussions: write
@@ -121,27 +57,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
           name: deer-release-apk
           path: ./artifacts
-
-      - name: Download Web artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: deer-web-build
-          path: ./web-artifacts
-
-      - name: Verify APK artifact
-        run: |
-          if [ ! -f "./artifacts/app-release.apk" ]; then
-            echo "Error: APK file (app-release.apk) not found in artifacts"; ls -la ./artifacts/; exit 1;
-          fi
-          mv ./artifacts/app-release.apk ./artifacts/deer-release.apk
-          ls -la ./artifacts/
-
       - name: Generate release tag
         id: tag
         run: |
@@ -192,3 +112,23 @@ jobs:
             This release is signed and verified. The APK is built in un entorno limpio y reproducible.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy-to-cloudflare:
+    name: Deploy To Cloudflare
+    runs-on: low-end
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Yarn Setup
+        uses: DerYeger/yarn-setup-action@v1.0.1
+        with: 
+          node-version: 20
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Update browserslist database
+        run: npx update-browserslist-db@latest
+      - name: Build Web App
+        run: yarn build-web
