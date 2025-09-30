@@ -9,8 +9,6 @@ jobs:
     name: Build Deer For Android
     runs-on: high-end
     steps:
-      - name: Cache
-        uses: actions/cache@v4.3.0
       - name: Setup Node.js environment
         uses: actions/setup-node@v5.0.0
         with:
