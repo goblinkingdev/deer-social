@@ -23,13 +23,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl wget git build-essential
           
-      # Install Node.js and yarn
-      - name: Install Node.js
-        run: |
-          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-          sudo apt-get install -y nodejs
-          sudo npm install -g yarn
-          
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -40,6 +33,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
+
+      - name: Install Yarn
+        run: |
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+          sudo apt-get update
+          sudo apt-get install -y yarn
+          yarn --version
 
       - name: Setup Java
         uses: actions/setup-java@v4
