@@ -108,12 +108,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
       - name: Install Yarn
         run: |
           curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -124,6 +118,13 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
 
       - name: Update browserslist database
         run: npx update-browserslist-db@latest
