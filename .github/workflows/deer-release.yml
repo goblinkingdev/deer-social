@@ -17,6 +17,19 @@ jobs:
     outputs:
       apk-path: ${{ steps.upload-artifact.outputs.artifact-url }}
     steps:
+      # System dependencies
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl wget git build-essential
+          
+      # Install Node.js and yarn
+      - name: Install Node.js
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          sudo npm install -g yarn
+          
       - name: Checkout
         uses: actions/checkout@v4
         with:
