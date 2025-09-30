@@ -9,6 +9,10 @@ jobs:
     name: Build Deer For Android
     runs-on: high-end
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
       - name: Setup Node.js environment
         uses: actions/setup-node@v5.0.0
         with:
@@ -53,8 +57,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Cache
+        uses: actions/cache@v4
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
@@ -116,6 +120,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
