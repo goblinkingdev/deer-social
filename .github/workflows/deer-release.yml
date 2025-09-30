@@ -116,15 +116,14 @@ jobs:
           sudo apt-get install -y yarn
           yarn --version
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
+          
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Update browserslist database
         run: npx update-browserslist-db@latest
