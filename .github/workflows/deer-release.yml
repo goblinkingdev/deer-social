@@ -123,3 +123,12 @@ jobs:
         run: npx update-browserslist-db@latest
       - name: Build Web App
         run: yarn build-web
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: 'deer-social'
+          directory: 'web-build'
+          branch: 'main'
+          wranglerVersion: '3'
