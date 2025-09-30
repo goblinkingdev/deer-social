@@ -160,6 +160,7 @@ export async function compressImage(
   const originalSize = img.source.path.startsWith('blob:')
     ? POST_IMG_MAX.size
     : getDataUriSize(img.source.path)
+  const ogSizeLimit = originalSize * (webp ? 1 : 1.5)
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
@@ -177,7 +178,7 @@ export async function compressImage(
 
     const format = webp
       ? SaveFormat.WEBP
-      : qualityPercentage
+      : qualityPercentage === 100
         ? SaveFormat.PNG
         : SaveFormat.JPEG
 
@@ -195,7 +196,7 @@ export async function compressImage(
     const size =
       'size' in res ? (res.size as number) : getDataUriSize(res.base64!)
 
-    if (size <= POST_IMG_MAX.size && size <= originalSize) {
+    if (size <= POST_IMG_MAX.size && size <= ogSizeLimit) {
       newDataUri = {
         path: res.uri,
         width: w,
