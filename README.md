@@ -6,7 +6,7 @@ Sorry for the branding being mostly unchanged, I'm not good at coming up with na
 
 Get the app itself:
 
-- **Web: [deer.aylac.top](https://deer.aylac.top/) [deer-social-ayla.pages.dev](https://deer-social-ayla.pages.dev/)**
+- **Web: [deer.aylac.top](https://deer.aylac.top/), [deer-social-ayla.pages.dev](https://deer-social-ayla.pages.dev/)**
 - **Android: [GitHub Releases](https://github.com/ayla6/deer-social-test/releases/latest), [Obtaininium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/ayla6/deer-social-test)**
 
 ## Features Today
