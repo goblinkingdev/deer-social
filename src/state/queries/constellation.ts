@@ -22,7 +22,7 @@ type Collection =
 
 const headers = new Headers({
   Accept: 'application/json',
-  'User-Agent': 'deer-social-ayla.pages.dev (contact @aylac.top)',
+  'User-Agent': 'deer.aylac.top (contact @aylac.top)',
 })
 
 const makeReqUrl = (

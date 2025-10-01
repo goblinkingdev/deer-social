@@ -7,7 +7,7 @@ import {isInvalidHandle} from '#/lib/strings/handles'
 import {startUriToStarterPackUri} from '#/lib/strings/starter-pack'
 import {logger} from '#/logger'
 
-export const BSKY_APP_HOST = 'https://deer-social-ayla.pages.dev'
+export const BSKY_APP_HOST = 'https://deer.aylac.top'
 const BSKY_TRUSTED_HOSTS = [
   'deer\\.social',
   'deer-social-ayla\\.pages\\.dev',
@@ -82,7 +82,7 @@ export function toShortUrl(url: string): string {
 
 export function toShareUrl(url: string): string {
   if (!url.startsWith('https')) {
-    const urlp = new URL('https://deer-social-ayla.pages.dev')
+    const urlp = new URL('https://deer.aylac.top')
     urlp.pathname = url
     url = urlp.toString()
   }
@@ -106,10 +106,10 @@ export function toBskyAppUrl(url: string): string {
 export function isBskyAppUrl(url: string): boolean {
   return (
     url.startsWith('https://bsky.app/') ||
-    (url.startsWith('https://deer-social-ayla.pages.dev/') &&
-      !url.startsWith('https://deer-social-ayla.pages.dev/about')) ||
-    (url.startsWith('https://deer-social-ayla.pages.dev/') &&
-      !url.startsWith('https://deer-social-ayla.pages.dev/about'))
+    (url.startsWith('https://deer.aylac.top/') &&
+      !url.startsWith('https://deer.aylac.top/about')) ||
+    (url.startsWith('https://deer.aylac.top/') &&
+      !url.startsWith('https://deer.aylac.top/about'))
   )
 }
 
