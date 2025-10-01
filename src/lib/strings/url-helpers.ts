@@ -108,8 +108,8 @@ export function isBskyAppUrl(url: string): boolean {
     url.startsWith('https://bsky.app/') ||
     (url.startsWith('https://deer.aylac.top/') &&
       !url.startsWith('https://deer.aylac.top/about')) ||
-    (url.startsWith('https://deer.aylac.top/') &&
-      !url.startsWith('https://deer.aylac.top/about'))
+    (url.startsWith('https://deer-social-ayla.pages.dev/') &&
+      !url.startsWith('https://deer-social-ayla.pages.dev/about'))
   )
 }
 
