@@ -1,3 +1,4 @@
+import {getFileSize} from 'react-native-compressor'
 import * as WebP from 'react-native-webp-converter'
 import {
   cacheDirectory,
@@ -193,7 +194,7 @@ export async function compressImage(
   webp: boolean = true,
 ): Promise<PickerImage> {
   const source = img.transformed || img.source
-  const originalSize = getDataUriSize(img.source.path)
+  const originalSize = (await getFileSize(source.path)) as unknown as number
 
   const [w, h] = containImageRes(source.width, source.height, POST_IMG_MAX)
 
@@ -212,7 +213,7 @@ export async function compressImage(
 
     const format = webp
       ? SaveFormat.WEBP
-      : qualityPercentage
+      : qualityPercentage === 100
         ? SaveFormat.PNG
         : SaveFormat.JPEG
 
@@ -262,11 +263,11 @@ export const manipulateWebp = async (
     quality: saveOptions.compress || 100,
   })
 
-  const blob = await (await fetch(resultUri)).blob()
+  const size = (await getFileSize(resultUri)) as unknown as number
 
   return {
     uri: resultUri,
-    size: blob.size,
+    size,
   }
 }
 
