@@ -45,7 +45,9 @@ module.exports = function (_config) {
       runtimeVersion: {
         policy: 'appVersion',
       },
-      icon: './assets/app-icons/ios_icon_default_light.png',
+      icon: IS_DEV
+        ? './assets/app-icons/ios_icon_dev.png'
+        : './assets/app-icons/ios_icon_default_light.png',
       userInterfaceStyle: 'automatic',
       primaryColor: '#4b9b6c',
       newArchEnabled: false,
@@ -148,7 +150,9 @@ module.exports = function (_config) {
         barStyle: 'light-content',
       },
       android: {
-        icon: './assets/app-icons/android_icon_default_light.png',
+        icon: IS_DEV
+          ? './assets/app-icons/android_icon_dev.png'
+          : './assets/app-icons/android_icon_default_light.png',
         adaptiveIcon: {
           foregroundImage: './assets/icon-android-foreground.png',
           monochromeImage: './assets/icon-android-foreground.png',
@@ -319,6 +323,11 @@ module.exports = function (_config) {
             default_dark: {
               ios: './assets/app-icons/ios_icon_default_dark.png',
               android: './assets/app-icons/android_icon_default_dark.png',
+              prerendered: true,
+            },
+            dev: {
+              ios: './assets/app-icons/ios_icon_dev.png',
+              android: './assets/app-icons/android_icon_dev.png',
               prerendered: true,
             },
 
