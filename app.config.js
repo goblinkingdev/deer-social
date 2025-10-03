@@ -15,7 +15,9 @@ module.exports = function (_config) {
 
   const IS_TESTFLIGHT = process.env.EXPO_PUBLIC_ENV === 'testflight'
   const IS_PRODUCTION = process.env.EXPO_PUBLIC_ENV === 'production'
-  const IS_DEV = !IS_TESTFLIGHT || !IS_PRODUCTION
+  const IS_DEV =
+    process.env.EXPO_PUBLIC_ENV === 'development' ||
+    (!IS_TESTFLIGHT && !IS_PRODUCTION)
 
   const ASSOCIATED_DOMAINS = [
     'applinks:deer.aylac.top',
@@ -35,7 +37,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'Deer',
+      name: IS_DEV ? 'Deer (dev)' : 'Deer',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -49,7 +51,7 @@ module.exports = function (_config) {
       newArchEnabled: false,
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'top.aylac.deer',
+        bundleIdentifier: IS_DEV ? 'dev.top.aylac.deer' : 'top.aylac.deer',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -153,7 +155,7 @@ module.exports = function (_config) {
           backgroundImage: './assets/icon-android-background.png',
           backgroundColor: '#4b9b6c',
         },
-        package: 'top.aylac.deer',
+        package: IS_DEV ? 'dev.top.aylac.deer' : 'top.aylac.deer',
         intentFilters: [
           {
             action: 'VIEW',

@@ -45,15 +45,11 @@
             with sdk;
               [
                 build-tools-35-0-0
-                build-tools-36-0-0
                 cmdline-tools-latest
                 platform-tools
                 platforms-android-35
-                platforms-android-36
                 sources-android-35
-                sources-android-36
                 ndk-27-1-12297006
-                ndk-27-0-12077973
                 cmake-3-22-1
               ]
               ++ pkgs.lib.optionals (!noEmulator) [

@@ -1,4 +1,4 @@
-appId: top.aylac.deer
+appId: dev.top.aylac.deer
 ---
 - runScript:
     file: ../setupServer.js

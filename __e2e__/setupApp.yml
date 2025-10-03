@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 appId: top.aylac.deer
 ---
 - launchApp:
    appId: "top.aylac.deer"
+=======
+appId: dev.xyz.blueskyweb.app
+---
+- launchApp:
+   appId: "dev.xyz.blueskyweb.app"
+>>>>>>> devmode
    clearState: true
 - waitForAnimationToEnd
 - tapOn: "http://localhost:8081"
