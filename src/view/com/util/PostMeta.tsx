@@ -43,8 +43,7 @@ let PostMeta = (opts: PostMetaOpts): React.ReactNode => {
   const author = useProfileShadow(opts.author)
   const displayName = author.displayName || author.handle
   const handle = author.handle
-  // remove dumb typing when you update the atproto api package!!
-  const pronouns = (author as {pronouns?: string})?.pronouns
+  const pronouns = author?.pronouns
   const profileLink = makeProfileLink(author)
   const queryClient = useQueryClient()
   const onOpenAuthor = opts.onOpenAuthor

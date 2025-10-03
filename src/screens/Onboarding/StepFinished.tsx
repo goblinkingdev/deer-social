@@ -68,7 +68,6 @@ import {Text} from '#/components/Typography'
 import * as bsky from '#/types/bsky'
 
 export function StepFinished() {
-  const {_} = useLingui()
   const {state, dispatch} = useContext(Context)
   const onboardDispatch = useOnboardingDispatch()
   const [saving, setSaving] = useState(false)
@@ -491,7 +490,6 @@ function ValueProposition({
 
 function Dot({active}: {active: boolean}) {
   const t = useTheme()
-  const {_} = useLingui()
 
   return (
     <View
