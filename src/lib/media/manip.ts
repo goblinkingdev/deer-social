@@ -15,7 +15,6 @@ import {manipulateAsync, SaveFormat} from 'expo-image-manipulator'
 import * as MediaLibrary from 'expo-media-library'
 import * as Sharing from 'expo-sharing'
 import {Buffer} from 'buffer'
-import {RNFetchBlob} from 'rn-fetch-blob'
 
 import {POST_IMG_MAX} from '#/lib/constants'
 import {logger} from '#/logger'
@@ -140,19 +139,23 @@ export async function saveImageToMediaLibrary({uri}: {uri: string}) {
     safeDeleteAsync(imagePath)
   }
 }
-
 export async function saveVideoToMediaLibrary({uri}: {uri: string}) {
   // download the file to cache
-  const downloadResponse = await RNFetchBlob.config({
-    fileCache: true,
-  })
-    .fetch('GET', uri)
+  const tempPath = createPath('tmp')
+  const downloadResumable = createDownloadResumable(uri, tempPath)
+  const downloadResult = await downloadResumable
+    .downloadAsync()
     .catch(() => null)
-  if (downloadResponse == null) return false
-  let videoPath = downloadResponse.path()
-  let extension = mimeToExt(downloadResponse.respInfo.headers['content-type'])
-  videoPath = normalizePath(
-    await moveToPermanentPath(videoPath, '.' + extension),
+
+  if (downloadResult == null || downloadResult.status !== 200) {
+    return false
+  }
+
+  const contentType = downloadResult.headers['content-type']
+  const extension = mimeToExt(contentType)
+
+  const videoPath = normalizePath(
+    await moveToPermanentPath(downloadResult.uri, '.' + extension),
     true,
   )
 
