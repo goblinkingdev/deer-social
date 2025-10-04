@@ -9,7 +9,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install Yarn
-        run: npm install -g yarn
+        run: |
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+          sudo apt update && sudo apt install yarn
       - uses: actions/setup-node@v4
         with:
           node-version: 20
