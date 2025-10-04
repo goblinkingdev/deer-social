@@ -2,58 +2,39 @@ name: Build deer
 on: workflow_dispatch
 
 jobs:
-  deer-build-android:
-    name: Build deer for Android
-    runs-on: high-end 
+  build-android:
+    name: Build Deer For Android
+    runs-on: high-end
     steps:
-      # System dependencies
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl wget git build-essential
-
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install Yarn (via npm for Yarn 1)
-        run: |
-          npm install -g yarn
-          yarn --version
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+          cache: yarn
+      - name: Install Yarn
+        run: npm install -g yarn
+      - uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
-          cache: gradle
-
+          cache: gradle  
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Setup just
+      - name: Setup Just
         uses: extractions/setup-just@v2
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
       - name: Copy example build settings
         run: |
           cp .env.example .env
           cp google-services.json.example google-services.json
-
-      - name: Build
-        run: |
-          export NODE_OPTIONS=--max-old-space-size=10240
-          export GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
-          just dist-build-android-gradle
-
-      - name: Upload artifact
+      - name: Build APK
+        run: just dist-build-android-gradle
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android
+          name: deer-release-apk
           path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+          if-no-files-found: error
