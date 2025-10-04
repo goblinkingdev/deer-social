@@ -48,11 +48,6 @@ export type MetricEvents = {
   // Screen events
   'splash:signInPressed': {}
   'splash:createAccountPressed': {}
-  'welcomeModal:signupClicked': {}
-  'welcomeModal:exploreClicked': {}
-  'welcomeModal:signinClicked': {}
-  'welcomeModal:dismissed': {}
-  'welcomeModal:presented': {}
   'signup:nextPressed': {
     activeStep: number
     phoneVerificationRequired?: boolean
@@ -326,6 +321,12 @@ export type MetricEvents = {
       | 'ChatsList'
       | 'SendViaChatDialog'
   }
+  'starterPack:addUser': {
+    starterPack?: string
+  }
+  'starterPack:removeUser': {
+    starterPack?: string
+  }
   'starterPack:share': {
     starterPack: string
     shareType: 'link' | 'qrcode'
@@ -357,6 +358,7 @@ export type MetricEvents = {
   'feed:interstitial:feedCard:press': {}
 
   'profile:header:suggestedFollowsCard:press': {}
+  'profile:addToStarterPack': {}
 
   'test:all:always': {}
   'test:all:sometimes': {}

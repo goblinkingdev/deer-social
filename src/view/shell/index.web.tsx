@@ -8,7 +8,6 @@ import {RemoveScrollBar} from 'react-remove-scroll-bar'
 import {useIntentHandler} from '#/lib/hooks/useIntentHandler'
 import {useWebMediaQueries} from '#/lib/hooks/useWebMediaQueries'
 import {type NavigationProp} from '#/lib/routes/types'
-import {useGate} from '#/lib/statsig/statsig'
 import {useIsDrawerOpen, useSetDrawerOpen} from '#/state/shell'
 import {useComposerKeyboardShortcut} from '#/state/shell/composer/useComposerKeyboardShortcut'
 import {useCloseAllActiveElements} from '#/state/util'
@@ -20,13 +19,11 @@ import {EmailDialog} from '#/components/dialogs/EmailDialog'
 import {LinkWarningDialog} from '#/components/dialogs/LinkWarning'
 import {MutedWordsDialog} from '#/components/dialogs/MutedWords'
 import {SigninDialog} from '#/components/dialogs/Signin'
-import {useWelcomeModal} from '#/components/hooks/useWelcomeModal'
 import {
   Outlet as PolicyUpdateOverlayPortalOutlet,
   usePolicyUpdateContext,
 } from '#/components/PolicyUpdateOverlay'
 import {Outlet as PortalOutlet} from '#/components/Portal'
-import {WelcomeModal} from '#/components/WelcomeModal'
 import {FlatNavigator, RoutesContainer} from '#/Navigation'
 import {Composer} from './Composer.web'
 import {DrawerContent} from './Drawer'
@@ -42,8 +39,6 @@ function ShellInner() {
   const showDrawer = !isDesktop && isDrawerOpen
   const [showDrawerDelayedExit, setShowDrawerDelayedExit] = useState(showDrawer)
   const {state: policyUpdateState} = usePolicyUpdateContext()
-  const welcomeModalControl = useWelcomeModal()
-  const gate = useGate()
 
   useLayoutEffect(() => {
     if (showDrawer !== showDrawerDelayedExit) {
@@ -80,11 +75,6 @@ function ShellInner() {
       <EmailDialog />
       <LinkWarningDialog />
       <Lightbox />
-
-      {/* Show welcome modal if the gate is enabled */}
-      {welcomeModalControl.isOpen && gate('welcome_modal') && (
-        <WelcomeModal control={welcomeModalControl} />
-      )}
 
       {/* Until policy update has been completed by the user, don't render anything that is portaled */}
       {policyUpdateState.completed && (
