@@ -125,7 +125,7 @@ msgstr ""
 msgid "{0, plural, other {# people have}} used this starter pack!"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:356
+#: src/components/dialogs/StarterPackDialog.tsx:360
 msgid "{0, plural, other {+# more}}"
 msgstr ""
 
@@ -593,18 +593,18 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:429
 #: src/screens/Messages/components/RequestButtons.tsx:91
-#: src/view/com/profile/ProfileMenu.tsx:178
+#: src/view/com/profile/ProfileMenu.tsx:183
 msgctxt "toast"
 msgid "Account blocked"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:191
+#: src/view/com/profile/ProfileMenu.tsx:196
 msgctxt "toast"
 msgid "Account followed"
 msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:452
-#: src/view/com/profile/ProfileMenu.tsx:154
+#: src/view/com/profile/ProfileMenu.tsx:159
 msgctxt "toast"
 msgid "Account muted"
 msgstr ""
@@ -627,18 +627,18 @@ msgid "Account removed from quick access"
 msgstr ""
 
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:146
-#: src/view/com/profile/ProfileMenu.tsx:168
+#: src/view/com/profile/ProfileMenu.tsx:173
 msgctxt "toast"
 msgid "Account unblocked"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:203
+#: src/view/com/profile/ProfileMenu.tsx:208
 msgctxt "toast"
 msgid "Account unfollowed"
 msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:442
-#: src/view/com/profile/ProfileMenu.tsx:144
+#: src/view/com/profile/ProfileMenu.tsx:149
 msgctxt "toast"
 msgid "Account unmuted"
 msgstr ""
@@ -659,8 +659,8 @@ msgstr ""
 
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:169
 #: src/components/dialogs/MutedWords.tsx:333
-#: src/components/dialogs/StarterPackDialog.tsx:370
-#: src/components/dialogs/StarterPackDialog.tsx:376
+#: src/components/dialogs/StarterPackDialog.tsx:374
+#: src/components/dialogs/StarterPackDialog.tsx:380
 #: src/view/com/modals/UserAddRemoveLists.tsx:235
 msgid "Add"
 msgstr ""
@@ -669,7 +669,7 @@ msgstr ""
 msgid "Add {0} more to continue"
 msgstr ""
 
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:61
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:62
 msgid "Add {displayName} to starter pack"
 msgstr ""
 
@@ -790,14 +790,14 @@ msgstr ""
 msgid "Add this feed to your feeds"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:361
-#: src/view/com/profile/ProfileMenu.tsx:364
+#: src/view/com/profile/ProfileMenu.tsx:366
+#: src/view/com/profile/ProfileMenu.tsx:369
 msgid "Add to lists"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:175
-#: src/view/com/profile/ProfileMenu.tsx:351
-#: src/view/com/profile/ProfileMenu.tsx:354
+#: src/components/dialogs/StarterPackDialog.tsx:176
+#: src/view/com/profile/ProfileMenu.tsx:356
+#: src/view/com/profile/ProfileMenu.tsx:359
 msgid "Add to starter packs"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgstr ""
 msgid "Added to list"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:257
+#: src/components/dialogs/StarterPackDialog.tsx:258
 msgid "Added to starter pack"
 msgstr ""
 
@@ -906,10 +906,6 @@ msgstr ""
 #: src/screens/Settings/components/ChangePasswordDialog.tsx:235
 #: src/screens/Settings/components/ChangePasswordDialog.tsx:241
 msgid "Already have a code?"
-msgstr ""
-
-#: src/components/WelcomeModal.tsx:189
-msgid "Already have an account?"
 msgstr ""
 
 #: src/screens/Login/ChooseAccountForm.tsx:43
@@ -1074,7 +1070,7 @@ msgid "Anyone who follows me"
 msgstr ""
 
 #: src/Navigation.tsx:524
-#: src/screens/Settings/AppIconSettings/index.tsx:67
+#: src/screens/Settings/AppIconSettings/index.tsx:61
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:18
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:23
 msgid "App Icon"
@@ -1286,7 +1282,7 @@ msgstr ""
 msgid "Before creating a post or replying, you must first verify your email."
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:70
+#: src/components/dialogs/StarterPackDialog.tsx:71
 #: src/components/StarterPack/ProfileStarterPacks.tsx:231
 #: src/components/StarterPack/ProfileStarterPacks.tsx:241
 msgid "Before creating a starter pack, you must first verify your email."
@@ -1314,7 +1310,7 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:858
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:352
-#: src/view/com/profile/ProfileMenu.tsx:559
+#: src/view/com/profile/ProfileMenu.tsx:564
 msgid "Block"
 msgstr ""
 
@@ -1324,13 +1320,13 @@ msgstr ""
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:745
 #: src/screens/Messages/components/RequestButtons.tsx:144
 #: src/screens/Messages/components/RequestButtons.tsx:146
-#: src/view/com/profile/ProfileMenu.tsx:465
-#: src/view/com/profile/ProfileMenu.tsx:472
+#: src/view/com/profile/ProfileMenu.tsx:470
+#: src/view/com/profile/ProfileMenu.tsx:477
 msgid "Block account"
 msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:853
-#: src/view/com/profile/ProfileMenu.tsx:542
+#: src/view/com/profile/ProfileMenu.tsx:547
 msgid "Block Account?"
 msgstr ""
 
@@ -1386,7 +1382,7 @@ msgid "Blocked Accounts"
 msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:855
-#: src/view/com/profile/ProfileMenu.tsx:554
+#: src/view/com/profile/ProfileMenu.tsx:559
 msgid "Blocked accounts cannot reply in your threads, mention you, or otherwise interact with you."
 msgstr ""
 
@@ -1403,7 +1399,7 @@ msgstr ""
 msgid "Blocking is public. Blocked accounts cannot reply in your threads, mention you, or otherwise interact with you."
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:551
+#: src/view/com/profile/ProfileMenu.tsx:556
 msgid "Blocking will not prevent labels from being applied on your account, but it will stop this account from replying in your threads or interacting with you."
 msgstr ""
 
@@ -1446,14 +1442,6 @@ msgstr ""
 
 #: src/screens/Signup/StepInfo/Policies.tsx:32
 msgid "Bluesky's Updated Community Guidelines"
-msgstr ""
-
-#: src/screens/Settings/AppIconSettings/index.tsx:99
-msgid "Bluesky+"
-msgstr ""
-
-#: src/screens/Settings/AppIconSettings/index.tsx:102
-msgid "Bluesky+ icons"
 msgstr ""
 
 #: src/lib/moderation/useLabelBehaviorDescription.ts:56
@@ -1579,8 +1567,8 @@ msgstr ""
 #: src/screens/Profile/Header/EditProfileDialog.tsx:254
 #: src/screens/Profile/Header/EditProfileDialog.tsx:262
 #: src/screens/Search/Shell.tsx:349
-#: src/screens/Settings/AppIconSettings/index.tsx:44
-#: src/screens/Settings/AppIconSettings/index.tsx:230
+#: src/screens/Settings/AppIconSettings/index.tsx:38
+#: src/screens/Settings/AppIconSettings/index.tsx:195
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:78
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:85
 #: src/screens/Settings/components/ChangePasswordDialog.tsx:246
@@ -1645,12 +1633,12 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:39
+#: src/screens/Settings/AppIconSettings/index.tsx:33
 msgid "Change app icon"
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:38
-#: src/screens/Settings/AppIconSettings/index.tsx:226
+#: src/screens/Settings/AppIconSettings/index.tsx:32
+#: src/screens/Settings/AppIconSettings/index.tsx:191
 msgid "Change app icon to \"{0}\""
 msgstr ""
 
@@ -1684,7 +1672,7 @@ msgstr ""
 msgid "Change your password"
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:221
+#: src/screens/Settings/AppIconSettings/index.tsx:186
 msgid "Changes app icon"
 msgstr ""
 
@@ -1880,7 +1868,7 @@ msgstr ""
 #: src/components/dialogs/nuxs/InitialVerificationAnnouncement.tsx:178
 #: src/components/dialogs/nuxs/InitialVerificationAnnouncement.tsx:187
 #: src/components/dialogs/SearchablePeopleList.tsx:295
-#: src/components/dialogs/StarterPackDialog.tsx:178
+#: src/components/dialogs/StarterPackDialog.tsx:179
 #: src/components/dms/EmojiPopup.android.tsx:58
 #: src/components/dms/ReportDialog.tsx:387
 #: src/components/dms/ReportDialog.tsx:396
@@ -1926,7 +1914,7 @@ msgstr ""
 msgid "Close dialog"
 msgstr ""
 
-#: src/view/shell/index.web.tsx:106
+#: src/view/shell/index.web.tsx:96
 msgid "Close drawer menu"
 msgstr ""
 
@@ -1955,10 +1943,6 @@ msgstr ""
 
 #: src/components/Menu/index.tsx:344
 msgid "Close this dialog"
-msgstr ""
-
-#: src/components/WelcomeModal.tsx:214
-msgid "Close welcome modal"
 msgstr ""
 
 #: src/screens/Login/PasswordUpdatedForm.tsx:32
@@ -2217,8 +2201,8 @@ msgstr ""
 msgid "Copy App Password"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:502
-#: src/view/com/profile/ProfileMenu.tsx:505
+#: src/view/com/profile/ProfileMenu.tsx:507
+#: src/view/com/profile/ProfileMenu.tsx:510
 msgid "Copy at:// URI"
 msgstr ""
 
@@ -2233,8 +2217,8 @@ msgid "Copy code"
 msgstr ""
 
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:501
-#: src/view/com/profile/ProfileMenu.tsx:511
-#: src/view/com/profile/ProfileMenu.tsx:514
+#: src/view/com/profile/ProfileMenu.tsx:516
+#: src/view/com/profile/ProfileMenu.tsx:519
 msgid "Copy DID"
 msgstr ""
 
@@ -2265,8 +2249,8 @@ msgstr ""
 msgid "Copy link to post"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:263
-#: src/view/com/profile/ProfileMenu.tsx:274
+#: src/view/com/profile/ProfileMenu.tsx:268
+#: src/view/com/profile/ProfileMenu.tsx:279
 msgid "Copy link to profile"
 msgstr ""
 
@@ -2298,8 +2282,8 @@ msgid "Copy TXT record value"
 msgstr ""
 
 #: src/components/PostControls/ShareMenu/ShareMenuItems.web.tsx:104
-#: src/view/com/profile/ProfileMenu.tsx:283
-#: src/view/com/profile/ProfileMenu.tsx:293
+#: src/view/com/profile/ProfileMenu.tsx:288
+#: src/view/com/profile/ProfileMenu.tsx:298
 #: src/view/screens/ProfileList.tsx:530
 msgid "Copy via bsky.app"
 msgstr ""
@@ -2357,8 +2341,8 @@ msgstr ""
 
 #. Text on button to create a new starter pack
 #. Text on button to create a new starter pack
-#: src/components/dialogs/StarterPackDialog.tsx:111
-#: src/components/dialogs/StarterPackDialog.tsx:200
+#: src/components/dialogs/StarterPackDialog.tsx:112
+#: src/components/dialogs/StarterPackDialog.tsx:201
 #: src/components/StarterPack/ProfileStarterPacks.tsx:296
 msgid "Create"
 msgstr ""
@@ -2379,8 +2363,6 @@ msgstr ""
 
 #: src/components/LoggedOutCTA.tsx:71
 #: src/components/LoggedOutCTA.tsx:76
-#: src/components/WelcomeModal.tsx:155
-#: src/components/WelcomeModal.tsx:163
 #: src/view/com/auth/SplashScreen.tsx:74
 #: src/view/com/auth/SplashScreen.web.tsx:123
 #: src/view/shell/bottom-bar/BottomBar.tsx:345
@@ -2429,8 +2411,8 @@ msgstr ""
 msgid "Create report for {0}"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:106
-#: src/components/dialogs/StarterPackDialog.tsx:195
+#: src/components/dialogs/StarterPackDialog.tsx:107
+#: src/components/dialogs/StarterPackDialog.tsx:196
 msgid "Create starter pack"
 msgstr ""
 
@@ -2459,7 +2441,7 @@ msgstr ""
 msgid "Customize who can interact with this post."
 msgstr ""
 
-#: src/screens/Onboarding/Layout.tsx:60
+#: src/screens/Onboarding/Layout.tsx:61
 msgid "Customizes your Bluesky experience"
 msgstr ""
 
@@ -2519,7 +2501,7 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:75
+#: src/screens/Settings/AppIconSettings/index.tsx:69
 msgid "Default icons"
 msgstr ""
 
@@ -2652,6 +2634,11 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:833
 msgid "Detach quote post?"
+msgstr ""
+
+#: src/screens/Settings/AppIconSettings/useAppIconSets.ts:43
+msgctxt "Name of app icon variant"
+msgid "Dev mode!!!"
 msgstr ""
 
 #: src/screens/Settings/AboutSettings.tsx:138
@@ -2805,8 +2792,8 @@ msgstr ""
 msgid "Ditch the trolls and clickbait. Find real people and conversations that matter to you."
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:323
-#: src/view/com/profile/ProfileMenu.tsx:335
+#: src/view/com/profile/ProfileMenu.tsx:328
+#: src/view/com/profile/ProfileMenu.tsx:340
 msgid "Divorce mutual"
 msgstr ""
 
@@ -3002,8 +2989,8 @@ msgstr ""
 msgid "Edit list details"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:398
-#: src/view/com/profile/ProfileMenu.tsx:404
+#: src/view/com/profile/ProfileMenu.tsx:403
+#: src/view/com/profile/ProfileMenu.tsx:409
 msgid "Edit live status"
 msgstr ""
 
@@ -3393,11 +3380,6 @@ msgstr ""
 msgid "Explore"
 msgstr ""
 
-#: src/components/WelcomeModal.tsx:168
-#: src/components/WelcomeModal.tsx:177
-msgid "Explore the app"
-msgstr ""
-
 #: src/screens/Settings/AccountSettings.tsx:150
 #: src/screens/Settings/AccountSettings.tsx:154
 msgid "Export my data"
@@ -3437,7 +3419,7 @@ msgstr ""
 msgid "Failed to add emoji reaction"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:269
+#: src/components/dialogs/StarterPackDialog.tsx:270
 msgid "Failed to add to starter pack"
 msgstr ""
 
@@ -3543,7 +3525,7 @@ msgstr ""
 msgid "Failed to remove emoji reaction"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:288
+#: src/components/dialogs/StarterPackDialog.tsx:289
 msgid "Failed to remove from starter pack"
 msgstr ""
 
@@ -3647,7 +3629,7 @@ msgstr ""
 msgid "Feed menu"
 msgstr ""
 
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:57
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:58
 msgid "Feed toggle"
 msgstr ""
 
@@ -3797,8 +3779,8 @@ msgstr ""
 msgid "Follow 7 accounts"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:325
-#: src/view/com/profile/ProfileMenu.tsx:340
+#: src/view/com/profile/ProfileMenu.tsx:330
+#: src/view/com/profile/ProfileMenu.tsx:345
 msgid "Follow account"
 msgstr ""
 
@@ -4092,8 +4074,8 @@ msgstr ""
 #: src/components/dms/ReportDialog.tsx:197
 #: src/components/ReportDialog/SelectReportOptionView.tsx:81
 #: src/components/ReportDialog/SubmitView.tsx:110
-#: src/screens/Onboarding/Layout.tsx:120
-#: src/screens/Onboarding/Layout.tsx:213
+#: src/screens/Onboarding/Layout.tsx:121
+#: src/screens/Onboarding/Layout.tsx:214
 #: src/screens/Signup/BackNextButtons.tsx:35
 msgid "Go back to previous step"
 msgstr ""
@@ -4112,8 +4094,8 @@ msgstr ""
 msgid "Go Home"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:399
-#: src/view/com/profile/ProfileMenu.tsx:406
+#: src/view/com/profile/ProfileMenu.tsx:404
+#: src/view/com/profile/ProfileMenu.tsx:411
 msgid "Go live"
 msgstr ""
 
@@ -5302,8 +5284,8 @@ msgid "More languages..."
 msgstr ""
 
 #: src/screens/ProfileList/components/MoreOptionsMenu.tsx:149
-#: src/view/com/profile/ProfileMenu.tsx:240
-#: src/view/com/profile/ProfileMenu.tsx:246
+#: src/view/com/profile/ProfileMenu.tsx:245
+#: src/view/com/profile/ProfileMenu.tsx:251
 #: src/view/screens/ProfileList.tsx:768
 msgid "More options"
 msgstr ""
@@ -5337,8 +5319,8 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:726
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:732
-#: src/view/com/profile/ProfileMenu.tsx:444
-#: src/view/com/profile/ProfileMenu.tsx:451
+#: src/view/com/profile/ProfileMenu.tsx:449
+#: src/view/com/profile/ProfileMenu.tsx:456
 msgid "Mute account"
 msgstr ""
 
@@ -5594,7 +5576,7 @@ msgstr ""
 msgid "New posts from {firstAuthorName} and {additionalAuthorsCount, plural, one {{formattedAuthorsCount} other} other {{formattedAuthorsCount} others}}"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:192
+#: src/components/dialogs/StarterPackDialog.tsx:193
 msgid "New starter pack"
 msgstr ""
 
@@ -5630,11 +5612,6 @@ msgstr ""
 #: src/screens/StarterPack/Wizard/index.tsx:214
 #: src/screens/StarterPack/Wizard/index.tsx:392
 #: src/screens/StarterPack/Wizard/index.tsx:399
-msgid "Next"
-msgstr ""
-
-#: src/screens/Settings/AppIconSettings/useAppIconSets.ts:42
-msgctxt "Name of app icon variant"
 msgid "Next"
 msgstr ""
 
@@ -5800,7 +5777,7 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:566
+#: src/view/com/profile/ProfileMenu.tsx:571
 msgid "Note about sharing"
 msgstr ""
 
@@ -5889,8 +5866,8 @@ msgstr ""
 #. Confirm button text.
 #: src/screens/Profile/Header/ProfileHeaderLabeler.tsx:391
 #: src/screens/Search/modules/ExploreInterestsCard.tsx:48
-#: src/screens/Settings/AppIconSettings/index.tsx:48
-#: src/screens/Settings/AppIconSettings/index.tsx:234
+#: src/screens/Settings/AppIconSettings/index.tsx:42
+#: src/screens/Settings/AppIconSettings/index.tsx:199
 msgid "OK"
 msgstr ""
 
@@ -6270,7 +6247,7 @@ msgstr ""
 msgid "Permission to access your photo library was denied. Please enable it in your system settings."
 msgstr ""
 
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:57
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:58
 msgid "Person toggle"
 msgstr ""
 
@@ -6871,14 +6848,6 @@ msgstr ""
 msgid "Read the patches and contribute"
 msgstr ""
 
-#: src/components/WelcomeModal.tsx:146
-msgid "Real conversations."
-msgstr ""
-
-#: src/components/WelcomeModal.tsx:144
-msgid "Real people."
-msgstr ""
-
 #: src/screens/Takendown.tsx:171
 #: src/screens/Takendown.tsx:179
 msgid "Reason for appeal"
@@ -6937,11 +6906,11 @@ msgstr ""
 
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:171
 #: src/components/dialogs/MutedWords.tsx:443
-#: src/components/dialogs/StarterPackDialog.tsx:370
-#: src/components/dialogs/StarterPackDialog.tsx:376
+#: src/components/dialogs/StarterPackDialog.tsx:374
+#: src/components/dialogs/StarterPackDialog.tsx:380
 #: src/components/FeedCard.tsx:343
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:104
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:111
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:105
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:112
 #: src/screens/Bookmarks/index.tsx:255
 #: src/screens/Settings/Settings.tsx:668
 #: src/view/com/modals/UserAddRemoveLists.tsx:235
@@ -6949,7 +6918,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/components/StarterPack/Wizard/WizardListCard.tsx:60
+#: src/components/StarterPack/Wizard/WizardListCard.tsx:61
 msgid "Remove {displayName} from starter pack"
 msgstr ""
 
@@ -7050,8 +7019,8 @@ msgstr ""
 msgid "Remove this feed from your saved feeds"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:373
 #: src/view/com/profile/ProfileMenu.tsx:378
+#: src/view/com/profile/ProfileMenu.tsx:383
 msgid "Remove trust"
 msgstr ""
 
@@ -7061,8 +7030,8 @@ msgstr ""
 
 #: src/components/verification/VerificationRemovePrompt.tsx:46
 #: src/components/verification/VerificationsDialog.tsx:252
-#: src/view/com/profile/ProfileMenu.tsx:417
-#: src/view/com/profile/ProfileMenu.tsx:420
+#: src/view/com/profile/ProfileMenu.tsx:422
+#: src/view/com/profile/ProfileMenu.tsx:425
 msgid "Remove verification"
 msgstr ""
 
@@ -7092,7 +7061,7 @@ msgstr ""
 msgid "Removed from saved feeds"
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:276
+#: src/components/dialogs/StarterPackDialog.tsx:277
 msgid "Removed from starter pack"
 msgstr ""
 
@@ -7209,8 +7178,8 @@ msgstr ""
 msgid "Report"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:484
-#: src/view/com/profile/ProfileMenu.tsx:487
+#: src/view/com/profile/ProfileMenu.tsx:489
+#: src/view/com/profile/ProfileMenu.tsx:492
 msgid "Report account"
 msgstr ""
 
@@ -7662,8 +7631,8 @@ msgstr ""
 msgid "Search my posts"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:302
-#: src/view/com/profile/ProfileMenu.tsx:305
+#: src/view/com/profile/ProfileMenu.tsx:307
+#: src/view/com/profile/ProfileMenu.tsx:310
 msgid "Search posts"
 msgstr ""
 
@@ -7945,7 +7914,7 @@ msgstr ""
 msgid "Server address"
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:178
+#: src/screens/Settings/AppIconSettings/index.tsx:143
 msgid "Set app icon to {0}"
 msgstr ""
 
@@ -7953,7 +7922,7 @@ msgstr ""
 msgid "Set new password"
 msgstr ""
 
-#: src/screens/Onboarding/Layout.tsx:49
+#: src/screens/Onboarding/Layout.tsx:50
 msgid "Set up your account"
 msgstr ""
 
@@ -8047,7 +8016,7 @@ msgstr ""
 msgid "Share a fun fact!"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:571
+#: src/view/com/profile/ProfileMenu.tsx:576
 msgid "Share anyway"
 msgstr ""
 
@@ -8095,10 +8064,10 @@ msgstr ""
 #: src/screens/ProfileList/components/MoreOptionsMenu.tsx:171
 #: src/screens/StarterPack/StarterPackScreen.tsx:615
 #: src/screens/StarterPack/StarterPackScreen.tsx:623
-#: src/view/com/profile/ProfileMenu.tsx:263
-#: src/view/com/profile/ProfileMenu.tsx:276
-#: src/view/com/profile/ProfileMenu.tsx:283
-#: src/view/com/profile/ProfileMenu.tsx:295
+#: src/view/com/profile/ProfileMenu.tsx:268
+#: src/view/com/profile/ProfileMenu.tsx:281
+#: src/view/com/profile/ProfileMenu.tsx:288
+#: src/view/com/profile/ProfileMenu.tsx:300
 msgid "Share via..."
 msgstr ""
 
@@ -8223,8 +8192,6 @@ msgstr ""
 
 #: src/components/dialogs/Signin.tsx:97
 #: src/components/dialogs/Signin.tsx:99
-#: src/components/WelcomeModal.tsx:194
-#: src/components/WelcomeModal.tsx:206
 #: src/screens/Login/index.tsx:177
 #: src/screens/Login/index.tsx:200
 #: src/screens/Login/LoginForm.tsx:188
@@ -8336,10 +8303,6 @@ msgstr ""
 
 #: src/components/dialogs/EmailDialog/screens/VerificationReminder.tsx:91
 msgid "Snoozes the reminder"
-msgstr ""
-
-#: src/components/WelcomeModal.tsx:148
-msgid "Social media you control."
 msgstr ""
 
 #: src/screens/Onboarding/index.tsx:53
@@ -8775,12 +8738,12 @@ msgid "That's everything!"
 msgstr ""
 
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:348
-#: src/view/com/profile/ProfileMenu.tsx:547
+#: src/view/com/profile/ProfileMenu.tsx:552
 msgid "The account will be able to interact with you after unblocking."
 msgstr ""
 
-#: src/screens/Settings/AppIconSettings/index.tsx:41
-#: src/screens/Settings/AppIconSettings/index.tsx:227
+#: src/screens/Settings/AppIconSettings/index.tsx:35
+#: src/screens/Settings/AppIconSettings/index.tsx:192
 msgid "The app will be restarted"
 msgstr ""
 
@@ -8954,12 +8917,12 @@ msgstr ""
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:115
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:137
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:150
-#: src/view/com/profile/ProfileMenu.tsx:148
-#: src/view/com/profile/ProfileMenu.tsx:158
-#: src/view/com/profile/ProfileMenu.tsx:172
-#: src/view/com/profile/ProfileMenu.tsx:182
-#: src/view/com/profile/ProfileMenu.tsx:195
-#: src/view/com/profile/ProfileMenu.tsx:207
+#: src/view/com/profile/ProfileMenu.tsx:153
+#: src/view/com/profile/ProfileMenu.tsx:163
+#: src/view/com/profile/ProfileMenu.tsx:177
+#: src/view/com/profile/ProfileMenu.tsx:187
+#: src/view/com/profile/ProfileMenu.tsx:200
+#: src/view/com/profile/ProfileMenu.tsx:212
 msgid "There was an issue! {0}"
 msgstr ""
 
@@ -9172,7 +9135,7 @@ msgstr ""
 msgid "This post's author has disabled quote posts."
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:568
+#: src/view/com/profile/ProfileMenu.tsx:573
 msgid "This profile is only visible to logged-in users. It won't be visible to people who aren't signed in."
 msgstr ""
 
@@ -9344,8 +9307,8 @@ msgstr ""
 msgid "Trust emerges from relationships, communities, and shared context, so we’re also enabling <0>trusted verifiers</0>: organizations that can directly issue verification."
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:385
-#: src/view/com/profile/ProfileMenu.tsx:388
+#: src/view/com/profile/ProfileMenu.tsx:390
+#: src/view/com/profile/ProfileMenu.tsx:393
 msgid "Trust verifier"
 msgstr ""
 
@@ -9422,7 +9385,7 @@ msgstr ""
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:352
 #: src/screens/ProfileList/components/Header.tsx:171
 #: src/screens/ProfileList/components/Header.tsx:178
-#: src/view/com/profile/ProfileMenu.tsx:559
+#: src/view/com/profile/ProfileMenu.tsx:564
 #: src/view/screens/ProfileList.tsx:741
 msgid "Unblock"
 msgstr ""
@@ -9434,13 +9397,13 @@ msgstr ""
 
 #: src/components/dms/ConvoMenu.tsx:247
 #: src/components/dms/ConvoMenu.tsx:250
-#: src/view/com/profile/ProfileMenu.tsx:464
-#: src/view/com/profile/ProfileMenu.tsx:470
+#: src/view/com/profile/ProfileMenu.tsx:469
+#: src/view/com/profile/ProfileMenu.tsx:475
 msgid "Unblock account"
 msgstr ""
 
 #: src/screens/Profile/Header/ProfileHeaderStandard.tsx:346
-#: src/view/com/profile/ProfileMenu.tsx:541
+#: src/view/com/profile/ProfileMenu.tsx:546
 msgid "Unblock Account?"
 msgstr ""
 
@@ -9469,8 +9432,8 @@ msgstr ""
 msgid "Unfollow {0}"
 msgstr ""
 
-#: src/view/com/profile/ProfileMenu.tsx:324
-#: src/view/com/profile/ProfileMenu.tsx:337
+#: src/view/com/profile/ProfileMenu.tsx:329
+#: src/view/com/profile/ProfileMenu.tsx:342
 msgid "Unfollow account"
 msgstr ""
 
@@ -9514,8 +9477,8 @@ msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:725
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:731
-#: src/view/com/profile/ProfileMenu.tsx:443
-#: src/view/com/profile/ProfileMenu.tsx:449
+#: src/view/com/profile/ProfileMenu.tsx:448
+#: src/view/com/profile/ProfileMenu.tsx:454
 msgid "Unmute account"
 msgstr ""
 
@@ -9842,8 +9805,8 @@ msgstr ""
 
 #: src/components/verification/VerificationCreatePrompt.tsx:84
 #: src/components/verification/VerificationCreatePrompt.tsx:86
-#: src/view/com/profile/ProfileMenu.tsx:427
-#: src/view/com/profile/ProfileMenu.tsx:430
+#: src/view/com/profile/ProfileMenu.tsx:432
+#: src/view/com/profile/ProfileMenu.tsx:435
 msgid "Verify account"
 msgstr ""
 
@@ -10599,7 +10562,7 @@ msgstr ""
 msgid "You have no lists."
 msgstr ""
 
-#: src/components/dialogs/StarterPackDialog.tsx:100
+#: src/components/dialogs/StarterPackDialog.tsx:101
 msgid "You have no starter packs."
 msgstr ""
 
