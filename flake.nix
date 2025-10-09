@@ -15,6 +15,7 @@
   }:
     flake-utils.lib.eachDefaultSystem (
       system: let
+        noEmulator = (builtins.getEnv "NO_EMULATOR") == "1";
         xdgStateHome = builtins.getEnv "XDG_STATE_HOME";
 
         android-arch =
@@ -41,22 +42,21 @@
         pinnedJDK = pkgs.jdk17;
         androidSdk = android-nixpkgs.sdk.${system} (
           sdk:
-            with sdk; [
-              build-tools-35-0-0
-              build-tools-36-0-0
-              cmdline-tools-latest
-              emulator
-              platform-tools
-              platforms-android-35
-              platforms-android-36
-              sources-android-35
-              sources-android-36
-              ndk-27-1-12297006
-              ndk-27-0-12077973
-              cmake-3-22-1
-              sdk."system-images-android-35-google-apis-${android-arch}"
-              sdk."system-images-android-35-google-apis-playstore-${android-arch}"
-            ]
+            with sdk;
+              [
+                build-tools-35-0-0
+                cmdline-tools-latest
+                platform-tools
+                platforms-android-35
+                sources-android-35
+                ndk-27-1-12297006
+                cmake-3-22-1
+              ]
+              ++ pkgs.lib.optionals (!noEmulator) [
+                emulator
+                sdk."system-images-android-35-google-apis-${android-arch}"
+                sdk."system-images-android-35-google-apis-playstore-${android-arch}"
+              ]
         );
 
         create-avd = pkgs.writeShellScriptBin "create-avd" ''
@@ -87,27 +87,28 @@
 
               GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/35.0.0/aapt2";
 
-              packages = [
-                gradle_8
-                create-avd
+              packages =
+                [
+                  gradle_8
 
-                just
-                fastmod
-                nodejs
-                yarn
-                crowdin-cli
-                eas-cli
+                  just
+                  fastmod
+                  nodejs
+                  yarn
+                  crowdin-cli
+                  eas-cli
 
-                bundletool
+                  bundletool
 
-                typescript
-                typescript-language-server
+                  typescript
+                  typescript-language-server
 
-                go
-                gopls
+                  go
+                  gopls
 
-                wrangler-flake.packages.${system}.wrangler
-              ];
+                  wrangler-flake.packages.${system}.wrangler
+                ]
+                ++ pkgs.lib.optionals (!noEmulator) [create-avd];
 
               shellHook = ''
                 export GRADLE_USER_HOME=~/.cache/gradle

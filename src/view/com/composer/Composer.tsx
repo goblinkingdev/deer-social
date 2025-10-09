@@ -91,6 +91,7 @@ import {
 import {useModalControls} from '#/state/modals'
 import {useRequireAltTextEnabled} from '#/state/preferences'
 import {
+  fromPostLanguages,
   toPostLanguages,
   useLanguagePrefs,
   useLanguagePrefsApi,
@@ -269,6 +270,44 @@ export const ComposePost = ({
   const [isPublishing, setIsPublishing] = useState(false)
   const [publishingStage, setPublishingStage] = useState('')
   const [error, setError] = useState('')
+
+  /**
+   * A temporary local reference to a language suggestion that the user has
+   * accepted. This overrides the global post language preference, but is not
+   * stored permanently.
+   */
+  const [acceptedLanguageSuggestion, setAcceptedLanguageSuggestion] = useState<
+    string | null
+  >(null)
+
+  /**
+   * The language(s) of the post being replied to.
+   */
+  const [replyToLanguages, setReplyToLanguages] = useState<string[]>(
+    replyTo?.langs || [],
+  )
+
+  /**
+   * The currently selected languages of the post. Prefer local temporary
+   * language suggestion over global lang prefs, if available.
+   */
+  const currentLanguages = useMemo(
+    () =>
+      acceptedLanguageSuggestion
+        ? [acceptedLanguageSuggestion]
+        : toPostLanguages(langPrefs.postLanguage),
+    [acceptedLanguageSuggestion, langPrefs.postLanguage],
+  )
+
+  /**
+   * When the user selects a language from the composer language selector,
+   * clear any temporary language suggestions they may have selected
+   * previously, and any we might try to suggest to them.
+   */
+  const onSelectLanguage = () => {
+    setAcceptedLanguageSuggestion(null)
+    setReplyToLanguages([])
+  }
 
   const [composerState, composerDispatch] = useReducer(
     composerReducer,
@@ -561,7 +600,7 @@ export const ComposePost = ({
           thread,
           replyTo: replyTo?.uri,
           onStateChange: setPublishingStage,
-          langs: toPostLanguages(langPrefs.postLanguage),
+          langs: currentLanguages,
         })
       ).uris[0]
 
@@ -637,7 +676,7 @@ export const ComposePost = ({
             isPartOfThread: thread.posts.length > 1,
             hasLink: !!post.embed.link,
             hasQuote: !!post.embed.quote,
-            langs: langPrefs.postLanguage,
+            langs: fromPostLanguages(currentLanguages),
             logContext: 'Composer',
           })
           index++
@@ -704,7 +743,7 @@ export const ComposePost = ({
     thread,
     canPost,
     isPublishing,
-    langPrefs.postLanguage,
+    currentLanguages,
     onClose,
     onPost,
     onPostSuccess,
@@ -801,8 +840,9 @@ export const ComposePost = ({
     <>
       <SuggestedLanguage
         text={activePost.richtext.text}
-        // NOTE(@elijaharita): currently just choosing the first language if any exists
-        replyToLanguage={replyTo?.langs?.[0]}
+        replyToLanguages={replyToLanguages}
+        currentLanguages={currentLanguages}
+        onAcceptSuggestedLanguage={setAcceptedLanguageSuggestion}
       />
       <ComposerPills
         isReply={!!replyTo}
@@ -825,6 +865,8 @@ export const ComposePost = ({
             type: 'add_post',
           })
         }}
+        currentLanguages={currentLanguages}
+        onSelectLanguage={onSelectLanguage}
       />
     </>
   )
@@ -1441,6 +1483,8 @@ function ComposerFooter({
   onEmojiButtonPress,
   onSelectVideo,
   onAddPost,
+  currentLanguages,
+  onSelectLanguage,
 }: {
   post: PostDraft
   dispatch: (action: PostAction) => void
@@ -1449,6 +1493,8 @@ function ComposerFooter({
   onError: (error: string) => void
   onSelectVideo: (postId: string, asset: ImagePickerAsset) => void
   onAddPost: () => void
+  currentLanguages: string[]
+  onSelectLanguage?: (language: string) => void
 }) {
   const t = useTheme()
   const {_} = useLingui()
@@ -1602,7 +1648,10 @@ function ComposerFooter({
             <PlusIcon size="lg" />
           </Button>
         )}
-        <PostLanguageSelect />
+        <PostLanguageSelect
+          currentLanguages={currentLanguages}
+          onSelectLanguage={onSelectLanguage}
+        />
         <CharProgress
           count={post.shortenedGraphemeLength}
           style={{width: 65}}

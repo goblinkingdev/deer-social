@@ -15,7 +15,9 @@ module.exports = function (_config) {
 
   const IS_TESTFLIGHT = process.env.EXPO_PUBLIC_ENV === 'testflight'
   const IS_PRODUCTION = process.env.EXPO_PUBLIC_ENV === 'production'
-  const IS_DEV = !IS_TESTFLIGHT || !IS_PRODUCTION
+  const IS_DEV =
+    process.env.EXPO_PUBLIC_ENV === 'development' ||
+    (!IS_TESTFLIGHT && !IS_PRODUCTION)
 
   const ASSOCIATED_DOMAINS = [
     'applinks:pages.dev.deer-social-7m8',
@@ -34,7 +36,7 @@ module.exports = function (_config) {
   return {
     expo: {
       version: VERSION,
-      name: 'Deer',
+      name: IS_DEV ? 'Deer (dev)' : 'Deer',
       slug: 'deer',
       scheme: ['bluesky', 'deer'],
       // owner: 'blueskysocial',
@@ -42,7 +44,9 @@ module.exports = function (_config) {
       runtimeVersion: {
         policy: 'appVersion',
       },
-      icon: './assets/app-icons/ios_icon_default_light.png',
+      icon: IS_DEV
+        ? './assets/app-icons/ios_icon_dev.png'
+        : './assets/app-icons/ios_icon_default_light.png',
       userInterfaceStyle: 'automatic',
       primaryColor: '#4b9b6c',
       newArchEnabled: false,
@@ -146,7 +150,9 @@ module.exports = function (_config) {
         barStyle: 'light-content',
       },
       android: {
-        icon: './assets/app-icons/android_icon_default_light.png',
+        icon: IS_DEV
+          ? './assets/app-icons/android_icon_dev.png'
+          : './assets/app-icons/android_icon_default_light.png',
         adaptiveIcon: {
           foregroundImage: './assets/icon-android-foreground.png',
           monochromeImage: './assets/icon-android-foreground.png',
@@ -399,6 +405,11 @@ module.exports = function (_config) {
             default_dark: {
               ios: './assets/app-icons/ios_icon_default_dark.png',
               android: './assets/app-icons/android_icon_default_dark.png',
+              prerendered: true,
+            },
+            dev: {
+              ios: './assets/app-icons/ios_icon_dev.png',
+              android: './assets/app-icons/android_icon_dev.png',
               prerendered: true,
             },
 

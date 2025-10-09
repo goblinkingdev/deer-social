@@ -21,10 +21,7 @@ export interface ComposerOptsPostRef {
   cid: string
   text: string
   langs?: string[]
-  // remove this after updating atproto api package
-  author: AppBskyActorDefs.ProfileViewBasic & {
-    pronouns?: string
-  }
+  author: AppBskyActorDefs.ProfileViewBasic
   embed?: AppBskyFeedDefs.PostView['embed']
   moderation?: ModerationDecision
 }

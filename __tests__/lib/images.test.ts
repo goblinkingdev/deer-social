@@ -44,8 +44,8 @@ describe('downloadAndResize', () => {
       width: 100,
       height: 100,
       maxSize: 500000,
-      mode: 'cover',
       timeout: 10000,
+      webp: false,
     }
 
     const result = await downloadAndResize(opts)
@@ -76,8 +76,8 @@ describe('downloadAndResize', () => {
       width: 100,
       height: 100,
       maxSize: 500000,
-      mode: 'cover',
       timeout: 10000,
+      webp: false,
     }
 
     const result = await downloadAndResize(opts)
