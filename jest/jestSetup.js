@@ -3,6 +3,36 @@ import 'react-native-gesture-handler/jestSetup'
 // IMPORTANT: this is what's used in the native runtime
 import 'react-native-url-polyfill/auto'
 
+// Mock ImportMetaEnv for Expo
+global.__ExpoImportMetaRegistry = {}
+
+// Mock global window and matchMedia
+global.window = {
+  ...global.window,
+  matchMedia: _query => ({
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    matches: false,
+  }),
+  navigator: {
+    userAgent: '',
+  },
+  location: {
+    hostname: 'localhost',
+  },
+}
+
+global.document = {
+  ...global.document,
+  createElement: () => ({}),
+  documentElement: {
+    style: {},
+  },
+}
+
+// Mock global.structuredClone
+global.structuredClone = obj => JSON.parse(JSON.stringify(obj))
+
 import {configure} from '@testing-library/react-native'
 
 configure({asyncUtilTimeout: 20000})
@@ -32,6 +62,17 @@ jest.mock('react-native-safe-area-context', () => {
     useSafeAreaInsets: jest.fn().mockImplementation(() => inset),
   }
 })
+
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+  }),
+  useRoute: () => ({
+    params: {},
+  }),
+  useIsFocused: () => true,
+}))
 
 jest.mock('expo-file-system/legacy', () => ({
   getInfoAsync: jest.fn().mockResolvedValue({exists: true, size: 100}),

@@ -297,7 +297,7 @@ exports.create = function create(context) {
       }
     },
     ReturnStatement(node) {
-      let fnScope = context.getScope()
+      let fnScope = context.sourceCode.getScope(node)
       while (fnScope && fnScope.type !== 'function') {
         fnScope = fnScope.upper
       }

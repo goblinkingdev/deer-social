@@ -7,7 +7,7 @@ import {isInvalidHandle} from '#/lib/strings/handles'
 import {startUriToStarterPackUri} from '#/lib/strings/starter-pack'
 import {logger} from '#/logger'
 
-export const BSKY_APP_HOST = 'https://deer-social-7m8.pages.dev/'
+export const BSKY_APP_HOST = 'https://bsky.app/'
 const BSKY_TRUSTED_HOSTS = [
   'deer\\.social',
   'deer-social-7m8\\.pages\\.dev',
@@ -57,7 +57,7 @@ export function toNiceDomain(url: string): string {
       return 'Bluesky Social'
     }
     return urlp.host ? urlp.host : url
-  } catch (e) {
+  } catch (_e) {
     return url
   }
 }
@@ -74,14 +74,14 @@ export function toShortUrl(url: string): string {
       return urlp.host + path.slice(0, 13) + '...'
     }
     return urlp.host + path
-  } catch (e) {
+  } catch (_e) {
     return url
   }
 }
 
 export function toShareUrl(url: string): string {
   if (!url.startsWith('https')) {
-    const urlp = new URL('https://deer-social-7m8.pages.dev/')
+    const urlp = new URL('https://bsky.app/')
     urlp.pathname = url
     url = urlp.toString()
   }
@@ -103,13 +103,7 @@ export function toBskyAppUrl(url: string): string {
 }
 
 export function isBskyAppUrl(url: string): boolean {
-  return (
-    url.startsWith('https://bsky.app/') ||
-    (url.startsWith('https://deer-social-7m8.pages.dev/') &&
-      !url.startsWith('https://deer-social-7m8.pages.dev/about')) ||
-    (url.startsWith('https://deer-social-7m8.pages.dev/') &&
-      !url.startsWith('https://deer-social-7m8.pages.dev/about'))
-  )
+  return url.startsWith('https://bsky.app/')
 }
 
 export function isRelativeUrl(url: string): boolean {
@@ -218,7 +212,7 @@ export function convertBskyAppUrlIfNeeded(url: string): string {
 
       return urlp.pathname
     } catch (e) {
-      console.error('Unexpected error in convertBskyAppUrlIfNeeded()', e)
+      console.error('Unexpected error in convertBskyAppUrlIfNeeded()')
     }
   } else if (isShortLink(url)) {
     // We only want to do this on native, web handles the 301 for us
@@ -373,7 +367,7 @@ export function shortLinkToHref(url: string): string {
     }
     return url
   } catch (e) {
-    logger.error('Failed to parse possible short link', {safeMessage: e})
+    logger.error('Failed to parse possible short link')
     return url
   }
 }

@@ -16,6 +16,16 @@ module.exports = {
     'bsky-internal',
     'eslint-plugin-react-compiler',
     'import',
+    'jest',
+  ],
+  overrides: [
+    {
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      extends: ['plugin:jest/recommended'],
+      env: {
+        'jest/globals': true
+      }
+    }
   ],
   rules: {
     'react/no-unescaped-entities': 0,

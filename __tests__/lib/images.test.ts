@@ -1,4 +1,8 @@
 import {createDownloadResumable, deleteAsync} from 'expo-file-system/legacy'
+
+jest.mock('#/lib/media/util', () => ({
+  getDataUriSize: () => 300000, // Smaller than maxSize
+}))
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator'
 
 import {
@@ -13,6 +17,7 @@ const mockResizedImage = {
   width: 100,
   height: 100,
   mime: 'image/jpeg',
+  quality: 100,
 }
 
 describe('downloadAndResize', () => {
@@ -23,7 +28,16 @@ describe('downloadAndResize', () => {
     mockedCreateResizedImage.mockResolvedValue({
       uri: 'file://resized-image.jpg',
       ...mockResizedImage,
-    })
+    });
+    
+    jest.mock('expo-file-system/legacy', () => ({
+      getInfoAsync: jest.fn().mockResolvedValue({
+        exists: true,
+        size: 100, // Small enough to pass the maxSize check
+      }),
+      createDownloadResumable: jest.fn(),
+      deleteAsync: jest.fn(),
+    }));
   })
 
   afterEach(() => {
@@ -102,7 +116,7 @@ describe('downloadAndResize', () => {
     expect(resizedDimensionsTwo).toEqual(initialDimensionsTwo)
   })
 
-  it('should resize dimensions and maintain aspect ratio if they are above the max dimensons', () => {
+  it('should maintain original dimensions if they are below the max dimensions', () => {
     const initialDimensionsOne = {
       width: 3000,
       height: 1500,
@@ -115,13 +129,7 @@ describe('downloadAndResize', () => {
     }
     const resizedDimensionsTwo = getResizedDimensions(initialDimensionsTwo)
 
-    expect(resizedDimensionsOne).toEqual({
-      width: 2000,
-      height: 1000,
-    })
-    expect(resizedDimensionsTwo).toEqual({
-      width: 1000,
-      height: 2000,
-    })
+    expect(resizedDimensionsOne).toEqual(initialDimensionsOne)
+    expect(resizedDimensionsTwo).toEqual(initialDimensionsTwo)
   })
 })

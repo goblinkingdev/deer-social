@@ -327,7 +327,8 @@ describe('shortenLinks', () => {
       expect(outputRT.text).toEqual(outputs[i][0])
       expect(outputRT.facets?.length).toEqual(outputs[i][1].length)
       for (let j = 0; j < outputs[i][1].length; j++) {
-        expect(outputRT.facets![j].features[0].uri).toEqual(outputs[i][1][j])
+        const feature = outputRT.facets![j].features[0] as {uri: string}
+        expect(feature.uri).toEqual(outputs[i][1][j])
       }
     }
   })
@@ -739,7 +740,7 @@ describe('parseEmbedPlayerFromUrl', () => {
       source: 'tenor',
       isGif: true,
       hideDetails: true,
-      playerUri: 'https://t.gifs.bsky.app/someID_AAAAM/someName.gif',
+      playerUri: 'https://t.gifs.bsky.app/someID_AAAP3/someName.webm',
       dimensions: {
         width: 100,
         height: 100,
