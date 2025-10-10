@@ -30,6 +30,8 @@ jobs:
         run: |
           cp .env.example .env
           cp google-services.json.example google-services.json
+      - name: Expo prebuild
+        run: npx expo prebuild --no-install --platform android
       - name: Add BitDrift Maven Repository to Android build.gradle
         run: |
           # Define the repository snippet
