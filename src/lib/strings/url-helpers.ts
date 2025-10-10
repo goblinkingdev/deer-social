@@ -57,7 +57,7 @@ export function toNiceDomain(url: string): string {
       return 'Bluesky Social'
     }
     return urlp.host ? urlp.host : url
-  } catch (_e) {
+  } catch {
     return url
   }
 }
@@ -74,7 +74,7 @@ export function toShortUrl(url: string): string {
       return urlp.host + path.slice(0, 13) + '...'
     }
     return urlp.host + path
-  } catch (_e) {
+  } catch {
     return url
   }
 }
@@ -211,7 +211,7 @@ export function convertBskyAppUrlIfNeeded(url: string): string {
       }
 
       return urlp.pathname
-    } catch (e) {
+    } catch {
       console.error('Unexpected error in convertBskyAppUrlIfNeeded()')
     }
   } else if (isShortLink(url)) {
@@ -367,7 +367,7 @@ export function shortLinkToHref(url: string): string {
     }
     return url
   } catch (e) {
-    logger.error('Failed to parse possible short link')
+    logger.error('Failed to parse possible short link', {error: e, url})
     return url
   }
 }
@@ -376,7 +376,7 @@ export function getHostnameFromUrl(url: string | URL): string | null {
   let urlp
   try {
     urlp = new URL(url)
-  } catch (e) {
+  } catch {
     return null
   }
   return urlp.hostname

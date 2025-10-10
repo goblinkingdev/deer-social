@@ -10,13 +10,13 @@ const IFRAME_HOST = isWeb
     window.location.host === 'localhost:8100'
     ? 'http://localhost:8100'
     : process.env.JEST_WORKER_ID
-    ? 'https://bsky.app'
-    : 'https://deer-social-7m8.pages.dev'
+      ? 'https://bsky.app'
+      : 'https://deer-social-7m8.pages.dev'
   : __DEV__ && !process.env.JEST_WORKER_ID
     ? 'http://localhost:8100'
     : process.env.JEST_WORKER_ID
-    ? 'https://bsky.app'
-    : 'https://deer-social-7m8.pages.dev'
+      ? 'https://bsky.app'
+      : 'https://deer-social-7m8.pages.dev'
 
 export const embedPlayerSources = [
   'youtube',
@@ -88,7 +88,7 @@ export function parseEmbedPlayerFromUrl(
   let urlp
   try {
     urlp = new URL(url)
-  } catch (_e) {
+  } catch {
     return undefined
   }
 
