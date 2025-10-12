@@ -3,7 +3,7 @@
   "version": "v4.3.11",
   "private": true,
   "engines": {
-    "node": ">=20.19.4"
+    "node": ">=22"
   },
   "packageManager": "yarn@1.22.22",
   "expo": {
