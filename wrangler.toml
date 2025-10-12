@@ -14,3 +14,6 @@ EXPO_PUBLIC_ENV = "production"
 [env.preview.vars]
 ENVIRONMENT = "preview"
 EXPO_PUBLIC_ENV = "preview"
+
+[build.environment]
+NODE_VERSION = "20.19.4"
