@@ -6,6 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 ENVIRONMENT = "production"
 EXPO_PUBLIC_ENV = "production"
+NODE_VERSION = "20.19.4"
 
 [env.production.vars]
 ENVIRONMENT = "production"
@@ -15,8 +16,3 @@ EXPO_PUBLIC_ENV = "production"
 ENVIRONMENT = "preview"
 EXPO_PUBLIC_ENV = "preview"
 
-[build]
-command = "yarn build-web"
-
-[build.environment]
-NODE_VERSION = "20.19.4"
