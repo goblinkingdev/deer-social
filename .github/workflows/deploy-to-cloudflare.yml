@@ -5,7 +5,7 @@ on:
 jobs:
   deploy-to-cloudflare:
     name: Deploy to Cloudflare Pages
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
