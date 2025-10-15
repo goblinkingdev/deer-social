@@ -18,7 +18,7 @@ jobs:
           distribution: temurin
           cache: gradle  
       - name: Setup Android SDK
-        uses: react-native-community/setup-android@v3
+        uses: android-actions/setup-android@v3
       - name: Setup Just
         uses: extractions/setup-just@v2
       - name: Install dependencies
