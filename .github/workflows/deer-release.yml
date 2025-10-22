@@ -150,7 +150,7 @@ jobs:
 
             ### 📥 Downloads
             - **Android APK**: Download the `deer-release.apk` file below
-            - **Web App**: Available at [deer-social.pages.dev](https://deer-social-7m8.pages.dev)
+            - **Web App**: Available at [deer-social.vercel.app](https://deer-social.vercel.app)
 
             ### 🔒 Security
             This release is signed and verified. The APK is built in un entorno limpio y reproducible.

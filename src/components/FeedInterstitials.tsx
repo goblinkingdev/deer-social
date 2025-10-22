@@ -265,9 +265,9 @@ export function ProfileGrid({
   const content = isLoading
     ? Array(maxLength)
         .fill(0)
-        .map((_, i) => (
+        .map((_, profilePlaceholderIndex) => (
           <View
-            key={i}
+            key={profilePlaceholderIndex}
             style={[
               a.flex_1,
               gtMobile &&
@@ -480,7 +480,9 @@ export function SuggestedFeeds() {
   const content = isLoading ? (
     Array(numFeedsToDisplay)
       .fill(0)
-      .map((_, i) => <SuggestedFeedsCardPlaceholder key={i} />)
+      .map((_, placeholderFeedIndex) => (
+        <SuggestedFeedsCardPlaceholder key={placeholderFeedIndex} />
+      ))
   ) : error || !feeds ? null : (
     <>
       {feeds.slice(0, numFeedsToDisplay).map(feed => (

@@ -22,7 +22,7 @@ type Collection =
 
 const headers = new Headers({
   Accept: 'application/json',
-  'User-Agent': 'deer-social-7m8.pages.dev (contact @goblinkingf.bsky.social)',
+  'User-Agent': 'deer-social.vercel.app (contact @goblinkingf.bsky.social)',
 })
 
 const makeReqUrl = (

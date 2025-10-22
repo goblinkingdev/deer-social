@@ -142,9 +142,9 @@ export function Content<T>({
   const [, setValue] = useContext(ValueTextContext)
 
   useLayoutEffect(() => {
-    const item = items.find(item => valueExtractor(item) === context.value)
-    if (item) {
-      setValue(item)
+    const foundItem = items.find(item => valueExtractor(item) === context.value)
+    if (foundItem) {
+      setValue(foundItem)
     }
   }, [items, context.value, valueExtractor, setValue])
 
@@ -285,8 +285,12 @@ export function ItemText({children}: ItemTextProps) {
   )
 }
 
-export function ItemIndicator({icon: Icon = CheckIcon}: ItemIndicatorProps) {
+export function ItemIndicator({
+  icon: IconComponent = CheckIcon,
+}: ItemIndicatorProps) {
   const {selected} = useItemContext()
 
-  return <View style={{width: 24}}>{selected && <Icon size="md" />}</View>
+  return (
+    <View style={{width: 24}}>{selected && <IconComponent size="md" />}</View>
+  )
 }

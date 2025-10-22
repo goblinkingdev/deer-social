@@ -46,3 +46,19 @@ function copyFiles(sourceDir, targetDir) {
 copyFiles('web-build/static/js', 'bskyweb/static/js')
 copyFiles('web-build/static/css', 'bskyweb/static/css')
 copyFiles('web-build/static/media', 'bskyweb/static/media')
+
+const additionalFiles = [
+  'favicon.ico',
+  'favicon-16.png',
+  'favicon-32.png',
+  'manifest.json',
+  'robots.txt',
+]
+additionalFiles.forEach(file => {
+  const sourcePath = path.join(projectRoot, 'bskyweb/static', file)
+  const targetPath = path.join(projectRoot, 'web-build', file)
+  if (fs.existsSync(sourcePath)) {
+    fs.copyFileSync(sourcePath, targetPath)
+    console.log(`Copied ${sourcePath} to ${targetPath}`)
+  }
+})

@@ -31,6 +31,7 @@ export function VideoEmbedInnerWeb({
   const [hlsLoading, setHlsLoading] = useState(false)
   const figId = useId()
   const {_} = useLingui()
+  const currentTimeRef = useRef<number | undefined>(undefined)
 
   // send error up to error boundary
   const [error, setError] = useState<Error | null>(null)
@@ -49,6 +50,7 @@ export function VideoEmbedInnerWeb({
   useEffect(() => {
     if (lastKnownTime.current && videoRef.current) {
       videoRef.current.currentTime = lastKnownTime.current
+      currentTimeRef.current = lastKnownTime.current
     }
   }, [lastKnownTime])
 
@@ -68,7 +70,7 @@ export function VideoEmbedInnerWeb({
             muted={!focused}
             aria-labelledby={embed.alt ? figId : undefined}
             onTimeUpdate={e => {
-              lastKnownTime.current = e.currentTarget.currentTime
+              currentTimeRef.current = e.currentTarget.currentTime
             }}
           />
           {embed.alt && (

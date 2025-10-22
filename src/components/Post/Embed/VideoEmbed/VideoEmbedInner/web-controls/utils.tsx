@@ -17,7 +17,8 @@ export function useVideoElement(ref: RefObject<HTMLVideoElement | null>) {
 
   useEffect(() => {
     if (!ref.current) return
-    ref.current.volume = volume
+    const videoElement = ref.current
+    videoElement.volume = volume
   }, [ref, volume])
 
   useEffect(() => {

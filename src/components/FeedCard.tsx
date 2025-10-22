@@ -181,9 +181,9 @@ export function Description({
 }: {description?: string} & Partial<RichTextProps>) {
   const rt = React.useMemo(() => {
     if (!description) return
-    const rt = new RichTextApi({text: description || ''})
-    rt.detectFacetsWithoutResolution()
-    return rt
+    const richText = new RichTextApi({text: description || ''})
+    richText.detectFacetsWithoutResolution()
+    return richText
   }, [description])
   if (!rt) return null
   return <RichText value={rt} style={[a.leading_snug]} disableLinks {...rest} />

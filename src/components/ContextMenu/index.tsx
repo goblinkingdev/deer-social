@@ -145,9 +145,9 @@ export function Root({children}: {children: React.ReactNode}) {
         animationSV,
         translationSV,
         mode,
-        open: (evt: Measurement, mode: 'full' | 'auxiliary-only') => {
+        open: (evt: Measurement, menuMode: 'full' | 'auxiliary-only') => {
           setMeasurement(evt)
-          setMode(mode)
+          setMode(menuMode)
           animationSV.set(withSpring(1, SPRING_IN))
         },
         close: () => {
@@ -176,10 +176,12 @@ export function Root({children}: {children: React.ReactNode}) {
             hoverablesSV.set(
               Object.fromEntries(
                 // eslint-ignore
-                [...hoverables.current.entries()].map(([id, {rect}]) => [
-                  id,
-                  {id, rect},
-                ]),
+                [...hoverables.current.entries()].map(
+                  ([hoverableId, {rect: itemRect}]) => [
+                    hoverableId,
+                    {id: hoverableId, rect: itemRect},
+                  ],
+                ),
               ),
             )
           }, 1)

@@ -1,4 +1,4 @@
-appId: dev.pages.deer_social
+appId: vercel.app.deer_social
 ---
 - runScript:
     file: ../setupServer.js

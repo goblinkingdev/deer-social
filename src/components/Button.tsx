@@ -216,8 +216,8 @@ export const Button = React.forwardRef<View, ButtonProps>(
     )
 
     const {baseStyles, hoverStyles} = React.useMemo(() => {
-      const baseStyles: ViewStyle[] = []
-      const hoverStyles: ViewStyle[] = []
+      const buttonBaseStyles: ViewStyle[] = []
+      const buttonHoverStyles: ViewStyle[] = []
 
       /*
        * This is the happy path for new button styles, following the
@@ -496,8 +496,8 @@ export const Button = React.forwardRef<View, ButtonProps>(
       }
 
       return {
-        baseStyles,
-        hoverStyles,
+        baseStyles: buttonBaseStyles,
+        hoverStyles: buttonHoverStyles,
       }
     }, [t, variant, color, size, shape, disabled])
 
@@ -772,7 +772,7 @@ export function ButtonIcon({
      * Copied here from icons/common.tsx so we can tweak if we need to, but
      * also so that we can calculate transforms.
      */
-    const iconSize = {
+    const actualIconSize = {
       xs: 12,
       sm: 16,
       md: 18,
@@ -785,15 +785,15 @@ export function ButtonIcon({
      * Goal here is to match rendered text size so that different size icons
      * don't increase button size
      */
-    const iconContainerSize = {
+    const actualIconContainerSize = {
       large: 20,
       small: 17,
       tiny: 15,
     }[buttonSize || 'small']
 
     return {
-      iconSize,
-      iconContainerSize,
+      iconSize: actualIconSize,
+      iconContainerSize: actualIconContainerSize,
     }
   }, [buttonSize, size])
 

@@ -71,8 +71,8 @@ export function SubmitView({
             },
           })
           .then(
-            _ => true,
-            _ => false,
+            _result => true,
+            _error => false,
           )
       }),
     )

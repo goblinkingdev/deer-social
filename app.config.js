@@ -20,7 +20,7 @@ module.exports = function (_config) {
     (!IS_TESTFLIGHT && !IS_PRODUCTION)
 
   const ASSOCIATED_DOMAINS = [
-    'applinks:pages.dev.deer-social-7m8',
+    'applinks:vercel.app.deer-social',
     // When testing local services, enter an ngrok (et al) domain here. It must use a standard HTTP/HTTPS port.
     ...(IS_DEV || IS_TESTFLIGHT ? [] : []),
   ]
@@ -52,7 +52,7 @@ module.exports = function (_config) {
       newArchEnabled: false,
       ios: {
         supportsTablet: false,
-        bundleIdentifier: 'deer-social-7m8.pages.dev',
+        bundleIdentifier: 'deer-social.vercel.app',
         config: {
           usesNonExemptEncryption: false,
         },
@@ -116,7 +116,7 @@ module.exports = function (_config) {
           'com.apple.developer.kernel.increased-memory-limit': true,
           'com.apple.developer.kernel.extended-virtual-addressing': true,
           'com.apple.security.application-groups':
-            'group.dev.pages.deer-social-7m8',
+            'group.vercel.app.deer-social-7m8',
         },
         privacyManifests: {
           NSPrivacyAccessedAPITypes: [
@@ -160,7 +160,7 @@ module.exports = function (_config) {
           backgroundColor: '#4b9b6c',
         },
         googleServicesFile: './google-services.json',
-        package: 'dev.pages.deer_social',
+        package: 'vercel.app.deer_social',
         intentFilters: [
           {
             action: 'VIEW',
@@ -168,11 +168,11 @@ module.exports = function (_config) {
             data: [
               {
                 scheme: 'https',
-                host: 'deer-social-7m8.pages.dev',
+                host: 'deer-social.vercel.app',
               },
               {
                 scheme: 'https',
-                host: 'deer-social-7m8.pages.dev',
+                host: 'deer-social.vercel.app',
               },
               {
                 scheme: 'https',

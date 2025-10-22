@@ -6,7 +6,7 @@ Sorry for the branding being mostly unchanged
 
 Get the app itself:
 
-- **Web: [deer.social](https://deer-social-7m8.pages.dev/)**
+- **Web: [deer.social](https://deer-social.vercel.app/)**
 - **Android: [GitHub Releases](https://github.com/goblinkingdev/deer-social/releases/latest)**
 
 ## Features Today

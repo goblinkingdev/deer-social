@@ -29,13 +29,28 @@ function useWebQueryParams() {
   const [params, setParams] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    return navigation.addListener('state', e => {
+    const unsubscribe = navigation.addListener('state', e => {
+      console.log('Navigation state listener triggered:', e)
       try {
         const {state} = e.data
-        const lastRoute = state.routes[state.routes.length - 1]
-        setParams(lastRoute.params)
-      } catch (err) {}
+        console.log('Navigation state:', state)
+        if (state.routes && state.routes.length > 0) {
+          const lastRoute = state.routes[state.routes.length - 1]
+          console.log('Last route:', lastRoute)
+          if (lastRoute.params) {
+            setParams(lastRoute.params)
+            console.log('Set params:', lastRoute.params)
+          } else {
+            console.warn('Last route has no params')
+          }
+        } else {
+          console.warn('No routes in navigation state')
+        }
+      } catch (err) {
+        console.error('Error in navigation listener:', err)
+      }
     })
+    return unsubscribe
   }, [navigation, setParams])
 
   return params
@@ -110,13 +125,13 @@ export function DesktopRightNav({routeName}: {routeName: string}) {
           </>
         )}
         <InlineLinkText
-          to="https://deer-social-7m8.pages.dev/about/privacy"
+          to="https://deer-social.vercel.app/about/privacy"
           label={_(msg`Privacy`)}>
           {_(msg`Privacy`)}
         </InlineLinkText>
         {' • '}
         <InlineLinkText
-          to="https://deer-social-7m8.pages.dev/about/tos"
+          to="https://deer-social.vercel.app/about/tos"
           label={_(msg`Terms`)}>
           {_(msg`Terms`)}
         </InlineLinkText>

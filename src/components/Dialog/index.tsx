@@ -114,8 +114,8 @@ export function Outer({
   }, [callQueuedCallbacks, control.id, onClose, setDialogIsOpen])
 
   const onSnapPointChange = (e: BottomSheetSnapPointChangeEvent) => {
-    const {snapPoint} = e.nativeEvent
-    setSnapPoint(snapPoint)
+    const {snapPoint: newSnapPoint} = e.nativeEvent
+    setSnapPoint(newSnapPoint)
 
     if (
       snapPoint === BottomSheetSnapPoint.Full &&

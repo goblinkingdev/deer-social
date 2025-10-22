@@ -11,12 +11,12 @@ const IFRAME_HOST = isWeb
     ? 'http://localhost:8100'
     : process.env.JEST_WORKER_ID
       ? 'https://bsky.app'
-      : 'https://deer-social-7m8.pages.dev'
+      : 'https://deer-social.vercel.app'
   : __DEV__ && !process.env.JEST_WORKER_ID
     ? 'http://localhost:8100'
     : process.env.JEST_WORKER_ID
       ? 'https://bsky.app'
-      : 'https://deer-social-7m8.pages.dev'
+      : 'https://deer-social.vercel.app'
 
 export const embedPlayerSources = [
   'youtube',

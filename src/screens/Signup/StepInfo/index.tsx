@@ -170,7 +170,7 @@ export function StepInfo({
           <View style={[a.gap_xl]}>
             <Text style={[a.gap_md, a.leading_normal]}>
               <Trans>
-                deer-social-7m8.pages.dev is part of the{' '}
+                deer-social.vercel.app is part of the{' '}
                 {
                   <InlineLinkText
                     label={_(msg`ATmosphere`)}
@@ -221,8 +221,8 @@ export function StepInfo({
                   <Trans>bsky.app</Trans>
                 </InlineLinkText>
               }{' '}
-              first, then return to deer-social-7m8.pages.dev and log in with
-              the account you created.
+              first, then return to deer-social.vercel.app and log in with the
+              account you created.
             </Trans>
           </Text>
         )}

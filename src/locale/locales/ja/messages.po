@@ -2494,7 +2494,7 @@ msgid "Deer Settings"
 msgstr ""
 
 #: src/screens/Signup/StepInfo/index.tsx:172
-msgid "deer-social-7m8.pages.dev is part of the <0>ATmosphere</0>—the network of apps, services, and accounts built on the AT Protocol."
+msgid "deer-social.vercel.app is part of the <0>ATmosphere</0>—the network of apps, services, and accounts built on the AT Protocol."
 msgstr ""
 
 #: src/screens/Settings/AppearanceSettings.tsx:170
@@ -2841,7 +2841,7 @@ msgid "Don't have a code or need a new one? <0>Click here.</0>"
 msgstr "コードを持っていないか、新しいコードが必要ですか？<0>ここをクリックしてください。</0>"
 
 #: src/screens/Signup/StepInfo/index.tsx:216
-msgid "Don't have an account provider or an existing Bluesky account? To create a new account on a Bluesky-hosted PDS, sign up through <0>bsky.app</0> first, then return to deer-social-7m8.pages.dev and log in with the account you created."
+msgid "Don't have an account provider or an existing Bluesky account? To create a new account on a Bluesky-hosted PDS, sign up through <0>bsky.app</0> first, then return to deer-social.vercel.app and log in with the account you created."
 msgstr ""
 
 #: src/components/dialogs/EmailDialog/components/ResendEmailText.tsx:37

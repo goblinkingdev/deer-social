@@ -370,19 +370,19 @@ export function NamePlaceholder({style}: ViewStyleProp) {
 }
 
 export function Description({
-  profile: profileUnshadowed,
+  profile: originalProfile,
   numberOfLines = 3,
   style,
 }: {
   profile: bsky.profile.AnyProfileView
   numberOfLines?: number
 } & TextStyleProp) {
-  const profile = useProfileShadow(profileUnshadowed)
+  const profile = useProfileShadow(originalProfile)
   const rt = useMemo(() => {
     if (!('description' in profile)) return
-    const rt = new RichTextApi({text: profile.description || ''})
-    rt.detectFacetsWithoutResolution()
-    return rt
+    const richText = new RichTextApi({text: profile.description || ''})
+    richText.detectFacetsWithoutResolution()
+    return richText
   }, [profile])
   if (!rt) return null
   if (

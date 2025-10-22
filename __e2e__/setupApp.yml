@@ -1,7 +1,7 @@
-appId: dev.pages.deer_social
+appId: vercel.app.deer_social
 ---
 - launchApp:
-   appId: "dev.pages.deer_social"
+   appId: "vercel.app.deer_social"
    clearState: true
 - waitForAnimationToEnd
 - tapOn: "http://localhost:8081"

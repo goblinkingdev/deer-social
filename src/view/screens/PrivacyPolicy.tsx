@@ -39,8 +39,8 @@ export const PrivacyPolicyScreen = (_props: Props) => {
               The Privacy Policy has been moved to{' '}
               <TextLink
                 style={pal.link}
-                href="https://deer-social-7m8.pages.dev/about/privacy"
-                text="deer-social-7m8.pages.dev/about/privacy"
+                href="https://deer-social.vercel.app/about/privacy"
+                text="deer-social.vercel.app/about/privacy"
               />
             </Trans>
           </Text>
