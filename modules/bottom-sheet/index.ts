@@ -1,8 +1,8 @@
 import {BottomSheet} from './src/BottomSheet'
 import {
   BottomSheetSnapPoint,
-  BottomSheetState,
-  BottomSheetViewProps,
+  type BottomSheetState,
+  type BottomSheetViewProps,
 } from './src/BottomSheet.types'
 import {BottomSheetNativeComponent} from './src/BottomSheetNativeComponent'
 import {
@@ -18,6 +18,7 @@ export {
   BottomSheetPortalProvider,
   BottomSheetProvider,
   BottomSheetSnapPoint,
-  type BottomSheetState,
-  type BottomSheetViewProps,
 }
+
+// Export types separately to avoid Babel scope tracker issues
+export type {BottomSheetState, BottomSheetViewProps}
